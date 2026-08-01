@@ -109,7 +109,10 @@
                 playsinline
                 class="h-8 max-w-[220px]"
               >
-                <source :src="blog.music.previewUrl" type="audio/mpeg" />
+                <source
+                  :src="musicPreviewUrl"
+                  type="audio/mpeg"
+                />
                 Your browser does not support the audio element.
               </audio>
               <a
@@ -345,6 +348,11 @@ const progress = ref(0);
 const audioEl = ref(null);
 const showLoginPrompt = ref(false);
 
+const musicPreviewUrl = computed(() => {
+  const url = blog.value?.music?.previewUrl;
+  return url ? url.replace(/^http:\/\//, "https://") : "";
+});
+
 const authorName = computed(() => {
   const author = blog.value?.author;
   if (!author) return "Unknown";
@@ -443,15 +451,26 @@ watch(audioEl, (el) => {
   }
 });
 
+// Fallback: jika autoplay diblokir browser, coba putar saat user berinteraksi
+const tryPlayMusic = () => {
+  const el = audioEl.value;
+  if (el && el.paused) {
+    const playPromise = el.play();
+    if (playPromise) playPromise.catch(() => {});
+  }
+};
+
 onMounted(() => {
   fetchBlog();
   window.addEventListener("scroll", updateProgress, { passive: true });
   window.addEventListener("resize", updateProgress);
+  window.addEventListener("click", tryPlayMusic);
 });
 
 onUnmounted(() => {
   window.removeEventListener("scroll", updateProgress);
   window.removeEventListener("resize", updateProgress);
+  window.removeEventListener("click", tryPlayMusic);
 });
 </script>
 
