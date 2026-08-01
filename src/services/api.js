@@ -185,6 +185,41 @@ export const blogAPI = {
 }
 
 // ============================================
+// REPOST API
+// ============================================
+export const repostAPI = {
+  // Toggle repost
+  toggleRepost: (blogId) => {
+    return apiClient.post(`/blogs/${blogId}/repost`)
+  },
+
+  // Check repost status
+  getRepostStatus: (blogId) => {
+    return apiClient.get(`/blogs/${blogId}/repost`)
+  },
+}
+
+// ============================================
+// COMMENT API
+// ============================================
+export const commentAPI = {
+  // Get comments for a blog
+  getComments: (blogId, params = {}) => {
+    return apiClient.get(`/blogs/${blogId}/comments`, { params })
+  },
+
+  // Add a comment
+  createComment: (blogId, data) => {
+    return apiClient.post(`/blogs/${blogId}/comments`, data)
+  },
+
+  // Delete a comment
+  deleteComment: (id) => {
+    return apiClient.delete(`/comments/${id}`)
+  },
+}
+
+// ============================================
 // MUSIC API
 // ============================================
 export const musicAPI = {
@@ -252,4 +287,6 @@ export default {
   music: musicAPI,
   like: likeAPI,
   notification: notificationAPI,
+  repost: repostAPI,
+  comment: commentAPI,
 }

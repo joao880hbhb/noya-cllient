@@ -161,6 +161,9 @@
               {{ getInitials(authorName) }}
             </div>
             <div>
+              <p class="text-[11px] tracking-wide text-[#B0B0B0]">
+                Ditulis oleh
+              </p>
               <p
                 class="text-[13px] font-medium text-[#111111] group-hover:underline underline-offset-2"
               >
@@ -200,6 +203,54 @@
                 />
               </svg>
               <span class="tabular-nums">{{ likesCount }}</span>
+            </button>
+
+            <!-- Repost button -->
+            <button
+              @click="handleToggleRepost"
+              :disabled="reposting"
+              class="inline-flex items-center gap-1.5 text-[13px] font-medium rounded-full px-3.5 py-1.5 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              :class="
+                reposted
+                  ? 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100'
+                  : 'text-[#6B6B6B] border-[#E7E7E7] hover:border-[#111111] hover:text-[#111111]'
+              "
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 4v7h7M20 20v-7h-7M5.868 16.5a8 8 0 0014.1-6M18.132 7.5a8 8 0 00-14.1 6"
+                />
+              </svg>
+              <span class="tabular-nums">{{ repostsCount }}</span>
+            </button>
+
+            <!-- Comment count -->
+            <button
+              @click="scrollToComments"
+              class="inline-flex items-center gap-1.5 text-[13px] font-medium rounded-full px-3.5 py-1.5 border border-[#E7E7E7] text-[#6B6B6B] hover:border-[#111111] hover:text-[#111111] transition-colors"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8 10h8M8 14h5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span class="tabular-nums">{{ commentsCount }}</span>
             </button>
 
             <!-- Views -->
@@ -268,6 +319,217 @@
           </span>
         </div>
       </article>
+
+      <!-- Comments section -->
+      <div ref="commentsSection" class="mt-14 border-t border-[#F0F0F0] pt-10">
+        <h2
+          class="font-display italic text-[24px] sm:text-[28px] text-[#111111]"
+        >
+          Komentar
+        </h2>
+
+        <!-- Comment form -->
+        <div class="mt-6">
+          <div v-if="authStore.isAuthenticated" class="flex items-start gap-3">
+            <img
+              v-if="authStore.user?.picture"
+              :src="authStore.user.picture"
+              :alt="authStore.user?.displayName"
+              class="h-9 w-9 rounded-full object-cover border border-[#E7E7E7] shrink-0"
+            />
+            <div
+              v-else
+              class="h-9 w-9 rounded-full bg-[#111111] flex items-center justify-center text-white text-[12px] font-medium shrink-0"
+            >
+              {{ getInitials(authStore.user?.displayName || "U") }}
+            </div>
+            <form class="flex-1" @submit.prevent="submitComment">
+              <textarea
+                v-model="commentText"
+                rows="2"
+                maxlength="1000"
+                class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[3px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
+                placeholder="Tulis komentar..."
+                @keydown.ctrl.enter="submitComment"
+                @keydown.meta.enter="submitComment"
+              ></textarea>
+              <div class="flex items-center justify-between mt-2">
+                <span class="text-[11px] text-[#B0B0B0] tabular-nums">{{
+                  commentText.length
+                }}
+                / 1000</span>
+                <button
+                  type="submit"
+                  :disabled="commentSubmitting"
+                  class="inline-flex items-center px-4 py-1.5 bg-[#111111] text-white rounded-full text-[12px] font-medium hover:bg-black disabled:opacity-50 transition-colors"
+                >
+                  {{
+                    commentSubmitting
+                      ? "Mengirim…"
+                      : "Kirim"
+                  }}
+                </button>
+              </div>
+            </form>
+          </div>
+          <button
+            v-else
+            @click="openLoginPrompt('login-comment')"
+            class="w-full text-left border border-dashed border-[#D8D8D8] rounded-[3px] px-4 py-3.5 text-[13px] text-[#B0B0B0] hover:border-[#111111] hover:text-[#111111] transition-colors"
+          >
+            Masuk untuk berkomentar…
+          </button>
+        </div>
+
+        <!-- Comment list -->
+        <div v-if="commentsLoading" class="mt-6 space-y-4">
+          <div
+            v-for="i in 3"
+            :key="i"
+            class="flex gap-3 animate-pulse"
+          >
+            <div class="h-9 w-9 rounded-full bg-[#F0F0F0] shrink-0"></div>
+            <div class="flex-1 space-y-2">
+              <div class="h-3 w-32 bg-[#F0F0F0] rounded"></div>
+              <div class="h-3 w-full bg-[#F0F0F0] rounded"></div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          v-else-if="commentsError"
+          class="mt-6 border border-[#FDF7F6] bg-[#FDF7F6] px-4 py-3"
+        >
+          <p class="text-[13px] text-[#8C1D14]">{{ commentsError }}</p>
+        </div>
+
+        <div v-else-if="comments.length" class="mt-6 flex flex-col divide-y divide-[#F0F0F0]">
+          <div
+            v-for="comment in comments"
+            :key="comment._id"
+            class="py-5"
+          >
+            <div class="flex items-start gap-3">
+              <img
+                v-if="comment.author?.picture"
+                :src="comment.author.picture"
+                :alt="comment.author?.displayName"
+                class="h-9 w-9 rounded-full object-cover border border-[#E7E7E7] shrink-0"
+              />
+              <div
+                v-else
+                class="h-9 w-9 rounded-full bg-[#111111] flex items-center justify-center text-white text-[12px] font-medium shrink-0"
+              >
+                {{ getInitials(commentAuthorName(comment)) }}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-baseline gap-2">
+                  <p class="text-[13px] font-medium text-[#111111]">
+                    {{ commentAuthorName(comment) }}
+                  </p>
+                  <span class="text-[11px] text-[#B0B0B0]">{{
+                    formatRelativeTime(comment.createdAt)
+                  }}</span>
+                  <button
+                    v-if="
+                      authStore.isAuthenticated &&
+                      comment.author?._id === authStore.user?.id
+                    "
+                    @click="deleteComment(comment._id)"
+                    class="ml-auto text-[11px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
+                  >
+                    Hapus
+                  </button>
+                </div>
+                <p class="mt-1 text-[14px] leading-relaxed text-[#333333] whitespace-pre-wrap">
+                  {{ comment.content }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Replies -->
+            <div
+              v-if="comment.replies && comment.replies.length"
+              class="mt-3 ml-12 flex flex-col divide-y divide-[#F5F5F5]"
+            >
+              <div
+                v-for="reply in comment.replies"
+                :key="reply._id"
+                class="py-3"
+              >
+                <div class="flex items-start gap-3">
+                  <img
+                    v-if="reply.author?.picture"
+                    :src="reply.author.picture"
+                    :alt="reply.author?.displayName"
+                    class="h-7 w-7 rounded-full object-cover border border-[#E7E7E7] shrink-0"
+                  />
+                  <div
+                    v-else
+                    class="h-7 w-7 rounded-full bg-[#111111] flex items-center justify-center text-white text-[10px] font-medium shrink-0"
+                  >
+                    {{ getInitials(replyAuthorName(reply)) }}
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-baseline gap-2">
+                      <p class="text-[12.5px] font-medium text-[#111111]">
+                        {{ replyAuthorName(reply) }}
+                      </p>
+                      <span class="text-[11px] text-[#B0B0B0]">{{
+                        formatRelativeTime(reply.createdAt)
+                      }}</span>
+                      <button
+                        v-if="
+                          authStore.isAuthenticated &&
+                          reply.author?._id === authStore.user?.id
+                        "
+                        @click="deleteComment(reply._id)"
+                        class="ml-auto text-[11px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                    <p class="mt-1 text-[13.5px] leading-relaxed text-[#333333] whitespace-pre-wrap">
+                      {{ reply.content }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reply form -->
+            <form
+              v-if="authStore.isAuthenticated"
+              class="mt-3 ml-12 flex gap-2"
+              @submit.prevent="submitReply(comment)"
+            >
+              <input
+                v-model="replyTexts[comment._id]"
+                type="text"
+                maxlength="1000"
+                class="flex-1 text-[13px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[3px] focus:border-[#111111] focus:ring-0 px-3 py-1.5 transition-colors"
+                placeholder="Balas komentar…"
+              />
+              <button
+                type="submit"
+                class="text-[12px] font-medium text-[#5B4BFF] hover:text-[#4a3dcc] shrink-0 transition-colors"
+              >
+                Balas
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Empty comments -->
+        <div
+          v-else
+          class="mt-6 border border-dashed border-[#D8D8D8] rounded-[3px] py-10 px-6 text-center"
+        >
+          <p class="text-[13px] text-[#8A8A8A]">
+            Belum ada komentar. Jadilah yang pertama!
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- Login prompt modal -->
@@ -300,10 +562,10 @@
           </svg>
         </div>
         <h3 class="text-[17px] font-display font-semibold text-[#111111]">
-          Masuk untuk menyukai
+          {{ loginPromptTitle }}
         </h3>
         <p class="mt-2 text-[13px] leading-relaxed text-[#6B6B6B]">
-          Kamu perlu login dulu untuk bisa menyukai cerita ini.
+          {{ loginPromptMessage }}
         </p>
         <div class="mt-7 flex flex-col gap-2.5">
           <button
@@ -327,10 +589,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { blogAPI, likeAPI, BASE_URL } from "@/services/api";
+import { blogAPI, likeAPI, repostAPI, commentAPI, BASE_URL } from "@/services/api";
 import { useAuthStore } from "@/stores/auth";
 import BlogContent from "@/components/BlogContent.vue";
-import { getInitials, formatDate } from "@/utils/helpers";
+import { getInitials, formatDate, formatRelativeTime } from "@/utils/helpers";
 
 const route = useRoute();
 const router = useRouter();
@@ -343,9 +605,42 @@ const liked = ref(false);
 const likesCount = ref(0);
 const liking = ref(false);
 const progress = ref(0);
+const reposted = ref(false);
+const repostsCount = ref(0);
+const reposting = ref(false);
+const commentsCount = ref(0);
+const comments = ref([]);
+const commentsLoading = ref(false);
+const commentsError = ref("");
+const commentText = ref("");
+const commentSubmitting = ref(false);
+const replyTexts = ref({});
+const commentsSection = ref(null);
+const loginPromptReason = ref("like");
 const audioEl = ref(null);
 const showLoginPrompt = ref(false);
 const musicPreviewUrl = ref("");
+
+const loginPromptTitle = computed(() => {
+  if (loginPromptReason.value === "repost") return "Masuk untuk merepost";
+  if (loginPromptReason.value === "comment") return "Masuk untuk berkomentar";
+  return "Masuk untuk menyukai";
+});
+
+const loginPromptMessage = computed(() => {
+  if (loginPromptReason.value === "repost") {
+    return "Kamu perlu login dulu untuk bisa merepost cerita ini.";
+  }
+  if (loginPromptReason.value === "comment") {
+    return "Kamu perlu login dulu untuk bisa menulis komentar.";
+  }
+  return "Kamu perlu login dulu untuk bisa menyukai cerita ini.";
+});
+
+const openLoginPrompt = (reason = "like") => {
+  loginPromptReason.value = reason;
+  showLoginPrompt.value = true;
+};
 
 // Audio di-stream lewat server kita (/api/music/preview/:trackId).
 // Server selalu mengambil URL segar dari Deezer saat itu juga, jadi
@@ -402,8 +697,12 @@ const fetchBlog = async () => {
     if (blog.value) {
       likesCount.value = blog.value.likesCount || 0;
       liked.value = !!response.data.userLiked;
+      reposted.value = !!response.data.userReposted;
+      repostsCount.value = response.data.repostsCount || 0;
+      commentsCount.value = response.data.commentsCount || 0;
       musicPreviewUrl.value = "";
       refreshMusicPreview(blog.value.music);
+      loadComments();
     } else {
       error.value = "Blog not found";
     }
@@ -417,7 +716,7 @@ const fetchBlog = async () => {
 
 const handleToggleLike = async () => {
   if (!authStore.isAuthenticated) {
-    showLoginPrompt.value = true;
+    openLoginPrompt("like");
     return;
   }
   if (liking.value || !blog.value?._id) return;
@@ -429,7 +728,7 @@ const handleToggleLike = async () => {
     likesCount.value = response.data.likesCount;
   } catch (err) {
     if (err.response?.status === 401) {
-      showLoginPrompt.value = true;
+      openLoginPrompt("like");
     }
   } finally {
     liking.value = false;
@@ -443,6 +742,112 @@ const goToLogin = () => {
 
 const closeLoginPrompt = () => {
   showLoginPrompt.value = false;
+};
+
+const handleToggleRepost = async () => {
+  if (!authStore.isAuthenticated) {
+    openLoginPrompt("repost");
+    return;
+  }
+  if (reposting.value || !blog.value?._id) return;
+
+  reposting.value = true;
+  try {
+    const response = await repostAPI.toggleRepost(blog.value._id);
+    reposted.value = response.data.reposted;
+    repostsCount.value = response.data.repostsCount;
+  } catch (err) {
+    if (err.response?.status === 401) {
+      openLoginPrompt("repost");
+    }
+  } finally {
+    reposting.value = false;
+  }
+};
+
+const scrollToComments = () => {
+  commentsSection.value?.scrollIntoView({ behavior: "smooth" });
+};
+
+const commentAuthorName = (comment) =>
+  comment.author?.displayName ||
+  [comment.author?.firstName, comment.author?.lastName].filter(Boolean).join(" ") ||
+  "User";
+
+const replyAuthorName = commentAuthorName;
+
+const loadComments = async () => {
+  if (!blog.value?._id) return;
+  commentsLoading.value = true;
+  commentsError.value = "";
+  try {
+    const response = await commentAPI.getComments(blog.value._id, { limit: 50 });
+    comments.value = response.data.comments || [];
+    commentsCount.value = response.data.totalComments ?? commentsCount.value;
+  } catch (err) {
+    commentsError.value =
+      err.response?.data?.message || "Gagal memuat komentar";
+  } finally {
+    commentsLoading.value = false;
+  }
+};
+
+const submitComment = async () => {
+  if (!authStore.isAuthenticated) {
+    openLoginPrompt("comment");
+    return;
+  }
+  const text = commentText.value.trim();
+  if (!text || commentSubmitting.value || !blog.value?._id) return;
+
+  commentSubmitting.value = true;
+  try {
+    const response = await commentAPI.createComment(blog.value._id, {
+      content: text,
+    });
+    comments.value.unshift(response.data.comment);
+    commentsCount.value = response.data.commentsCount;
+    commentText.value = "";
+  } catch (err) {
+    commentsError.value =
+      err.response?.data?.message || "Gagal mengirim komentar";
+  } finally {
+    commentSubmitting.value = false;
+  }
+};
+
+const submitReply = async (comment) => {
+  if (!authStore.isAuthenticated) {
+    openLoginPrompt("comment");
+    return;
+  }
+  const text = (replyTexts.value[comment._id] || "").trim();
+  if (!text || !blog.value?._id) return;
+
+  try {
+    const response = await commentAPI.createComment(blog.value._id, {
+      content: text,
+      parent: comment._id,
+    });
+    if (!comment.replies) comment.replies = [];
+    comment.replies.push(response.data.comment);
+    commentsCount.value = response.data.commentsCount;
+    replyTexts.value[comment._id] = "";
+  } catch (err) {
+    commentsError.value =
+      err.response?.data?.message || "Gagal mengirim balasan";
+  }
+};
+
+const deleteComment = async (commentId) => {
+  if (!confirm("Hapus komentar ini?")) return;
+  try {
+    await commentAPI.deleteComment(commentId);
+    comments.value = comments.value.filter((c) => c._id !== commentId);
+    commentsCount.value = Math.max(0, commentsCount.value - 1);
+  } catch (err) {
+    commentsError.value = err.response?.data?.message || "Gagal menghapus komentar";
+  }
 };
 
 watch(() => route.params.slug, fetchBlog);

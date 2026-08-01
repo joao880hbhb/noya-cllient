@@ -296,6 +296,25 @@
             :to="`/blogs/${blog.slug}`"
             class="block py-5 first:pt-0"
           >
+            <div
+              v-if="blog.isRepost"
+              class="mb-2 flex items-center gap-1.5 text-[11px] text-[#8A8A8A]"
+            >
+              <svg
+                class="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 4v7h7M20 20v-7h-7M5.868 16.5a8 8 0 0014.1-6M18.132 7.5a8 8 0 00-14.1 6"
+                />
+              </svg>
+              Repost · {{ blog.author?.displayName || "Penulis" }}
+            </div>
             <div class="group flex items-center gap-4">
               <!-- Thumbnail -->
               <div
