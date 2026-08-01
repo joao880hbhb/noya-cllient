@@ -268,6 +268,58 @@
         </div>
       </article>
     </div>
+
+    <!-- Login prompt modal -->
+    <div
+      v-if="showLoginPrompt"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
+        @click="closeLoginPrompt"
+      ></div>
+      <div
+        class="relative w-full max-w-sm bg-white rounded-[6px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)] p-8 text-center"
+      >
+        <div
+          class="mx-auto h-12 w-12 rounded-full bg-[#F7F5FF] flex items-center justify-center mb-5"
+        >
+          <svg
+            class="h-6 w-6 text-[#5B4BFF]"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-[17px] font-display font-semibold text-[#111111]">
+          Masuk untuk menyukai
+        </h3>
+        <p class="mt-2 text-[13px] leading-relaxed text-[#6B6B6B]">
+          Kamu perlu login dulu untuk bisa menyukai cerita ini.
+        </p>
+        <div class="mt-7 flex flex-col gap-2.5">
+          <button
+            @click="goToLogin"
+            class="w-full inline-flex items-center justify-center px-5 py-2.5 bg-[#5B4BFF] text-white rounded-full text-[13px] font-medium hover:bg-[#4a3dcc] transition-colors"
+          >
+            Login
+          </button>
+          <button
+            @click="closeLoginPrompt"
+            class="w-full inline-flex items-center justify-center px-5 py-2.5 border border-[#E7E7E7] text-[#4B4B4B] rounded-full text-[13px] font-medium hover:bg-[#FAFAFA] transition-colors"
+          >
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -291,6 +343,7 @@ const likesCount = ref(0);
 const liking = ref(false);
 const progress = ref(0);
 const audioEl = ref(null);
+const showLoginPrompt = ref(false);
 
 const authorName = computed(() => {
   const author = blog.value?.author;
@@ -352,7 +405,7 @@ const fetchBlog = async () => {
 
 const handleToggleLike = async () => {
   if (!authStore.isAuthenticated) {
-    router.push({ name: "login", query: { redirect: route.fullPath } });
+    showLoginPrompt.value = true;
     return;
   }
   if (liking.value || !blog.value?._id) return;
@@ -364,11 +417,20 @@ const handleToggleLike = async () => {
     likesCount.value = response.data.likesCount;
   } catch (err) {
     if (err.response?.status === 401) {
-      router.push({ name: "login", query: { redirect: route.fullPath } });
+      showLoginPrompt.value = true;
     }
   } finally {
     liking.value = false;
   }
+};
+
+const goToLogin = () => {
+  showLoginPrompt.value = false;
+  router.push({ name: "login", query: { redirect: route.fullPath } });
+};
+
+const closeLoginPrompt = () => {
+  showLoginPrompt.value = false;
 };
 
 watch(() => route.params.slug, fetchBlog);
