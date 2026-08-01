@@ -102,17 +102,15 @@
             </p>
             <div class="mt-3 flex flex-wrap items-center gap-3">
               <audio
-                v-if="blog.music.previewUrl"
+                v-if="musicPreviewUrl"
                 ref="audioEl"
                 controls
                 autoplay
                 playsinline
+                :src="musicPreviewUrl"
+                type="audio/mpeg"
                 class="h-8 max-w-[220px]"
               >
-                <source
-                  :src="musicPreviewUrl"
-                  type="audio/mpeg"
-                />
                 Your browser does not support the audio element.
               </audio>
               <a
@@ -329,7 +327,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { blogAPI, likeAPI } from "@/services/api";
+import { blogAPI, likeAPI, BASE_URL } from "@/services/api";
 import { useAuthStore } from "@/stores/auth";
 import BlogContent from "@/components/BlogContent.vue";
 import { getInitials, formatDate } from "@/utils/helpers";
@@ -347,11 +345,15 @@ const liking = ref(false);
 const progress = ref(0);
 const audioEl = ref(null);
 const showLoginPrompt = ref(false);
+const musicPreviewUrl = ref("");
 
-const musicPreviewUrl = computed(() => {
-  const url = blog.value?.music?.previewUrl;
-  return url ? url.replace(/^http:\/\//, "https://") : "";
-});
+// Audio di-stream lewat server kita (/api/music/preview/:trackId).
+// Server selalu mengambil URL segar dari Deezer saat itu juga, jadi
+// URL expired/mixed-content tidak lagi jadi masalah.
+const refreshMusicPreview = async (music) => {
+  if (!music?.trackId) return;
+  musicPreviewUrl.value = `${BASE_URL}/music/preview/${music.trackId}`;
+};
 
 const authorName = computed(() => {
   const author = blog.value?.author;
@@ -400,6 +402,8 @@ const fetchBlog = async () => {
     if (blog.value) {
       likesCount.value = blog.value.likesCount || 0;
       liked.value = !!response.data.userLiked;
+      musicPreviewUrl.value = "";
+      refreshMusicPreview(blog.value.music);
     } else {
       error.value = "Blog not found";
     }
@@ -446,6 +450,16 @@ watch(() => route.params.slug, fetchBlog);
 // Putar lagu otomatis begitu elemen audio muncul
 watch(audioEl, (el) => {
   if (el) {
+    const playPromise = el.play();
+    if (playPromise) playPromise.catch(() => {});
+  }
+});
+
+// Saat URL segar dari Deezer tiba, muat ulang & putar audio
+watch(musicPreviewUrl, (url) => {
+  const el = audioEl.value;
+  if (el && url) {
+    el.load();
     const playPromise = el.play();
     if (playPromise) playPromise.catch(() => {});
   }

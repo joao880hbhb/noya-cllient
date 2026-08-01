@@ -53,7 +53,7 @@ onMounted(fetchFeed);
         </div>
         <router-link
           to="/blogs"
-          class="hidden sm:inline-flex items-center text-sm font-medium text-black"
+          class="inline-flex items-center text-sm font-medium text-black whitespace-nowrap shrink-0"
         >
           View all &rarr;
         </router-link>
