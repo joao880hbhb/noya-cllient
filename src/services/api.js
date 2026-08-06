@@ -26,31 +26,70 @@ apiClient.interceptors.request.use(
   },
 )
 
-// Response interceptor untuk handle refresh token
+// Response interceptor dengan refresh token queue (mencegah race condition)
+let isRefreshing = false
+let failedQueue = []
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) reject(error)
+    else resolve(token)
+  })
+  failedQueue = []
+}
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
 
+    // Jangan intercept request ke /auth/refresh agar tidak loop
+    if (originalRequest.url?.includes('/auth/refresh')) {
+      return Promise.reject(error)
+    }
+
     // Jika error 401 dan belum retry
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // Jika sedang refresh, antri request ini
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject })
+        }).then((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`
+          return apiClient(originalRequest)
+        }).catch((err) => Promise.reject(err))
+      }
+
       originalRequest._retry = true
+      isRefreshing = true
 
       try {
         // Coba refresh token
-        const response = await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true })
+        const response = await axios.post(
+          `${BASE_URL}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        )
 
         const { accessToken } = response.data.data
         localStorage.setItem('accessToken', accessToken)
 
-        // Retry request dengan token baru
+        // Proses antrian request yang menunggu
+        processQueue(null, accessToken)
+
+        // Retry request asli dengan token baru
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
         return apiClient(originalRequest)
       } catch (refreshError) {
-        // Jika refresh gagal, clear token dan redirect ke login
+        // Refresh gagal → proses antrian dengan error
+        processQueue(refreshError, null)
+
+        // Clear token dan redirect ke login
         localStorage.removeItem('accessToken')
         window.location.href = '/login'
         return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
       }
     }
 
@@ -63,11 +102,11 @@ apiClient.interceptors.response.use(
 // ============================================
 export const authAPI = {
   // OAuth callback (Google Login)
-  oauthCallback: (credential) => {
+  oauthCallback: (credential, rememberMe = true) => {
     return apiClient.post('/auth/oauth/callback', {
       provider: 'google',
       idToken: credential,
-      rememberMe: true,
+      rememberMe,
     })
   },
 

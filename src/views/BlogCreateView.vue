@@ -13,6 +13,12 @@
             Write something<br class="hidden sm:block" />
             worth reading.
           </h1>
+          <p
+            v-if="draftStatus"
+            class="sm:hidden text-[10px] text-[#8A8A8A] mt-2 italic"
+          >
+            {{ draftStatus }}
+          </p>
         </div>
         <div class="hidden sm:block text-right pt-1 shrink-0">
           <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">
@@ -20,6 +26,12 @@
           </p>
           <p class="text-[11px] text-[#B0B0B0] tabular-nums mt-0.5">
             {{ contentLength }} chars
+          </p>
+          <p
+            v-if="draftStatus"
+            class="text-[10px] text-[#8A8A8A] mt-1.5 italic transition-all duration-300"
+          >
+            {{ draftStatus }}
           </p>
         </div>
       </div>
@@ -399,8 +411,9 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import { blogAPI, musicAPI } from "@/services/api";
 import BlogEditor from "@/components/BlogEditor.vue";
 import { debounce } from "@/utils/helpers";
@@ -413,6 +426,9 @@ import {
 } from "@/utils/constants";
 
 const router = useRouter();
+const authStore = useAuthStore();
+const draftStatus = ref("");
+
 
 // Form state
 const title = ref("");
@@ -554,6 +570,69 @@ const countTextContent = (doc) => {
 
 const contentLength = computed(() => countTextContent(content.value));
 
+// Draft auto-save logic
+const getDraftKey = () => `noya_draft_${authStore.user?._id || authStore.user?.id || 'guest'}`;
+
+const saveDraft = () => {
+  // Hanya save jika ada title, content, atau excerpt yang diisi
+  if (!title.value.trim() && (!content.value || contentLength.value === 0) && !excerpt.value.trim()) {
+    return;
+  }
+  
+  draftStatus.value = "Saving...";
+  const draftData = {
+    title: title.value,
+    content: content.value,
+    excerpt: excerpt.value,
+    tagsInput: tagsInput.value,
+    selectedMusic: selectedMusic.value,
+    status: status.value,
+  };
+  localStorage.setItem(getDraftKey(), JSON.stringify(draftData));
+  
+  // Update status saved setelah delay kecil
+  setTimeout(() => {
+    if (draftStatus.value === "Saving...") {
+      draftStatus.value = "Draft saved locally";
+    }
+  }, 500);
+};
+
+const debouncedSaveDraft = debounce(saveDraft, 1000);
+
+// Watch form inputs to trigger auto-save
+watch(
+  [title, content, excerpt, tagsInput, selectedMusic, status],
+  () => {
+    debouncedSaveDraft();
+  },
+  { deep: true }
+);
+
+// Load draft from localStorage on mount
+onMounted(() => {
+  const saved = localStorage.getItem(getDraftKey());
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.title) title.value = parsed.title;
+      if (parsed.content) content.value = parsed.content;
+      if (parsed.excerpt) excerpt.value = parsed.excerpt;
+      if (parsed.tagsInput) tagsInput.value = parsed.tagsInput;
+      if (parsed.selectedMusic) selectedMusic.value = parsed.selectedMusic;
+      if (parsed.status) status.value = parsed.status;
+      
+      draftStatus.value = "Draft restored from local storage";
+      setTimeout(() => {
+        draftStatus.value = "Draft saved locally";
+      }, 3000);
+    } catch (e) {
+      console.error("Failed to restore draft", e);
+    }
+  }
+});
+
+
 const handleSubmit = async () => {
   formError.value = "";
   successMessage.value = "";
@@ -590,6 +669,7 @@ const handleSubmit = async () => {
   try {
     const response = await blogAPI.createBlog(formData);
     successMessage.value = SUCCESS_MESSAGES.BLOG_CREATED;
+    localStorage.removeItem(getDraftKey());
     const blog = response.data.blog;
     if (blog?.slug) {
       router.push(`/blogs/${blog.slug}`);

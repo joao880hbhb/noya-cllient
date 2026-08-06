@@ -15,6 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
   const accessToken = ref(localStorage.getItem('accessToken') || null)
   const isLoading = ref(false)
   const error = ref(null)
+  const rememberMe = ref(localStorage.getItem('rememberMe') !== 'false')
 
   // Computed
   const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
@@ -42,13 +43,18 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
   }
 
+  const setRememberMe = (value) => {
+    rememberMe.value = value
+    localStorage.setItem('rememberMe', value ? 'true' : 'false')
+  }
+
   // Login with Google OAuth
   const loginWithGoogle = async (credential) => {
     try {
       isLoading.value = true
       clearError()
 
-      const response = await authAPI.oauthCallback(credential)
+      const response = await authAPI.oauthCallback(credential, rememberMe.value)
       const { accessToken: token, user: userData } = response.data.data
 
       setToken(token)
@@ -100,8 +106,10 @@ export const useAuthStore = defineStore('auth', () => {
         await sleep(RETRY_DELAY)
         return refreshToken(retries + 1)
       }
-      // Hanya logout jika ini benar-benar kegagalan auth (bukan rate limited)
-      if (!isRateLimited(err)) {
+      // Hanya logout jika server secara eksplisit menolak token (401)
+      // Jangan logout pada network error, 500, dll
+      const status = err?.response?.status
+      if (status === 401) {
         await logout()
       }
       return { success: false, rateLimited: isRateLimited(err) }
@@ -181,6 +189,8 @@ export const useAuthStore = defineStore('auth', () => {
     userDisplayName,
 
     // Actions
+    rememberMe,
+    setRememberMe,
     loginWithGoogle,
     logout,
     fetchUserProfile,

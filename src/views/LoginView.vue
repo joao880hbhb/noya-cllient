@@ -116,6 +116,27 @@
           </div>
         </div>
 
+        <!-- Remember Me Toggle -->
+        <div class="mt-6 flex items-center justify-center gap-3">
+          <button
+            @click="toggleRememberMe"
+            :class="[
+              'relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2',
+              authStore.rememberMe ? 'bg-purple-600' : 'bg-gray-300'
+            ]"
+            role="switch"
+            :aria-checked="authStore.rememberMe"
+          >
+            <span
+              :class="[
+                'pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                authStore.rememberMe ? 'translate-x-4' : 'translate-x-0'
+              ]"
+            />
+          </button>
+          <span class="text-sm text-gray-600">Remember me</span>
+        </div>
+
         <!-- Additional info -->
         <p class="mt-8 text-center text-xs leading-relaxed text-gray-400">
           By signing in, you agree to our
@@ -138,6 +159,10 @@ const authStore = useAuthStore();
 
 // Google Client ID dari environment variable
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+const toggleRememberMe = () => {
+  authStore.setRememberMe(!authStore.rememberMe);
+};
 
 // Load Google Sign-In script
 onMounted(() => {
