@@ -227,6 +227,7 @@
           <!-- Guest -->
           <template v-else>
             <router-link
+              v-if="route.path !== '/login'"
               to="/login"
               class="inline-flex items-center gap-2 px-5 py-2 bg-[#0e0e0e] text-white text-sm font-medium rounded-full hover:bg-[#070707]"
             >
@@ -241,13 +242,14 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { notificationAPI } from '@/services/api'
 import { formatRelativeTime } from '@/utils/helpers'
 import logoNoya from '@/assets/logonoya.png'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 const showUserMenu = ref(false)
 const showNotifications = ref(false)

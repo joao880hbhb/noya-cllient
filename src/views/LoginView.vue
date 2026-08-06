@@ -25,51 +25,8 @@
       ]"
     ></div>
 
-    <!-- Header / Navbar -->
-    <header 
-      :class="[
-        'w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between border-b transition-colors duration-300',
-        isDark ? 'border-white/[0.05]' : 'border-stone-200'
-      ]"
-    >
-      <div class="flex items-center gap-3">
-        <img
-          src="@/assets/logonoya.png"
-          alt="Noya"
-          class="h-8 w-8 rounded-full object-cover ring-2 ring-purple-500/20"
-        />
-        <span 
-          :class="[
-            'font-display italic text-2xl font-bold tracking-tight transition-colors duration-300',
-            isDark ? 'text-white' : 'text-stone-900'
-          ]"
-        >
-          Noya
-        </span>
-      </div>
-      
-      <!-- Theme Toggle Switch (Replaces Beta Community badge) -->
-      <button
-        @click="toggleTheme"
-        :class="[
-          'p-2 rounded-full border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer',
-          isDark ? 'border-white/10 bg-white/5 hover:bg-white/10' : 'border-stone-200 bg-stone-100 hover:bg-stone-200'
-        ]"
-        aria-label="Toggle theme"
-      >
-        <!-- Moon Icon (shown in light mode to switch to dark) -->
-        <svg v-if="!isDark" class="h-4 w-4 text-stone-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-        <!-- Sun Icon (shown in dark mode to switch to light) -->
-        <svg v-else class="h-4 w-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m2.828 9.9a5 5 0 117.072 0l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-        </svg>
-      </button>
-    </header>
-
     <!-- SECTION 1: HERO & LOGIN CARD -->
-    <main class="w-full max-w-7xl mx-auto px-6 py-12 md:py-20">
+    <main class="w-full max-w-7xl mx-auto px-6 py-12 md:py-24">
       <div class="grid lg:grid-cols-12 gap-12 items-center min-h-[70vh]">
         <!-- Hero Text -->
         <div class="lg:col-span-7 space-y-6 text-left">
@@ -101,14 +58,22 @@
           </p>
           <div class="pt-2 flex flex-wrap gap-4 items-center">
             <button
+              @click="router.push('/')"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg shadow-purple-600/10"
+            >
+              Mulai tanpa login
+              <span>&rarr;</span>
+            </button>
+            <button
               @click="scrollToFeatures"
               :class="[
-                'group flex items-center gap-2 text-sm transition-colors cursor-pointer',
-                isDark ? 'text-purple-300 hover:text-white' : 'text-purple-700 hover:text-purple-900 font-medium'
+                'group flex items-center gap-2 text-sm transition-all duration-300 cursor-pointer py-3 px-5 rounded-full border',
+                isDark 
+                  ? 'text-purple-300 border-white/10 hover:text-white hover:bg-white/5' 
+                  : 'text-purple-700 border-stone-200 hover:text-purple-900 hover:bg-stone-100 font-medium'
               ]"
             >
               Pelajari fitur utama
-              <span class="transform group-hover:translate-y-1 transition-transform duration-200">&darr;</span>
             </button>
           </div>
         </div>
@@ -170,31 +135,15 @@
               </div>
             </transition>
 
-            <!-- Google Sign In -->
+            <!-- Custom Google Sign In (Programmatic Button Style) -->
             <div class="mb-6">
-              <div
-                id="g_id_onload"
-                :data-client_id="googleClientId"
-                data-callback="handleGoogleCallback"
-                data-auto_prompt="false"
-              ></div>
-
               <div class="relative">
-                <div v-if="!authStore.isLoading" class="flex justify-center">
-                  <div
-                    id="g_id_signin"
-                    class="g_id_signin"
-                    data-type="standard"
-                    data-shape="pill"
-                    data-theme="filled_black"
-                    data-text="signin_with"
-                    data-size="large"
-                    data-logo_alignment="left"
-                    data-width="300"
-                  ></div>
+                <div v-show="!authStore.isLoading" class="flex justify-center">
+                  <!-- Div target untuk render Google Button secara mandiri -->
+                  <div id="custom-google-btn" class="min-h-[44px]"></div>
                 </div>
 
-                <div v-else class="flex flex-col items-center justify-center py-3">
+                <div v-if="authStore.isLoading" class="flex flex-col items-center justify-center py-3">
                   <div class="h-6 w-6 animate-spin rounded-full border-2 border-purple-500/20 border-t-purple-500"></div>
                   <p class="mt-3 text-sm text-purple-300">Signing in...</p>
                 </div>
@@ -494,7 +443,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { blogAPI } from "@/services/api";
@@ -524,6 +473,25 @@ const toggleTheme = () => {
 const handleThemeChanged = () => {
   isDark.value = document.documentElement.classList.contains("dark");
 };
+
+// Render Google button programmatically
+const renderGoogleButton = () => {
+  const container = document.getElementById("custom-google-btn");
+  if (container && window.google) {
+    container.innerHTML = ""; // Clear existing GSI render
+    window.google.accounts.id.renderButton(container, {
+      theme: isDark.value ? "filled_black" : "outline",
+      size: "large",
+      shape: "pill",
+      width: 300,
+    });
+  }
+};
+
+// Watch theme changes to re-render Google button dynamically with correct theme
+watch(isDark, () => {
+  renderGoogleButton();
+});
 
 const trendingBlogs = ref([]);
 const trendingLoading = ref(true);
@@ -558,13 +526,7 @@ onMounted(async () => {
     return;
   }
 
-  // Load Google Sign-In script
-  const script = document.createElement("script");
-  script.src = "https://accounts.google.com/gsi/client";
-  script.async = true;
-  script.defer = true;
-  document.head.appendChild(script);
-
+  // Define global Google OAuth handler
   window.handleGoogleCallback = async (response) => {
     const credential = response.credential;
     const result = await authStore.loginWithGoogle(credential);
@@ -573,6 +535,32 @@ onMounted(async () => {
       router.push(redirectTo);
     }
   };
+
+  // Check if GSI client is already loaded, otherwise load script
+  if (window.google) {
+    window.google.accounts.id.initialize({
+      client_id: googleClientId,
+      callback: window.handleGoogleCallback,
+      auto_prompt: false,
+    });
+    renderGoogleButton();
+  } else {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: window.handleGoogleCallback,
+          auto_prompt: false,
+        });
+        renderGoogleButton();
+      }
+    };
+    document.head.appendChild(script);
+  }
 
   // Fetch trending stories for showcase
   try {
