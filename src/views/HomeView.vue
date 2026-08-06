@@ -1,36 +1,87 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useAuthStore } from "@/stores/auth";
-import { blogAPI } from "@/services/api";
-import BlogCard from "@/components/BlogCard.vue";
-import UserSearch from "@/components/UserSearch.vue";
-import { getInitials, formatRelativeTime } from "@/utils/helpers";
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { blogAPI } from '@/services/api'
+import BlogCard from '@/components/BlogCard.vue'
+import UserSearch from '@/components/UserSearch.vue'
+import { getInitials, formatRelativeTime } from '@/utils/helpers'
 
-const authStore = useAuthStore();
+const authStore = useAuthStore()
 
-const trendingBlogs = ref([]);
-const latestBlogs = ref([]);
-const loading = ref(true);
-const error = ref("");
+const trendingBlogs = ref([])
+const latestBlogs = ref([])
+const loading = ref(true)
+const error = ref('')
+
+const loadingMore = ref(false)
+const loadMoreTrigger = ref(null)
+const currentPage = ref(1)
+const totalPages = ref(1)
+const pageSize = 9
+const hasMore = computed(() => currentPage.value < totalPages.value)
+let observer = null
 
 const fetchFeed = async () => {
-  loading.value = true;
-  error.value = "";
+  loading.value = true
+  error.value = ''
+  currentPage.value = 1
   try {
     const [trendingRes, latestRes] = await Promise.all([
-      blogAPI.getAllBlogs({ sort: "trending", limit: 6 }),
-      blogAPI.getAllBlogs({ page: 1, limit: 9 }),
-    ]);
-    trendingBlogs.value = trendingRes.data.blogs || [];
-    latestBlogs.value = latestRes.data.blogs || [];
+      blogAPI.getAllBlogs({ sort: 'trending', limit: 6 }),
+      blogAPI.getAllBlogs({ page: 1, limit: pageSize }),
+    ])
+    trendingBlogs.value = trendingRes.data.blogs || []
+    latestBlogs.value = latestRes.data.blogs || []
+    totalPages.value = latestRes.data.totalPages || 1
   } catch (err) {
-    error.value = err.response?.data?.message || "Failed to load beranda";
+    error.value = err.response?.data?.message || 'Failed to load beranda'
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
-onMounted(fetchFeed);
+const loadMoreLatest = async () => {
+  if (loadingMore.value || !hasMore.value) return
+  loadingMore.value = true
+  try {
+    const nextPage = currentPage.value + 1
+    const response = await blogAPI.getAllBlogs({ page: nextPage, limit: pageSize })
+    const newBlogs = response.data.blogs || []
+    latestBlogs.value = [...latestBlogs.value, ...newBlogs]
+    currentPage.value = nextPage
+    totalPages.value = response.data.totalPages || 1
+  } catch (err) {
+    console.error('Failed to load more blogs:', err)
+  } finally {
+    loadingMore.value = false
+  }
+}
+
+onMounted(() => {
+  fetchFeed()
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0]
+      if (entry.isIntersecting && hasMore.value && !loading.value && !loadingMore.value) {
+        loadMoreLatest()
+      }
+    },
+    {
+      rootMargin: '200px',
+    },
+  )
+
+  if (loadMoreTrigger.value) {
+    observer.observe(loadMoreTrigger.value)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>
 
 <template>
@@ -45,11 +96,9 @@ onMounted(fetchFeed);
       <div class="mb-6 flex items-end justify-between">
         <div>
           <h1 class="text-2xl font-bold text-gray-900">
-            Haloo, {{ authStore.user?.displayName || "User" }} 👋🏻
+            Haloo, {{ authStore.user?.displayName || 'User' }} 👋🏻
           </h1>
-          <p class="mt-1 text-sm text-gray-500">
-            Temukan cerita terhangat dan terbaru
-          </p>
+          <p class="mt-1 text-sm text-gray-500">Temukan cerita terhangat dan terbaru</p>
         </div>
         <router-link
           to="/blogs"
@@ -66,9 +115,7 @@ onMounted(fetchFeed);
             :key="i"
             class="flex items-center gap-3 bg-gray-50 rounded-2xl p-3 animate-pulse"
           >
-            <div
-              class="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-xl bg-gray-100"
-            ></div>
+            <div class="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-xl bg-gray-100"></div>
             <div class="flex-1 min-w-0">
               <div class="h-4 bg-gray-100 rounded mb-2 w-3/4"></div>
               <div class="h-3 bg-gray-100 rounded mb-2 w-full"></div>
@@ -93,9 +140,7 @@ onMounted(fetchFeed);
         <!-- Trending on Noya -->
         <section v-if="trendingBlogs.length" class="mb-10">
           <div class="mb-4 flex items-center gap-2">
-            <h2 class="font-serif text-xl font-bold text-gray-900">
-              Trending on Noya
-            </h2>
+            <h2 class="font-serif text-xl font-bold text-gray-900">Trending on Noya</h2>
             <!-- <span
               class="rounded-full bg-[#5B4BFF]/10 px-2 py-0.5 text-xs font-semibold text-[#e49d2c]"
             >
@@ -125,10 +170,7 @@ onMounted(fetchFeed);
                     class="h-full w-full object-cover"
                     loading="lazy"
                   />
-                  <div
-                    v-else
-                    class="h-full w-full flex items-center justify-center"
-                  >
+                  <div v-else class="h-full w-full flex items-center justify-center">
                     <span class="text-xl font-bold text-gray-300">{{
                       getInitials(blog.title)
                     }}</span>
@@ -137,7 +179,7 @@ onMounted(fetchFeed);
                   <span
                     class="absolute top-1 left-1 h-6 w-6 rounded-md bg-white/90 backdrop-blur flex items-center justify-center font-serif text-xs font-bold text-gray-900 shadow-sm"
                   >
-                    {{ String(index + 1).padStart(2, "0") }}
+                    {{ String(index + 1).padStart(2, '0') }}
                   </span>
                 </div>
 
@@ -148,17 +190,12 @@ onMounted(fetchFeed);
                   >
                     {{ blog.title }}
                   </h3>
-                  <p
-                    v-if="blog.excerpt"
-                    class="mt-1 text-xs text-gray-500 line-clamp-2"
-                  >
+                  <p v-if="blog.excerpt" class="mt-1 text-xs text-gray-500 line-clamp-2">
                     {{ blog.excerpt }}
                   </p>
 
                   <!-- Like & view info -->
-                  <div
-                    class="mt-2 flex items-center gap-3 text-xs text-gray-400"
-                  >
+                  <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
                     <span class="inline-flex items-center gap-1">
                       <svg
                         class="h-3.5 w-3.5"
@@ -210,16 +247,11 @@ onMounted(fetchFeed);
         <!-- Latest stories -->
         <section>
           <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-serif text-xl font-bold text-gray-900">
-              Cerita terbaru
-            </h2>
+            <h2 class="font-serif text-xl font-bold text-gray-900">Cerita terbaru</h2>
             <span class="h-px flex-1 bg-gray-100"></span>
           </div>
 
-          <div
-            v-if="latestBlogs.length"
-            class="flex flex-col divide-y divide-gray-100"
-          >
+          <div v-if="latestBlogs.length" class="flex flex-col divide-y divide-gray-100">
             <router-link
               v-for="blog in latestBlogs"
               :key="blog._id"
@@ -238,10 +270,7 @@ onMounted(fetchFeed);
                     class="h-full w-full object-cover"
                     loading="lazy"
                   />
-                  <div
-                    v-else
-                    class="h-full w-full flex items-center justify-center"
-                  >
+                  <div v-else class="h-full w-full flex items-center justify-center">
                     <span class="text-xl font-bold text-gray-300">{{
                       getInitials(blog.title)
                     }}</span>
@@ -255,10 +284,7 @@ onMounted(fetchFeed);
                   >
                     {{ blog.title }}
                   </h3>
-                  <p
-                    v-if="blog.excerpt"
-                    class="mt-1 text-xs text-gray-500 line-clamp-2"
-                  >
+                  <p v-if="blog.excerpt" class="mt-1 text-xs text-gray-500 line-clamp-2">
                     {{ blog.excerpt }}
                   </p>
 
@@ -267,28 +293,17 @@ onMounted(fetchFeed);
                     v-if="blog.song || blog.music"
                     class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#E7E7E7] px-2.5 py-0.5 text-[11px] font-medium text-[#4B4B4B]"
                   >
-                    <svg
-                      class="h-3 w-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
+                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 004.5 14C2.567 14 1 15.343 1 17s1.567 3 3.5 3 3.5-1.343 3.5-3V8.82l8-1.6v5.894A4.37 4.37 0 0014.5 13c-1.933 0-3.5 1.343-3.5 3s1.567 3 3.5 3 3.5-1.343 3.5-3V3z"
                       />
                     </svg>
                     {{ blog.song?.artist ?? blog.music?.artist
-                    }}{{ blog.song?.artist || blog.music?.artist ? " – " : ""
-                    }}{{
-                      blog.song?.title ??
-                      blog.music?.title ??
-                      blog.song ??
-                      blog.music
-                    }}
+                    }}{{ blog.song?.artist || blog.music?.artist ? ' – ' : ''
+                    }}{{ blog.song?.title ?? blog.music?.title ?? blog.song ?? blog.music }}
                   </span>
 
-                  <div
-                    class="mt-2 flex items-center gap-3 text-xs text-gray-400"
-                  >
+                  <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
                     <span class="inline-flex items-center gap-1.5 min-w-0">
                       <img
                         v-if="blog.author?.picture"
@@ -300,11 +315,7 @@ onMounted(fetchFeed);
                         v-else
                         class="h-5 w-5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-bold text-gray-500 shrink-0"
                       >
-                        {{
-                          getInitials(
-                            blog.author?.displayName || blog.author?.publicId,
-                          )
-                        }}
+                        {{ getInitials(blog.author?.displayName || blog.author?.publicId) }}
                       </div>
                       <span class="truncate">{{
                         blog.author?.displayName || blog.author?.publicId
@@ -362,22 +373,14 @@ onMounted(fetchFeed);
             <div
               class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm"
             >
-              <svg
-                class="h-7 w-7 text-gray-300"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
+              <svg class="h-7 w-7 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   d="M4 3a1 1 0 011-1h8.586a1 1 0 01.707.293l2.414 2.414A1 1 0 0117 5.414V17a1 1 0 01-1 1H5a1 1 0 01-1-1V3zm9 1v3h3l-3-3z"
                 />
               </svg>
             </div>
-            <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">
-              Belum ada cerita
-            </h3>
-            <p class="mt-1 text-sm text-gray-500">
-              Jadilah yang pertama menulis di Noya.
-            </p>
+            <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">Belum ada cerita</h3>
+            <p class="mt-1 text-sm text-gray-500">Jadilah yang pertama menulis di Noya.</p>
             <router-link
               v-if="authStore.isAuthenticated"
               to="/blogs/create"
@@ -385,6 +388,24 @@ onMounted(fetchFeed);
             >
               Tulis cerita
             </router-link>
+          </div>
+
+          <!-- Infinite Scroll Trigger Sentinel -->
+          <div ref="loadMoreTrigger" class="mt-8 mb-12 flex items-center justify-center py-6">
+            <!-- Loading spinner for more items -->
+            <div v-if="loadingMore" class="flex flex-col items-center gap-2">
+              <div
+                class="h-6 w-6 animate-spin rounded-full border-2 border-gray-200 border-t-[#5B4BFF]"
+              ></div>
+              <span class="text-xs text-gray-500 font-medium">Memuat cerita lainnya...</span>
+            </div>
+            <!-- No more items text -->
+            <span
+              v-else-if="!hasMore && latestBlogs.length > 0"
+              class="text-xs text-gray-400 font-medium"
+            >
+              Semua cerita telah dimuat
+            </span>
           </div>
         </section>
       </template>

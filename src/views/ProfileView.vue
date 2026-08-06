@@ -2,15 +2,8 @@
   <div class="min-h-screen bg-gray-50 py-10">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       <!-- Loading state -->
-      <div
-        v-if="authStore.isLoading"
-        class="flex flex-col items-center justify-center h-72 gap-3"
-      >
-        <svg
-          class="animate-spin h-6 w-6 text-[#111111]"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
+      <div v-if="authStore.isLoading" class="flex flex-col items-center justify-center h-72 gap-3">
+        <svg class="animate-spin h-6 w-6 text-[#111111]" fill="none" viewBox="0 0 24 24">
           <circle
             class="opacity-20"
             cx="12"
@@ -30,9 +23,7 @@
 
       <template v-else-if="authStore.user">
         <!-- Header card -->
-        <div
-          class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8"
-        >
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
           <div class="flex flex-col sm:flex-row sm:items-center gap-5">
             <img
               v-if="authStore.user.picture"
@@ -52,10 +43,7 @@
                 {{ username }}
               </h1>
               <p class="text-sm text-gray-500">{{ authStore.user.email }}</p>
-              <p
-                v-if="authStore.user.bio"
-                class="mt-2 text-sm text-gray-600 leading-relaxed"
-              >
+              <p v-if="authStore.user.bio" class="mt-2 text-sm text-gray-600 leading-relaxed">
                 {{ authStore.user.bio }}
               </p>
             </div>
@@ -70,17 +58,9 @@
             >
               <span
                 class="h-1.5 w-1.5 rounded-full"
-                :class="
-                  authStore.user.isPublic === false
-                    ? 'bg-gray-400'
-                    : 'bg-green-500'
-                "
+                :class="authStore.user.isPublic === false ? 'bg-gray-400' : 'bg-green-500'"
               ></span>
-              {{
-                authStore.user.isPublic === false
-                  ? "Private profile"
-                  : "Public profile"
-              }}
+              {{ authStore.user.isPublic === false ? 'Private profile' : 'Public profile' }}
             </span>
           </div>
 
@@ -112,12 +92,8 @@
         </div>
 
         <!-- Personal information -->
-        <div
-          class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8"
-        >
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">
-            Personal information
-          </h2>
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">Personal information</h2>
           <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
             <div v-if="authStore.user.firstName">
               <dt class="text-xs text-gray-400">First name</dt>
@@ -202,10 +178,7 @@
         >
           <h2 class="text-sm font-semibold text-gray-900 mb-5">Social media</h2>
           <ul class="space-y-3">
-            <li
-              v-if="authStore.user.socialMedia?.website"
-              class="flex items-center gap-3"
-            >
+            <li v-if="authStore.user.socialMedia?.website" class="flex items-center gap-3">
               <span
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 shrink-0"
               >
@@ -216,13 +189,7 @@
                   stroke="currentColor"
                   stroke-width="1.8"
                 >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
+                  <circle cx="12" cy="12" r="9" stroke-linecap="round" stroke-linejoin="round" />
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -239,10 +206,7 @@
                 {{ authStore.user.socialMedia.website }}
               </a>
             </li>
-            <li
-              v-if="authStore.user.socialMedia?.instagram"
-              class="flex items-center gap-3"
-            >
+            <li v-if="authStore.user.socialMedia?.instagram" class="flex items-center gap-3">
               <span
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 shrink-0"
               >
@@ -262,13 +226,7 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   />
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="4"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
+                  <circle cx="12" cy="12" r="4" stroke-linecap="round" stroke-linejoin="round" />
                   <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" />
                 </svg>
               </span>
@@ -276,10 +234,7 @@
                 authStore.user.socialMedia.instagram
               }}</span>
             </li>
-            <li
-              v-if="authStore.user.socialMedia?.twitter"
-              class="flex items-center gap-3"
-            >
+            <li v-if="authStore.user.socialMedia?.twitter" class="flex items-center gap-3">
               <span
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 shrink-0"
               >
@@ -301,10 +256,7 @@
                 authStore.user.socialMedia.twitter
               }}</span>
             </li>
-            <li
-              v-if="authStore.user.socialMedia?.linkedin"
-              class="flex items-center gap-3"
-            >
+            <li v-if="authStore.user.socialMedia?.linkedin" class="flex items-center gap-3">
               <span
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 shrink-0"
               >
@@ -344,9 +296,7 @@
         v-else-if="authStore.error"
         class="bg-white border border-gray-200 rounded-xl shadow-sm p-10 text-center"
       >
-        <p class="text-sm font-medium text-red-600 mb-2">
-          Couldn't load your profile
-        </p>
+        <p class="text-sm font-medium text-red-600 mb-2">Couldn't load your profile</p>
         <p class="text-sm text-gray-500 mb-6">{{ authStore.error }}</p>
         <button
           @click="authStore.fetchUserProfile()"
@@ -360,30 +310,24 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-import { getInitials, formatDate } from "@/utils/helpers";
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { getInitials, formatDate } from '@/utils/helpers'
 
-const router = useRouter();
-const authStore = useAuthStore();
+const router = useRouter()
+const authStore = useAuthStore()
 
 const username = computed(
-  () =>
-    authStore.user?.displayName ||
-    authStore.user?.name ||
-    authStore.user?.publicId ||
-    "",
-);
+  () => authStore.user?.displayName || authStore.user?.name || authStore.user?.publicId || '',
+)
 
 const dateOfBirthDisplay = computed(() => {
-  const dob = authStore.user?.dateOfBirth;
-  return dob ? formatDate(dob) : "";
-});
+  const dob = authStore.user?.dateOfBirth
+  return dob ? formatDate(dob) : ''
+})
 
-const formattedGender = computed(() =>
-  (authStore.user?.gender || "").replace(/_/g, " "),
-);
+const formattedGender = computed(() => (authStore.user?.gender || '').replace(/_/g, ' '))
 
 const hasPersonalInfo = computed(
   () =>
@@ -394,26 +338,26 @@ const hasPersonalInfo = computed(
       authStore.user?.dateOfBirth ||
       authStore.user?.gender
     ),
-);
+)
 
 const hasAddress = computed(() => {
-  const a = authStore.user?.address;
-  return !!(a && (a.street || a.city || a.state || a.postalCode || a.country));
-});
+  const a = authStore.user?.address
+  return !!(a && (a.street || a.city || a.state || a.postalCode || a.country))
+})
 
 const hasSocialMedia = computed(() => {
-  const s = authStore.user?.socialMedia;
-  return !!(s && (s.website || s.instagram || s.twitter || s.linkedin));
-});
+  const s = authStore.user?.socialMedia
+  return !!(s && (s.website || s.instagram || s.twitter || s.linkedin))
+})
 
 const handleEditProfile = () => {
-  router.push("/profile/edit");
-};
+  router.push('/profile/edit')
+}
 
 const handleLogout = async () => {
-  if (confirm("Are you sure you want to logout?")) {
-    await authStore.logout();
-    router.push("/login");
+  if (confirm('Are you sure you want to logout?')) {
+    await authStore.logout()
+    router.push('/login')
   }
-};
+}
 </script>

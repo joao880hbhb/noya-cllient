@@ -16,7 +16,13 @@ export const MAX_PAGE_SIZE = 50
 
 // File Upload
 export const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
-export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+export const ALLOWED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+]
 
 // Blog
 export const BLOG_TITLE_MIN_LENGTH = 3

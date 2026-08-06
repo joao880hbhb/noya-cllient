@@ -2,15 +2,8 @@
   <div class="min-h-screen bg-white">
     <div class="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-24 pb-32">
       <!-- Loading state -->
-      <div
-        v-if="loading"
-        class="flex flex-col items-center justify-center h-72 gap-3"
-      >
-        <svg
-          class="animate-spin h-6 w-6 text-[#111111]"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
+      <div v-if="loading" class="flex flex-col items-center justify-center h-72 gap-3">
+        <svg class="animate-spin h-6 w-6 text-[#111111]" fill="none" viewBox="0 0 24 24">
           <circle
             class="opacity-20"
             cx="12"
@@ -25,16 +18,11 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">
-          Loading profile
-        </p>
+        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">Loading profile</p>
       </div>
 
       <!-- Error state -->
-      <div
-        v-else-if="error"
-        class="border border-[#E7E7E7] rounded-[3px] p-10 text-center"
-      >
+      <div v-else-if="error" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
         <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
           Couldn't load this profile
         </p>
@@ -59,11 +47,7 @@
 
           <!-- Avatar & identity -->
           <div class="flex flex-col items-center text-center">
-            <p
-              class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-6"
-            >
-              Author profile
-            </p>
+            <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-6">Author profile</p>
 
             <img
               v-if="user.picture"
@@ -84,10 +68,7 @@
               {{ user.displayName || user.publicId }}
             </h1>
 
-            <p
-              v-if="user.bio"
-              class="mt-3 text-[14px] leading-relaxed text-[#6B6B6B] max-w-sm"
-            >
+            <p v-if="user.bio" class="mt-3 text-[14px] leading-relaxed text-[#6B6B6B] max-w-sm">
               {{ user.bio }}
             </p>
 
@@ -107,13 +88,7 @@
                     stroke-linejoin="round"
                     d="M12 21c-4-4.2-6.5-7.7-6.5-11a6.5 6.5 0 1113 0c0 3.3-2.5 6.8-6.5 11z"
                   />
-                  <circle
-                    cx="12"
-                    cy="10"
-                    r="2.2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
+                  <circle cx="12" cy="10" r="2.2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
                 {{ location }}
               </span>
@@ -131,13 +106,7 @@
                   stroke="currentColor"
                   stroke-width="1.6"
                 >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
+                  <circle cx="12" cy="12" r="9" stroke-linecap="round" stroke-linejoin="round" />
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -160,27 +129,9 @@
                 stroke="currentColor"
                 stroke-width="1.6"
               >
-                <circle
-                  cx="18"
-                  cy="5"
-                  r="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <circle
-                  cx="6"
-                  cy="12"
-                  r="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <circle
-                  cx="18"
-                  cy="19"
-                  r="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+                <circle cx="18" cy="5" r="2.4" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="6" cy="12" r="2.4" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="18" cy="19" r="2.4" stroke-linecap="round" stroke-linejoin="round" />
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -192,9 +143,7 @@
           </div>
 
           <!-- Stats row -->
-          <div
-            class="mt-10 grid grid-cols-3 gap-4 border-t border-[#F0F0F0] pt-8"
-          >
+          <div class="mt-10 grid grid-cols-3 gap-4 border-t border-[#F0F0F0] pt-8">
             <div class="flex flex-col items-center gap-1.5">
               <svg
                 class="h-4 w-4 text-[#8A8A8A]"
@@ -217,13 +166,9 @@
               <p class="text-[17px] font-display text-[#111111] tabular-nums">
                 {{ formatNumber(totalBlogs) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">
-                Posts
-              </p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">Posts</p>
             </div>
-            <div
-              class="flex flex-col items-center gap-1.5 border-x border-[#F0F0F0]"
-            >
+            <div class="flex flex-col items-center gap-1.5 border-x border-[#F0F0F0]">
               <svg
                 class="h-4 w-4 text-[#8A8A8A]"
                 fill="none"
@@ -240,9 +185,7 @@
               <p class="text-[17px] font-display text-[#111111] tabular-nums">
                 {{ formatNumber(totalLikes) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">
-                Likes
-              </p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">Likes</p>
             </div>
             <div class="flex flex-col items-center gap-1.5">
               <svg
@@ -257,39 +200,26 @@
                   stroke-linejoin="round"
                   d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"
                 />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="2.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+                <circle cx="12" cy="12" r="2.6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <p class="text-[17px] font-display text-[#111111] tabular-nums">
                 {{ formatNumber(blogViews) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">
-                Views
-              </p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">Views</p>
             </div>
           </div>
         </div>
 
         <!-- Section label -->
         <div class="mt-14 mb-6 flex items-center gap-4">
-          <h2
-            class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase whitespace-nowrap"
-          >
+          <h2 class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase whitespace-nowrap">
             Stories
           </h2>
           <span class="h-px flex-1 bg-[#E7E7E7]"></span>
         </div>
 
         <!-- Blog list -->
-        <div
-          v-if="blogs.length"
-          class="flex flex-col divide-y divide-[#F0F0F0]"
-        >
+        <div v-if="blogs.length" class="flex flex-col divide-y divide-[#F0F0F0]">
           <router-link
             v-for="blog in blogs"
             :key="blog._id"
@@ -313,7 +243,7 @@
                   d="M4 4v7h7M20 20v-7h-7M5.868 16.5a8 8 0 0014.1-6M18.132 7.5a8 8 0 00-14.1 6"
                 />
               </svg>
-              Repost · {{ blog.author?.displayName || "Penulis" }}
+              Repost · {{ blog.author?.displayName || 'Penulis' }}
             </div>
             <div class="group flex items-center gap-4">
               <!-- Thumbnail -->
@@ -327,10 +257,7 @@
                   class="h-full w-full object-cover"
                   loading="lazy"
                 />
-                <div
-                  v-else
-                  class="h-full w-full flex items-center justify-center"
-                >
+                <div v-else class="h-full w-full flex items-center justify-center">
                   <span class="font-display italic text-xl text-[#D8D8D8]">{{
                     getInitials(blog.title)
                   }}</span>
@@ -344,10 +271,7 @@
                 >
                   {{ blog.title }}
                 </h3>
-                <p
-                  v-if="blog.excerpt"
-                  class="mt-1 text-[12.5px] text-[#8A8A8A] line-clamp-2"
-                >
+                <p v-if="blog.excerpt" class="mt-1 text-[12.5px] text-[#8A8A8A] line-clamp-2">
                   {{ blog.excerpt }}
                 </p>
 
@@ -362,18 +286,11 @@
                     />
                   </svg>
                   {{ blog.song?.artist ?? blog.music?.artist
-                  }}{{ blog.song?.artist || blog.music?.artist ? " – " : ""
-                  }}{{
-                    blog.song?.title ??
-                    blog.music?.title ??
-                    blog.song ??
-                    blog.music
-                  }}
+                  }}{{ blog.song?.artist || blog.music?.artist ? ' – ' : ''
+                  }}{{ blog.song?.title ?? blog.music?.title ?? blog.song ?? blog.music }}
                 </span>
 
-                <div
-                  class="mt-2 flex items-center gap-3 text-[11px] text-[#B0B0B0]"
-                >
+                <div class="mt-2 flex items-center gap-3 text-[11px] text-[#B0B0B0]">
                   <span class="inline-flex items-center gap-1">
                     <svg
                       class="h-3.5 w-3.5"
@@ -442,19 +359,11 @@
                 stroke-linejoin="round"
                 d="M6 3h9l4 4v14a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z"
               />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M14 3v5h5"
-              />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
             </svg>
           </div>
-          <h3 class="mt-4 font-display italic text-[19px] text-[#111111]">
-            No articles yet
-          </h3>
-          <p class="mt-1 text-[13px] text-[#8A8A8A]">
-            Check back later for new stories.
-          </p>
+          <h3 class="mt-4 font-display italic text-[19px] text-[#111111]">No articles yet</h3>
+          <p class="mt-1 text-[13px] text-[#8A8A8A]">Check back later for new stories.</p>
         </div>
       </template>
 
@@ -471,11 +380,7 @@
           stroke="currentColor"
           stroke-width="1.8"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 5v14M5 12h14"
-          />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
         </svg>
         Write
       </router-link>
@@ -494,112 +399,105 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { profileAPI, blogAPI } from "@/services/api";
-import { useAuthStore } from "@/stores/auth";
-import { getInitials, formatNumber, formatRelativeTime } from "@/utils/helpers";
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { profileAPI, blogAPI } from '@/services/api'
+import { useAuthStore } from '@/stores/auth'
+import { getInitials, formatNumber, formatRelativeTime } from '@/utils/helpers'
 
-const route = useRoute();
-const router = useRouter();
-const authStore = useAuthStore();
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
 
-const user = ref(null);
-const blogs = ref([]);
-const totalBlogs = ref(0);
-const loading = ref(false);
-const error = ref("");
-const toast = ref("");
-let toastTimer = null;
+const user = ref(null)
+const blogs = ref([])
+const totalBlogs = ref(0)
+const loading = ref(false)
+const error = ref('')
+const toast = ref('')
+let toastTimer = null
 
 const location = computed(() => {
-  const address = user.value?.address;
-  if (!address) return "";
-  return [address.city, address.state, address.country]
-    .filter(Boolean)
-    .join(", ");
-});
+  const address = user.value?.address
+  if (!address) return ''
+  return [address.city, address.state, address.country].filter(Boolean).join(', ')
+})
 
-const website = computed(() => user.value?.socialMedia?.website || "");
+const website = computed(() => user.value?.socialMedia?.website || '')
 
-const totalLikes = computed(() =>
-  blogs.value.reduce((sum, b) => sum + (b.likesCount || 0), 0),
-);
-const blogViews = computed(() =>
-  blogs.value.reduce((sum, b) => sum + (b.views || 0), 0),
-);
+const totalLikes = computed(() => blogs.value.reduce((sum, b) => sum + (b.likesCount || 0), 0))
+const blogViews = computed(() => blogs.value.reduce((sum, b) => sum + (b.views || 0), 0))
 
 const isOwnProfile = computed(() => {
-  const publicId = route.params.publicId;
-  return !!publicId && authStore.user?.publicId === publicId;
-});
+  const publicId = route.params.publicId
+  return !!publicId && authStore.user?.publicId === publicId
+})
 
 const fetchProfile = async () => {
-  const publicId = route.params.publicId;
-  loading.value = true;
-  error.value = "";
+  const publicId = route.params.publicId
+  loading.value = true
+  error.value = ''
 
   try {
     const [profileRes, blogsRes] = await Promise.all([
       profileAPI.getUserByPublicId(publicId),
       blogAPI.getBlogsByPublicId(publicId, { page: 1, limit: 20 }),
-    ]);
+    ])
 
-    user.value = profileRes.data;
-    blogs.value = blogsRes.data.blogs || [];
-    totalBlogs.value = blogsRes.data.totalBlogs || 0;
+    user.value = profileRes.data
+    blogs.value = blogsRes.data.blogs || []
+    totalBlogs.value = blogsRes.data.totalBlogs || 0
   } catch (err) {
-    error.value = err.response?.data?.message || "Profile not found";
+    error.value = err.response?.data?.message || 'Profile not found'
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
-watch(() => route.params.publicId, fetchProfile);
+watch(() => route.params.publicId, fetchProfile)
 
-onMounted(fetchProfile);
+onMounted(fetchProfile)
 
-const profileUrl = () =>
-  `${window.location.origin}/profile/${route.params.publicId}`;
+const profileUrl = () => `${window.location.origin}/profile/${route.params.publicId}`
 
 const showToast = (message) => {
-  toast.value = message;
-  clearTimeout(toastTimer);
+  toast.value = message
+  clearTimeout(toastTimer)
   toastTimer = setTimeout(() => {
-    toast.value = "";
-  }, 2000);
-};
+    toast.value = ''
+  }, 2000)
+}
 
 const handleShare = async () => {
-  const url = profileUrl();
+  const url = profileUrl()
 
   if (navigator.share) {
     try {
       await navigator.share({
-        title: user.value?.displayName || "Profil Noya",
-        text: user.value?.bio || "",
+        title: user.value?.displayName || 'Profil Noya',
+        text: user.value?.bio || '',
         url,
-      });
-      return;
+      })
+      return
     } catch (err) {
-      if (err.name === "AbortError") return;
+      if (err.name === 'AbortError') return
     }
   }
 
   try {
-    await navigator.clipboard.writeText(url);
-    showToast("Link profil disalin");
+    await navigator.clipboard.writeText(url)
+    showToast('Link profil disalin')
   } catch {
-    showToast("Gagal membagikan profil");
+    showToast('Gagal membagikan profil')
   }
-};
+}
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&display=swap');
 
 .font-display {
-  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
 }
 
 .toast-enter-active,

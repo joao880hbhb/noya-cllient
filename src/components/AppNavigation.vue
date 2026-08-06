@@ -8,11 +8,7 @@
             to="/"
             class="flex items-center gap-2 text-xl sm:text-2xl font-bold text-[#5B4BFF]"
           >
-            <img
-              :src="logoNoya"
-              alt="Noya"
-              class="h-16 w-16 rounded-full object-cover"
-            />
+            <img :src="logoNoya" alt="Noya" class="h-16 w-16 rounded-full object-cover" />
           </router-link>
         </div>
 
@@ -40,12 +36,7 @@
                 @click="toggleNotifications"
                 class="relative flex items-center justify-center h-10 w-10 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none"
               >
-                <svg
-                  class="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -57,7 +48,7 @@
                   v-if="unreadCount > 0"
                   class="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center"
                 >
-                  {{ unreadCount > 99 ? "99+" : unreadCount }}
+                  {{ unreadCount > 99 ? '99+' : unreadCount }}
                 </span>
               </button>
 
@@ -66,9 +57,7 @@
                 v-if="showNotifications"
                 class="absolute right-0 mt-2 w-80 max-w-[90vw] bg-white rounded-xl shadow-lg py-1 z-10 border border-gray-100 overflow-hidden"
               >
-                <div
-                  class="px-4 py-3 border-b border-gray-100 flex items-center justify-between"
-                >
+                <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                   <p class="text-sm font-semibold text-gray-900">Notifikasi</p>
                   <button
                     v-if="notifications.length"
@@ -80,15 +69,10 @@
                 </div>
 
                 <div v-if="notifLoading" class="px-4 py-8 flex justify-center">
-                  <div
-                    class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#5B4BFF]"
-                  ></div>
+                  <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#5B4BFF]"></div>
                 </div>
 
-                <div
-                  v-else-if="notifications.length"
-                  class="max-h-96 overflow-y-auto"
-                >
+                <div v-else-if="notifications.length" class="max-h-96 overflow-y-auto">
                   <router-link
                     v-for="notification in notifications"
                     :key="notification._id"
@@ -108,16 +92,13 @@
                       class="h-10 w-10 rounded-full bg-[#5B4BFF]/10 text-[#5B4BFF] flex items-center justify-center text-sm font-bold shrink-0"
                     >
                       {{
-                        getInitials(
-                          notification.actor?.displayName ||
-                            notification.actor?.publicId,
-                        )
+                        getInitials(notification.actor?.displayName || notification.actor?.publicId)
                       }}
                     </div>
                     <div class="min-w-0">
                       <p class="text-sm text-gray-800 leading-snug">
                         <span class="font-semibold">
-                          {{ notification.actor?.displayName || "Seseorang" }}
+                          {{ notification.actor?.displayName || 'Seseorang' }}
                         </span>
                         menyukai blog kamu
                       </p>
@@ -156,10 +137,7 @@
 
             <!-- User menu -->
             <div class="relative">
-              <button
-                @click="toggleUserMenu"
-                class="flex items-center focus:outline-none"
-              >
+              <button @click="toggleUserMenu" class="flex items-center focus:outline-none">
                 <img
                   v-if="authStore.user?.picture"
                   :src="authStore.user.picture"
@@ -192,11 +170,7 @@
                   @click="showUserMenu = false"
                   class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                 >
-                  <svg
-                    class="h-4 w-4 text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fill-rule="evenodd"
                       d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -210,11 +184,7 @@
                   @click="showUserMenu = false"
                   class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                 >
-                  <svg
-                    class="h-4 w-4 text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       d="M4 3a1 1 0 011-1h8.586a1 1 0 01.707.293l2.414 2.414A1 1 0 0117 5.414V17a1 1 0 01-1 1H5a1 1 0 01-1-1V3zm9 1v3h3l-3-3z"
                     />
@@ -254,127 +224,127 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-import { notificationAPI } from "@/services/api";
-import { formatRelativeTime } from "@/utils/helpers";
-import logoNoya from "@/assets/logonoya.png";
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { notificationAPI } from '@/services/api'
+import { formatRelativeTime } from '@/utils/helpers'
+import logoNoya from '@/assets/logonoya.png'
 
-const router = useRouter();
-const authStore = useAuthStore();
-const showUserMenu = ref(false);
-const showNotifications = ref(false);
+const router = useRouter()
+const authStore = useAuthStore()
+const showUserMenu = ref(false)
+const showNotifications = ref(false)
 
-const notifications = ref([]);
-const unreadCount = ref(0);
-const notifLoading = ref(false);
-let pollTimer = null;
+const notifications = ref([])
+const unreadCount = ref(0)
+const notifLoading = ref(false)
+let pollTimer = null
 
 const toggleUserMenu = () => {
-  showUserMenu.value = !showUserMenu.value;
-  showNotifications.value = false;
-};
+  showUserMenu.value = !showUserMenu.value
+  showNotifications.value = false
+}
 
 const toggleNotifications = async () => {
-  showNotifications.value = !showNotifications.value;
-  showUserMenu.value = false;
+  showNotifications.value = !showNotifications.value
+  showUserMenu.value = false
   if (showNotifications.value) {
-    await fetchNotifications();
+    await fetchNotifications()
   }
-};
+}
 
 const fetchNotifications = async () => {
-  if (!authStore.isAuthenticated) return;
-  notifLoading.value = true;
+  if (!authStore.isAuthenticated) return
+  notifLoading.value = true
   try {
     const response = await notificationAPI.getNotifications({
       page: 1,
       limit: 20,
-    });
-    notifications.value = response.data.notifications || [];
-    unreadCount.value = response.data.unreadCount || 0;
+    })
+    notifications.value = response.data.notifications || []
+    unreadCount.value = response.data.unreadCount || 0
   } catch (err) {
     // ignore — polling keeps trying
   } finally {
-    notifLoading.value = false;
+    notifLoading.value = false
   }
-};
+}
 
 const handleOpenNotification = async (notification) => {
-  showNotifications.value = false;
+  showNotifications.value = false
   if (!notification.read) {
     try {
-      await notificationAPI.markAsRead(notification._id);
-      notification.read = true;
-      unreadCount.value = Math.max(0, unreadCount.value - 1);
+      await notificationAPI.markAsRead(notification._id)
+      notification.read = true
+      unreadCount.value = Math.max(0, unreadCount.value - 1)
     } catch (err) {
       // ignore
     }
   }
-};
+}
 
 const handleMarkAllRead = async () => {
   try {
-    await notificationAPI.markAllAsRead();
-    notifications.value.forEach((n) => (n.read = true));
-    unreadCount.value = 0;
+    await notificationAPI.markAllAsRead()
+    notifications.value.forEach((n) => (n.read = true))
+    unreadCount.value = 0
   } catch (err) {
     // ignore
   }
-};
+}
 
 const getInitials = (name) => {
-  if (!name) return "?";
-  const parts = name.split(" ");
+  if (!name) return '?'
+  const parts = name.split(' ')
   if (parts.length >= 2) {
-    return parts[0][0] + parts[1][0];
+    return parts[0][0] + parts[1][0]
   }
-  return name.substring(0, 2).toUpperCase();
-};
+  return name.substring(0, 2).toUpperCase()
+}
 
 const handleLogout = async () => {
-  showUserMenu.value = false;
-  await authStore.logout();
-  router.push("/login");
-};
+  showUserMenu.value = false
+  await authStore.logout()
+  router.push('/login')
+}
 
 const handleClickOutside = (event) => {
   if (showUserMenu.value || showNotifications.value) {
-    const insideMenu = event.target.closest(".relative");
+    const insideMenu = event.target.closest('.relative')
     if (!insideMenu) {
-      showUserMenu.value = false;
-      showNotifications.value = false;
+      showUserMenu.value = false
+      showNotifications.value = false
     }
   }
-};
+}
 
 // Fetch unread count when auth state changes
 watch(
   () => authStore.isAuthenticated,
   (val) => {
     if (val) {
-      fetchNotifications();
-      pollTimer = setInterval(fetchNotifications, 30000);
+      fetchNotifications()
+      pollTimer = setInterval(fetchNotifications, 30000)
     } else if (pollTimer) {
-      clearInterval(pollTimer);
-      pollTimer = null;
-      notifications.value = [];
-      unreadCount.value = 0;
+      clearInterval(pollTimer)
+      pollTimer = null
+      notifications.value = []
+      unreadCount.value = 0
     }
   },
-);
+)
 
 onMounted(() => {
-  window.addEventListener("click", handleClickOutside);
+  window.addEventListener('click', handleClickOutside)
   if (authStore.isAuthenticated) {
-    fetchNotifications();
-    pollTimer = setInterval(fetchNotifications, 30000);
+    fetchNotifications()
+    pollTimer = setInterval(fetchNotifications, 30000)
   }
-});
+})
 
 onUnmounted(() => {
-  window.removeEventListener("click", handleClickOutside);
-  if (pollTimer) clearInterval(pollTimer);
-});
+  window.removeEventListener('click', handleClickOutside)
+  if (pollTimer) clearInterval(pollTimer)
+})
 </script>

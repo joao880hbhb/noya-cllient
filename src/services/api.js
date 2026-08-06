@@ -54,10 +54,12 @@ apiClient.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
-        }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`
-          return apiClient(originalRequest)
-        }).catch((err) => Promise.reject(err))
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`
+            return apiClient(originalRequest)
+          })
+          .catch((err) => Promise.reject(err))
       }
 
       originalRequest._retry = true
@@ -65,11 +67,7 @@ apiClient.interceptors.response.use(
 
       try {
         // Coba refresh token
-        const response = await axios.post(
-          `${BASE_URL}/auth/refresh`,
-          {},
-          { withCredentials: true },
-        )
+        const response = await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true })
 
         const { accessToken } = response.data.data
         localStorage.setItem('accessToken', accessToken)

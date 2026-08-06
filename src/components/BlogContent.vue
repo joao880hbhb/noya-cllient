@@ -26,12 +26,10 @@ const renderMarks = (text, marks) => {
             rel: 'noopener noreferrer',
             class: 'text-indigo-600 hover:text-indigo-500 underline',
           },
-          acc
+          acc,
         )
       case 'textStyle':
-        return mark.attrs?.color
-          ? h('span', { style: { color: mark.attrs.color } }, acc)
-          : acc
+        return mark.attrs?.color ? h('span', { style: { color: mark.attrs.color } }, acc) : acc
       case 'highlight':
         return mark.attrs?.color
           ? h('mark', { style: { backgroundColor: mark.attrs.color } }, acc)
@@ -60,14 +58,18 @@ const renderNode = (node) => {
         3: 'text-xl font-semibold mb-2 mt-5',
         4: 'text-lg font-semibold mb-2 mt-4',
       }
-      return h(`h${level}`, { class: classes[level] || 'font-semibold mb-2 mt-4' }, renderChildren(node))
+      return h(
+        `h${level}`,
+        { class: classes[level] || 'font-semibold mb-2 mt-4' },
+        renderChildren(node),
+      )
     }
 
     case 'blockquote':
       return h(
         'blockquote',
         { class: 'border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4' },
-        renderChildren(node)
+        renderChildren(node),
       )
 
     case 'bulletList':
@@ -83,7 +85,7 @@ const renderNode = (node) => {
       return h(
         'pre',
         { class: 'bg-gray-100 p-4 rounded-md overflow-x-auto mb-4 text-sm' },
-        renderChildren(node)
+        renderChildren(node),
       )
 
     case 'hardBreak':
@@ -124,7 +126,7 @@ export default {
         content
           .split('\n')
           .filter((line) => line.trim())
-          .map((line) => h('p', { class: 'mb-4 leading-relaxed' }, line))
+          .map((line) => h('p', { class: 'mb-4 leading-relaxed' }, line)),
       )
     }
 

@@ -2,15 +2,8 @@
   <div class="min-h-screen bg-white">
     <div class="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-24">
       <!-- Loading state -->
-      <div
-        v-if="loading"
-        class="flex flex-col items-center justify-center h-72 gap-3"
-      >
-        <svg
-          class="animate-spin h-6 w-6 text-[#111111]"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
+      <div v-if="loading" class="flex flex-col items-center justify-center h-72 gap-3">
+        <svg class="animate-spin h-6 w-6 text-[#111111]" fill="none" viewBox="0 0 24 24">
           <circle
             class="opacity-20"
             cx="12"
@@ -25,16 +18,11 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">
-          Loading entry
-        </p>
+        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">Loading entry</p>
       </div>
 
       <!-- Error state -->
-      <div
-        v-else-if="loadError"
-        class="border border-[#E7E7E7] rounded-[3px] p-10 text-center"
-      >
+      <div v-else-if="loadError" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
         <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
           Couldn't load this entry
         </p>
@@ -52,9 +40,7 @@
         <!-- Masthead -->
         <div class="flex items-start justify-between gap-6 mb-14">
           <div>
-            <p
-              class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-2"
-            >
+            <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-2">
               Compose &middot; Editing entry
             </p>
             <h1
@@ -71,25 +57,17 @@
             >
               &larr; Back
             </button>
-            <p
-              class="hidden sm:block text-[11px] text-[#B0B0B0] tabular-nums mt-2"
-            >
+            <p class="hidden sm:block text-[11px] text-[#B0B0B0] tabular-nums mt-2">
               {{ contentLength }} chars
             </p>
           </div>
         </div>
 
         <!-- Feedback -->
-        <div
-          v-if="successMessage"
-          class="mb-6 border-l-2 border-[#111111] bg-[#FAFAFA] px-4 py-3"
-        >
+        <div v-if="successMessage" class="mb-6 border-l-2 border-[#111111] bg-[#FAFAFA] px-4 py-3">
           <p class="text-sm text-[#111111]">{{ successMessage }}</p>
         </div>
-        <div
-          v-if="formError"
-          class="mb-6 border-l-2 border-[#B3261E] bg-[#FDF7F6] px-4 py-3"
-        >
+        <div v-if="formError" class="mb-6 border-l-2 border-[#B3261E] bg-[#FDF7F6] px-4 py-3">
           <p class="text-sm text-[#8C1D14]">{{ formError }}</p>
         </div>
 
@@ -107,10 +85,7 @@
               <div
                 class="flex items-center justify-between px-8 sm:px-14 pt-9 pb-7 border-b border-[#F0F0F0]"
               >
-                <span
-                  class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase"
-                  >Status</span
-                >
+                <span class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase">Status</span>
                 <div class="flex items-center gap-5">
                   <button
                     v-for="opt in statusOptions"
@@ -158,16 +133,12 @@
               <div
                 class="grid md:grid-cols-[140px_1fr] gap-x-10 sm:gap-x-14 px-8 sm:px-14 py-10 sm:py-12 border-b border-[#F0F0F0]"
               >
-                <label
-                  class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
-                >
+                <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
                   Body <span class="text-[#B3261E]">*</span>
                 </label>
                 <div>
                   <BlogEditor v-model="content" />
-                  <p
-                    class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums"
-                  >
+                  <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
                     {{ contentLength }} characters
                   </p>
                 </div>
@@ -192,9 +163,7 @@
                     class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[2px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
                     placeholder="A short line shown in blog listings"
                   ></textarea>
-                  <p
-                    class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums"
-                  >
+                  <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
                     {{ excerpt.length }} / {{ BLOG_EXCERPT_LENGTH }}
                   </p>
                 </div>
@@ -204,9 +173,7 @@
               <div
                 class="grid md:grid-cols-[140px_1fr] gap-x-10 sm:gap-x-14 px-8 sm:px-14 py-10 sm:py-12 border-b border-[#F0F0F0]"
               >
-                <label
-                  class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
-                >
+                <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
                   Cover
                 </label>
                 <div>
@@ -224,9 +191,7 @@
                     v-else
                     class="border border-dashed border-[#D8D8D8] rounded-[2px] h-28 flex items-center justify-center mb-3"
                   >
-                    <span class="text-[12px] text-[#B0B0B0]"
-                      >No image selected</span
-                    >
+                    <span class="text-[12px] text-[#B0B0B0]">No image selected</span>
                   </div>
 
                   <div class="flex items-center gap-3">
@@ -241,7 +206,7 @@
                       for="coverImage"
                       class="inline-flex items-center px-3.5 py-1.5 border border-[#111111] rounded-[2px] text-[12px] font-medium text-[#111111] hover:bg-[#111111] hover:text-white transition-colors cursor-pointer"
                     >
-                      {{ coverPreview ? "Replace" : "Upload image" }}
+                      {{ coverPreview ? 'Replace' : 'Upload image' }}
                     </label>
                     <span class="text-[11px] text-[#C4C4C4] ml-auto"
                       >Max {{ MAX_FILE_SIZE / 1024 / 1024 }}MB</span
@@ -268,10 +233,7 @@
                     class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 px-0 pb-2 bg-transparent transition-colors"
                     placeholder="music, review, tutorial"
                   />
-                  <div
-                    v-if="parsedTags.length"
-                    class="flex flex-wrap gap-1.5 mt-3"
-                  >
+                  <div v-if="parsedTags.length" class="flex flex-wrap gap-1.5 mt-3">
                     <span
                       v-for="tag in parsedTags"
                       :key="tag"
@@ -290,9 +252,7 @@
               <div
                 class="grid md:grid-cols-[140px_1fr] gap-x-10 sm:gap-x-14 px-8 sm:px-14 py-10 sm:py-12"
               >
-                <label
-                  class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
-                >
+                <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
                   Soundtrack
                 </label>
                 <div>
@@ -308,9 +268,7 @@
                       class="h-12 w-12 rounded-[2px] object-cover shrink-0"
                     />
                     <div class="flex-1 min-w-0">
-                      <p
-                        class="text-[13px] font-medium text-[#111111] truncate"
-                      >
+                      <p class="text-[13px] font-medium text-[#111111] truncate">
                         {{ selectedMusic.title }}
                       </p>
                       <p class="text-[12px] text-[#8A8A8A] truncate">
@@ -376,25 +334,19 @@
                         class="h-9 w-9 rounded-[2px] object-cover shrink-0"
                       />
                       <div class="flex-1 min-w-0">
-                        <p
-                          class="text-[13px] font-medium text-[#111111] truncate"
-                        >
+                        <p class="text-[13px] font-medium text-[#111111] truncate">
                           {{ track.title }}
                         </p>
                         <p class="text-[11px] text-[#8A8A8A] truncate">
                           {{ track.artist }}
                         </p>
                       </div>
-                      <span
-                        class="text-[11px] text-[#C4C4C4] tabular-nums shrink-0"
-                        >{{ formatDuration(track.duration) }}</span
-                      >
+                      <span class="text-[11px] text-[#C4C4C4] tabular-nums shrink-0">{{
+                        formatDuration(track.duration)
+                      }}</span>
                     </button>
                   </div>
-                  <p
-                    v-if="musicSearchError"
-                    class="mt-2 text-[12px] text-[#B3261E]"
-                  >
+                  <p v-if="musicSearchError" class="mt-2 text-[12px] text-[#B3261E]">
                     {{ musicSearchError }}
                   </p>
                   <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
@@ -439,7 +391,7 @@
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                 ></path>
               </svg>
-              {{ saving ? "Saving…" : "Save changes" }}
+              {{ saving ? 'Saving…' : 'Save changes' }}
             </button>
           </div>
         </form>
@@ -449,169 +401,168 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { blogAPI, musicAPI } from "@/services/api";
-import BlogEditor from "@/components/BlogEditor.vue";
-import { debounce } from "@/utils/helpers";
+import { ref, watch, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { blogAPI, musicAPI } from '@/services/api'
+import BlogEditor from '@/components/BlogEditor.vue'
+import { debounce } from '@/utils/helpers'
 import {
   BLOG_TITLE_MAX_LENGTH,
   BLOG_EXCERPT_LENGTH,
   MAX_FILE_SIZE,
   ALLOWED_IMAGE_TYPES,
   SUCCESS_MESSAGES,
-} from "@/utils/constants";
+} from '@/utils/constants'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 // Blog being edited
-const blog = ref(null);
-const loading = ref(false);
-const loadError = ref("");
+const blog = ref(null)
+const loading = ref(false)
+const loadError = ref('')
 
 // Form state
-const title = ref("");
-const content = ref(null);
-const excerpt = ref("");
-const tagsInput = ref("");
-const status = ref("draft");
+const title = ref('')
+const content = ref(null)
+const excerpt = ref('')
+const tagsInput = ref('')
+const status = ref('draft')
 
 const statusOptions = [
-  { value: "draft", label: "Draft" },
-  { value: "private", label: "Private" },
-  { value: "published", label: "Published" },
-];
+  { value: 'draft', label: 'Draft' },
+  { value: 'private', label: 'Private' },
+  { value: 'published', label: 'Published' },
+]
 
 // Cover image
-const coverFile = ref(null);
-const coverPreview = ref("");
+const coverFile = ref(null)
+const coverPreview = ref('')
 
 // Music
-const searchQuery = ref("");
-const musicResults = ref([]);
-const musicSearching = ref(false);
-const musicSearchError = ref("");
-const selectedMusic = ref(null);
+const searchQuery = ref('')
+const musicResults = ref([])
+const musicSearching = ref(false)
+const musicSearchError = ref('')
+const selectedMusic = ref(null)
 
 // UI state
-const saving = ref(false);
-const formError = ref("");
-const successMessage = ref("");
+const saving = ref(false)
+const formError = ref('')
+const successMessage = ref('')
 
 const parsedTags = computed(() =>
   tagsInput.value
-    .split(",")
+    .split(',')
     .map((tag) => tag.trim())
     .filter(Boolean),
-);
+)
 
 const formatDuration = (seconds) => {
-  if (!seconds) return "";
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${String(secs).padStart(2, "0")}`;
-};
+  if (!seconds) return ''
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return `${mins}:${String(secs).padStart(2, '0')}`
+}
 
 const countTextContent = (doc) => {
-  if (!doc) return 0;
-  if (typeof doc === "string") return doc.length;
-  let count = 0;
+  if (!doc) return 0
+  if (typeof doc === 'string') return doc.length
+  let count = 0
   const walk = (node) => {
-    if (!node) return;
-    if (node.type === "text" && node.text) count += node.text.length;
-    if (Array.isArray(node.content)) node.content.forEach(walk);
-  };
-  walk(doc);
-  return count;
-};
+    if (!node) return
+    if (node.type === 'text' && node.text) count += node.text.length
+    if (Array.isArray(node.content)) node.content.forEach(walk)
+  }
+  walk(doc)
+  return count
+}
 
-const contentLength = computed(() => countTextContent(content.value));
+const contentLength = computed(() => countTextContent(content.value))
 
 const fetchBlog = async () => {
-  loading.value = true;
-  loadError.value = "";
+  loading.value = true
+  loadError.value = ''
 
   try {
-    const response = await blogAPI.getBlogBySlug(route.params.slug);
-    const data = response.data.blog;
+    const response = await blogAPI.getBlogBySlug(route.params.slug)
+    const data = response.data.blog
     if (!data) {
-      loadError.value = "Blog not found";
-      return;
+      loadError.value = 'Blog not found'
+      return
     }
 
-    blog.value = data;
-    title.value = data.title || "";
-    content.value = data.content || null;
-    excerpt.value = data.excerpt || "";
-    tagsInput.value = (data.tags || []).join(", ");
-    status.value = data.status || "draft";
-    coverPreview.value = data.coverImage || "";
-    if (data.music?.title) selectedMusic.value = data.music;
+    blog.value = data
+    title.value = data.title || ''
+    content.value = data.content || null
+    excerpt.value = data.excerpt || ''
+    tagsInput.value = (data.tags || []).join(', ')
+    status.value = data.status || 'draft'
+    coverPreview.value = data.coverImage || ''
+    if (data.music?.title) selectedMusic.value = data.music
   } catch (err) {
-    loadError.value = err.response?.data?.message || "Failed to load blog";
+    loadError.value = err.response?.data?.message || 'Failed to load blog'
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 const handleCoverChange = (event) => {
-  const file = event.target.files?.[0];
-  event.target.value = "";
-  if (!file) return;
+  const file = event.target.files?.[0]
+  event.target.value = ''
+  if (!file) return
 
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    formError.value = "Invalid file type. Please upload an image file.";
-    return;
+    formError.value = 'Invalid file type. Please upload an image file.'
+    return
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    formError.value = `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`;
-    return;
+    formError.value = `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`
+    return
   }
 
-  coverFile.value = file;
-  coverPreview.value = URL.createObjectURL(file);
-  formError.value = "";
-};
+  coverFile.value = file
+  coverPreview.value = URL.createObjectURL(file)
+  formError.value = ''
+}
 
 const searchMusic = async () => {
-  const keyword = searchQuery.value.trim();
+  const keyword = searchQuery.value.trim()
   if (!keyword || keyword.length < 2) {
-    musicResults.value = [];
-    musicSearchError.value = "";
-    return;
+    musicResults.value = []
+    musicSearchError.value = ''
+    return
   }
 
-  musicSearching.value = true;
-  musicSearchError.value = "";
+  musicSearching.value = true
+  musicSearchError.value = ''
 
   try {
     const response = await musicAPI.searchMusic({
       keyword,
       limit: 8,
-    });
-    musicResults.value = response.data.data || [];
+    })
+    musicResults.value = response.data.data || []
     if (!musicResults.value.length) {
-      musicSearchError.value = "No tracks found. Try a different search.";
+      musicSearchError.value = 'No tracks found. Try a different search.'
     }
   } catch (err) {
-    musicSearchError.value =
-      err.response?.data?.message || "Failed to search music";
+    musicSearchError.value = err.response?.data?.message || 'Failed to search music'
   } finally {
-    musicSearching.value = false;
+    musicSearching.value = false
   }
-};
+}
 
-const debouncedSearch = debounce(searchMusic, 400);
+const debouncedSearch = debounce(searchMusic, 400)
 
 watch(searchQuery, () => {
-  debouncedSearch();
-});
+  debouncedSearch()
+})
 
 const selectTrack = (track) => {
   selectedMusic.value = {
-    provider: "deezer",
+    provider: 'deezer',
     trackId: track.trackId,
     title: track.title,
     artist: track.artist,
@@ -620,71 +571,71 @@ const selectTrack = (track) => {
     previewUrl: track.previewUrl,
     deezerUrl: track.deezerUrl,
     duration: track.duration,
-  };
-  musicResults.value = [];
-  searchQuery.value = "";
-  musicSearchError.value = "";
-};
+  }
+  musicResults.value = []
+  searchQuery.value = ''
+  musicSearchError.value = ''
+}
 
 const handleSubmit = async () => {
-  formError.value = "";
-  successMessage.value = "";
+  formError.value = ''
+  successMessage.value = ''
 
   if (!title.value.trim()) {
-    formError.value = "Title is required";
-    return;
+    formError.value = 'Title is required'
+    return
   }
   if (title.value.trim().length < 3) {
-    formError.value = "Title must be at least 3 characters";
-    return;
+    formError.value = 'Title must be at least 3 characters'
+    return
   }
   if (contentLength.value < 10) {
-    formError.value = "Content must be at least 10 characters";
-    return;
+    formError.value = 'Content must be at least 10 characters'
+    return
   }
 
-  const formData = new FormData();
-  formData.append("title", title.value.trim());
-  formData.append("content", JSON.stringify(content.value));
-  formData.append("status", status.value);
-  formData.append("excerpt", excerpt.value.trim());
-  if (coverFile.value) formData.append("coverImage", coverFile.value);
+  const formData = new FormData()
+  formData.append('title', title.value.trim())
+  formData.append('content', JSON.stringify(content.value))
+  formData.append('status', status.value)
+  formData.append('excerpt', excerpt.value.trim())
+  if (coverFile.value) formData.append('coverImage', coverFile.value)
 
   const tags = tagsInput.value
-    .split(",")
+    .split(',')
     .map((tag) => tag.trim())
-    .filter(Boolean);
-  formData.append("tags", JSON.stringify(tags));
+    .filter(Boolean)
+  formData.append('tags', JSON.stringify(tags))
   if (selectedMusic.value) {
-    formData.append("music", JSON.stringify(selectedMusic.value));
+    formData.append('music', JSON.stringify(selectedMusic.value))
   } else {
-    formData.append("music", "");
+    formData.append('music', '')
   }
 
-  saving.value = true;
+  saving.value = true
   try {
-    const response = await blogAPI.updateBlog(blog.value._id, formData);
-    successMessage.value = SUCCESS_MESSAGES.BLOG_UPDATED;
-    const updated = response.data.blog;
+    const response = await blogAPI.updateBlog(blog.value._id, formData)
+    successMessage.value = SUCCESS_MESSAGES.BLOG_UPDATED
+    const updated = response.data.blog
     if (updated?.slug) {
-      router.push(`/blogs/${updated.slug}`);
+      router.push(`/blogs/${updated.slug}`)
     } else {
-      router.push(`/blogs/${blog.value.slug}`);
+      router.push(`/blogs/${blog.value.slug}`)
     }
   } catch (err) {
-    formError.value = err.response?.data?.message || "Failed to update blog";
+    formError.value = err.response?.data?.message || 'Failed to update blog'
   } finally {
-    saving.value = false;
+    saving.value = false
   }
-};
+}
 
-onMounted(fetchBlog);
+onMounted(fetchBlog)
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&display=swap');
 
 .font-display {
-  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
 }
 </style>

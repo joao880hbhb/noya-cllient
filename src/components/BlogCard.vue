@@ -34,9 +34,16 @@
       <span class="text-xs font-medium text-gray-500 truncate">
         {{ blog.author.displayName || blog.author.publicId }}
       </span>
-      <span v-if="trending" class="ml-auto inline-flex items-center gap-1 text-xs font-semibold text-[#5B4BFF]">
+      <span
+        v-if="trending"
+        class="ml-auto inline-flex items-center gap-1 text-xs font-semibold text-[#5B4BFF]"
+      >
         <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M5.05 3.636a1 1 0 010 1.414L3.464 6.636a1 1 0 11-1.414-1.414l1.586-1.586a1 1 0 011.414 0zm10 0a1 1 0 011.414 0l1.586 1.586a1 1 0 11-1.414 1.414l-1.586-1.586a1 1 0 010-1.414zM12 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zM5.05 16.364a1 1 0 01-1.414 0L2.05 14.778a1 1 0 111.414-1.414l1.586 1.586a1 1 0 010 1.414zM17 10a1 1 0 110 2h-2a1 1 0 110-2h2zm-8-2a4 4 0 108 0 4 4 0 00-8 0z" clip-rule="evenodd" />
+          <path
+            fill-rule="evenodd"
+            d="M5.05 3.636a1 1 0 010 1.414L3.464 6.636a1 1 0 11-1.414-1.414l1.586-1.586a1 1 0 011.414 0zm10 0a1 1 0 011.414 0l1.586 1.586a1 1 0 11-1.414 1.414l-1.586-1.586a1 1 0 010-1.414zM12 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zM5.05 16.364a1 1 0 01-1.414 0L2.05 14.778a1 1 0 111.414-1.414l1.586 1.586a1 1 0 010 1.414zM17 10a1 1 0 110 2h-2a1 1 0 110-2h2zm-8-2a4 4 0 108 0 4 4 0 00-8 0z"
+            clip-rule="evenodd"
+          />
         </svg>
         Trending
       </span>
@@ -65,14 +72,20 @@
     <div class="mt-3 flex items-center gap-3 text-xs text-gray-400">
       <span class="inline-flex items-center gap-1">
         <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 18a1 1 0 01-.707-.293C8.286 16.7 4 13.223 4 9a6 6 0 1112 0c0 4.223-4.286 7.7-5.293 8.707A1 1 0 0110 18z" />
+          <path
+            d="M10 18a1 1 0 01-.707-.293C8.286 16.7 4 13.223 4 9a6 6 0 1112 0c0 4.223-4.286 7.7-5.293 8.707A1 1 0 0110 18z"
+          />
         </svg>
         {{ formatNumber(blog.likesCount || 0) }}
       </span>
       <span class="inline-flex items-center gap-1">
         <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-          <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+          <path
+            fill-rule="evenodd"
+            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+            clip-rule="evenodd"
+          />
         </svg>
         {{ formatNumber(blog.views || 0) }}
       </span>

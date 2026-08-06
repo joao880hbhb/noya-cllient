@@ -7,7 +7,11 @@
         fill="currentColor"
         viewBox="0 0 20 20"
       >
-        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        <path
+          fill-rule="evenodd"
+          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+          clip-rule="evenodd"
+        />
       </svg>
       <input
         v-model="query"
@@ -24,7 +28,11 @@
         class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
       >
         <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
         </svg>
       </button>
     </div>
@@ -60,12 +68,22 @@
             {{ getInitials(user.displayName || user.publicId) }}
           </div>
           <div class="min-w-0">
-            <p class="text-sm font-semibold text-gray-900 truncate">{{ user.displayName || 'User' }}</p>
+            <p class="text-sm font-semibold text-gray-900 truncate">
+              {{ user.displayName || 'User' }}
+            </p>
             <!-- <p class="text-xs text-gray-400 truncate">@{{ shortenId(user.publicId) }}</p> -->
             <p v-if="user.bio" class="text-xs text-gray-500 truncate">{{ user.bio }}</p>
           </div>
-          <svg class="ml-auto h-4 w-4 text-gray-300 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          <svg
+            class="ml-auto h-4 w-4 text-gray-300 shrink-0"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd"
+            />
           </svg>
         </button>
       </div>

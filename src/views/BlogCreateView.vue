@@ -7,16 +7,11 @@
           <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-2">
             Compose &middot; New entry
           </p>
-          <h1
-            class="font-display italic text-[34px] sm:text-[42px] leading-[1.05] text-[#111111]"
-          >
+          <h1 class="font-display italic text-[34px] sm:text-[42px] leading-[1.05] text-[#111111]">
             Write something<br class="hidden sm:block" />
             worth reading.
           </h1>
-          <p
-            v-if="draftStatus"
-            class="sm:hidden text-[10px] text-[#8A8A8A] mt-2 italic"
-          >
+          <p v-if="draftStatus" class="sm:hidden text-[10px] text-[#8A8A8A] mt-2 italic">
             {{ draftStatus }}
           </p>
         </div>
@@ -24,9 +19,7 @@
           <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">
             {{ todayStamp }}
           </p>
-          <p class="text-[11px] text-[#B0B0B0] tabular-nums mt-0.5">
-            {{ contentLength }} chars
-          </p>
+          <p class="text-[11px] text-[#B0B0B0] tabular-nums mt-0.5">{{ contentLength }} chars</p>
           <p
             v-if="draftStatus"
             class="text-[10px] text-[#8A8A8A] mt-1.5 italic transition-all duration-300"
@@ -37,16 +30,10 @@
       </div>
 
       <!-- Feedback -->
-      <div
-        v-if="successMessage"
-        class="mb-6 border-l-2 border-[#111111] bg-[#FAFAFA] px-4 py-3"
-      >
+      <div v-if="successMessage" class="mb-6 border-l-2 border-[#111111] bg-[#FAFAFA] px-4 py-3">
         <p class="text-sm text-[#111111]">{{ successMessage }}</p>
       </div>
-      <div
-        v-if="formError"
-        class="mb-6 border-l-2 border-[#B3261E] bg-[#FDF7F6] px-4 py-3"
-      >
+      <div v-if="formError" class="mb-6 border-l-2 border-[#B3261E] bg-[#FDF7F6] px-4 py-3">
         <p class="text-sm text-[#8C1D14]">{{ formError }}</p>
       </div>
 
@@ -64,10 +51,7 @@
             <div
               class="flex items-center justify-between px-6 sm:px-10 pt-7 pb-5 border-b border-[#F0F0F0]"
             >
-              <span
-                class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase"
-                >Status</span
-              >
+              <span class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase">Status</span>
               <div class="flex items-center gap-5">
                 <button
                   v-for="opt in statusOptions"
@@ -115,16 +99,12 @@
             <div
               class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
             >
-              <label
-                class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
-              >
+              <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
                 Body <span class="text-[#B3261E]">*</span>
               </label>
               <div>
                 <BlogEditor v-model="content" />
-                <p
-                  class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums"
-                >
+                <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
                   {{ contentLength }} characters
                 </p>
               </div>
@@ -149,9 +129,7 @@
                   class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[2px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
                   placeholder="A short line shown in blog listings"
                 ></textarea>
-                <p
-                  class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums"
-                >
+                <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
                   {{ excerpt.length }} / {{ BLOG_EXCERPT_LENGTH }}
                 </p>
               </div>
@@ -161,9 +139,7 @@
             <div
               class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
             >
-              <label
-                class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
-              >
+              <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
                 Cover
               </label>
               <div>
@@ -181,9 +157,7 @@
                   v-else
                   class="border border-dashed border-[#D8D8D8] rounded-[2px] h-28 flex items-center justify-center mb-3"
                 >
-                  <span class="text-[12px] text-[#B0B0B0]"
-                    >No image selected</span
-                  >
+                  <span class="text-[12px] text-[#B0B0B0]">No image selected</span>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -198,7 +172,7 @@
                     for="coverImage"
                     class="inline-flex items-center px-3.5 py-1.5 border border-[#111111] rounded-[2px] text-[12px] font-medium text-[#111111] hover:bg-[#111111] hover:text-white transition-colors cursor-pointer"
                   >
-                    {{ coverPreview ? "Replace" : "Upload image" }}
+                    {{ coverPreview ? 'Replace' : 'Upload image' }}
                   </label>
                   <button
                     v-if="coverPreview"
@@ -219,10 +193,7 @@
             <div
               class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
             >
-              <label
-                for="tags"
-                class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
-              >
+              <label for="tags" class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
                 Tags
               </label>
               <div>
@@ -233,10 +204,7 @@
                   class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 p-3 bg-transparent transition-colors"
                   placeholder="music, review, tutorial"
                 />
-                <div
-                  v-if="parsedTags.length"
-                  class="flex flex-wrap gap-1.5 mt-3"
-                >
+                <div v-if="parsedTags.length" class="flex flex-wrap gap-1.5 mt-3">
                   <span
                     v-for="tag in parsedTags"
                     :key="tag"
@@ -252,12 +220,8 @@
             </div>
 
             <!-- Music -->
-            <div
-              class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8"
-            >
-              <label
-                class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
-              >
+            <div class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8">
+              <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
                 Soundtrack
               </label>
               <div>
@@ -339,25 +303,19 @@
                       class="h-9 w-9 rounded-[2px] object-cover shrink-0"
                     />
                     <div class="flex-1 min-w-0">
-                      <p
-                        class="text-[13px] font-medium text-[#111111] truncate"
-                      >
+                      <p class="text-[13px] font-medium text-[#111111] truncate">
                         {{ track.title }}
                       </p>
                       <p class="text-[11px] text-[#8A8A8A] truncate">
                         {{ track.artist }}
                       </p>
                     </div>
-                    <span
-                      class="text-[11px] text-[#C4C4C4] tabular-nums shrink-0"
-                      >{{ formatDuration(track.duration) }}</span
-                    >
+                    <span class="text-[11px] text-[#C4C4C4] tabular-nums shrink-0">{{
+                      formatDuration(track.duration)
+                    }}</span>
                   </button>
                 </div>
-                <p
-                  v-if="musicSearchError"
-                  class="mt-2 text-[12px] text-[#B3261E]"
-                >
+                <p v-if="musicSearchError" class="mt-2 text-[12px] text-[#B3261E]">
                   {{ musicSearchError }}
                 </p>
                 <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
@@ -402,7 +360,7 @@
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
               ></path>
             </svg>
-            {{ saving ? "Publishing…" : "Create post" }}
+            {{ saving ? 'Publishing…' : 'Create post' }}
           </button>
         </div>
       </form>
@@ -411,136 +369,134 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-import { blogAPI, musicAPI } from "@/services/api";
-import BlogEditor from "@/components/BlogEditor.vue";
-import { debounce } from "@/utils/helpers";
+import { ref, watch, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { blogAPI, musicAPI } from '@/services/api'
+import BlogEditor from '@/components/BlogEditor.vue'
+import { debounce } from '@/utils/helpers'
 import {
   BLOG_TITLE_MAX_LENGTH,
   BLOG_EXCERPT_LENGTH,
   MAX_FILE_SIZE,
   ALLOWED_IMAGE_TYPES,
   SUCCESS_MESSAGES,
-} from "@/utils/constants";
+} from '@/utils/constants'
 
-const router = useRouter();
-const authStore = useAuthStore();
-const draftStatus = ref("");
-
+const router = useRouter()
+const authStore = useAuthStore()
+const draftStatus = ref('')
 
 // Form state
-const title = ref("");
-const content = ref(null);
-const excerpt = ref("");
-const tagsInput = ref("");
-const status = ref("draft");
+const title = ref('')
+const content = ref(null)
+const excerpt = ref('')
+const tagsInput = ref('')
+const status = ref('draft')
 
 const statusOptions = [
-  { value: "draft", label: "Draft" },
-  { value: "private", label: "Private" },
-  { value: "published", label: "Published" },
-];
+  { value: 'draft', label: 'Draft' },
+  { value: 'private', label: 'Private' },
+  { value: 'published', label: 'Published' },
+]
 
 // Cover image
-const coverFile = ref(null);
-const coverPreview = ref("");
+const coverFile = ref(null)
+const coverPreview = ref('')
 
 // Music
-const searchQuery = ref("");
-const musicResults = ref([]);
-const musicSearching = ref(false);
-const musicSearchError = ref("");
-const selectedMusic = ref(null);
+const searchQuery = ref('')
+const musicResults = ref([])
+const musicSearching = ref(false)
+const musicSearchError = ref('')
+const selectedMusic = ref(null)
 
 // UI state
-const saving = ref(false);
-const formError = ref("");
-const successMessage = ref("");
+const saving = ref(false)
+const formError = ref('')
+const successMessage = ref('')
 
-const todayStamp = new Date().toLocaleDateString("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
+const todayStamp = new Date().toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+})
 
 const parsedTags = computed(() =>
   tagsInput.value
-    .split(",")
+    .split(',')
     .map((tag) => tag.trim())
     .filter(Boolean),
-);
+)
 
 const formatDuration = (seconds) => {
-  if (!seconds) return "";
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${String(secs).padStart(2, "0")}`;
-};
+  if (!seconds) return ''
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return `${mins}:${String(secs).padStart(2, '0')}`
+}
 
 const handleCoverChange = (event) => {
-  const file = event.target.files?.[0];
-  event.target.value = "";
-  if (!file) return;
+  const file = event.target.files?.[0]
+  event.target.value = ''
+  if (!file) return
 
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    formError.value = "Invalid file type. Please upload an image file.";
-    return;
+    formError.value = 'Invalid file type. Please upload an image file.'
+    return
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    formError.value = `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`;
-    return;
+    formError.value = `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`
+    return
   }
 
-  coverFile.value = file;
-  coverPreview.value = URL.createObjectURL(file);
-  formError.value = "";
-};
+  coverFile.value = file
+  coverPreview.value = URL.createObjectURL(file)
+  formError.value = ''
+}
 
 const removeCover = () => {
-  coverFile.value = null;
-  coverPreview.value = "";
-};
+  coverFile.value = null
+  coverPreview.value = ''
+}
 
 const searchMusic = async () => {
-  const keyword = searchQuery.value.trim();
+  const keyword = searchQuery.value.trim()
   if (!keyword || keyword.length < 2) {
-    musicResults.value = [];
-    musicSearchError.value = "";
-    return;
+    musicResults.value = []
+    musicSearchError.value = ''
+    return
   }
 
-  musicSearching.value = true;
-  musicSearchError.value = "";
+  musicSearching.value = true
+  musicSearchError.value = ''
 
   try {
     const response = await musicAPI.searchMusic({
       keyword,
       limit: 8,
-    });
-    musicResults.value = response.data.data || [];
+    })
+    musicResults.value = response.data.data || []
     if (!musicResults.value.length) {
-      musicSearchError.value = "No tracks found. Try a different search.";
+      musicSearchError.value = 'No tracks found. Try a different search.'
     }
   } catch (err) {
-    musicSearchError.value =
-      err.response?.data?.message || "Failed to search music";
+    musicSearchError.value = err.response?.data?.message || 'Failed to search music'
   } finally {
-    musicSearching.value = false;
+    musicSearching.value = false
   }
-};
+}
 
-const debouncedSearch = debounce(searchMusic, 400);
+const debouncedSearch = debounce(searchMusic, 400)
 
 watch(searchQuery, () => {
-  debouncedSearch();
-});
+  debouncedSearch()
+})
 
 const selectTrack = (track) => {
   selectedMusic.value = {
-    provider: "deezer",
+    provider: 'deezer',
     trackId: track.trackId,
     title: track.title,
     artist: track.artist,
@@ -549,37 +505,41 @@ const selectTrack = (track) => {
     previewUrl: track.previewUrl,
     deezerUrl: track.deezerUrl,
     duration: track.duration,
-  };
-  musicResults.value = [];
-  searchQuery.value = "";
-  musicSearchError.value = "";
-};
+  }
+  musicResults.value = []
+  searchQuery.value = ''
+  musicSearchError.value = ''
+}
 
 const countTextContent = (doc) => {
-  if (!doc) return 0;
-  if (typeof doc === "string") return doc.length;
-  let count = 0;
+  if (!doc) return 0
+  if (typeof doc === 'string') return doc.length
+  let count = 0
   const walk = (node) => {
-    if (!node) return;
-    if (node.type === "text" && node.text) count += node.text.length;
-    if (Array.isArray(node.content)) node.content.forEach(walk);
-  };
-  walk(doc);
-  return count;
-};
+    if (!node) return
+    if (node.type === 'text' && node.text) count += node.text.length
+    if (Array.isArray(node.content)) node.content.forEach(walk)
+  }
+  walk(doc)
+  return count
+}
 
-const contentLength = computed(() => countTextContent(content.value));
+const contentLength = computed(() => countTextContent(content.value))
 
 // Draft auto-save logic
-const getDraftKey = () => `noya_draft_${authStore.user?._id || authStore.user?.id || 'guest'}`;
+const getDraftKey = () => `noya_draft_${authStore.user?._id || authStore.user?.id || 'guest'}`
 
 const saveDraft = () => {
   // Hanya save jika ada title, content, atau excerpt yang diisi
-  if (!title.value.trim() && (!content.value || contentLength.value === 0) && !excerpt.value.trim()) {
-    return;
+  if (
+    !title.value.trim() &&
+    (!content.value || contentLength.value === 0) &&
+    !excerpt.value.trim()
+  ) {
+    return
   }
-  
-  draftStatus.value = "Saving...";
+
+  draftStatus.value = 'Saving...'
   const draftData = {
     title: title.value,
     content: content.value,
@@ -587,105 +547,103 @@ const saveDraft = () => {
     tagsInput: tagsInput.value,
     selectedMusic: selectedMusic.value,
     status: status.value,
-  };
-  localStorage.setItem(getDraftKey(), JSON.stringify(draftData));
-  
+  }
+  localStorage.setItem(getDraftKey(), JSON.stringify(draftData))
+
   // Update status saved setelah delay kecil
   setTimeout(() => {
-    if (draftStatus.value === "Saving...") {
-      draftStatus.value = "Draft saved locally";
+    if (draftStatus.value === 'Saving...') {
+      draftStatus.value = 'Draft saved locally'
     }
-  }, 500);
-};
+  }, 500)
+}
 
-const debouncedSaveDraft = debounce(saveDraft, 1000);
+const debouncedSaveDraft = debounce(saveDraft, 1000)
 
 // Watch form inputs to trigger auto-save
 watch(
   [title, content, excerpt, tagsInput, selectedMusic, status],
   () => {
-    debouncedSaveDraft();
+    debouncedSaveDraft()
   },
-  { deep: true }
-);
+  { deep: true },
+)
 
 // Load draft from localStorage on mount
 onMounted(() => {
-  const saved = localStorage.getItem(getDraftKey());
+  const saved = localStorage.getItem(getDraftKey())
   if (saved) {
     try {
-      const parsed = JSON.parse(saved);
-      if (parsed.title) title.value = parsed.title;
-      if (parsed.content) content.value = parsed.content;
-      if (parsed.excerpt) excerpt.value = parsed.excerpt;
-      if (parsed.tagsInput) tagsInput.value = parsed.tagsInput;
-      if (parsed.selectedMusic) selectedMusic.value = parsed.selectedMusic;
-      if (parsed.status) status.value = parsed.status;
-      
-      draftStatus.value = "Draft restored from local storage";
+      const parsed = JSON.parse(saved)
+      if (parsed.title) title.value = parsed.title
+      if (parsed.content) content.value = parsed.content
+      if (parsed.excerpt) excerpt.value = parsed.excerpt
+      if (parsed.tagsInput) tagsInput.value = parsed.tagsInput
+      if (parsed.selectedMusic) selectedMusic.value = parsed.selectedMusic
+      if (parsed.status) status.value = parsed.status
+
+      draftStatus.value = 'Draft restored from local storage'
       setTimeout(() => {
-        draftStatus.value = "Draft saved locally";
-      }, 3000);
+        draftStatus.value = 'Draft saved locally'
+      }, 3000)
     } catch (e) {
-      console.error("Failed to restore draft", e);
+      console.error('Failed to restore draft', e)
     }
   }
-});
-
+})
 
 const handleSubmit = async () => {
-  formError.value = "";
-  successMessage.value = "";
+  formError.value = ''
+  successMessage.value = ''
 
   if (!title.value.trim()) {
-    formError.value = "Title is required";
-    return;
+    formError.value = 'Title is required'
+    return
   }
   if (title.value.trim().length < 3) {
-    formError.value = "Title must be at least 3 characters";
-    return;
+    formError.value = 'Title must be at least 3 characters'
+    return
   }
   if (contentLength.value < 10) {
-    formError.value = "Content must be at least 10 characters";
-    return;
+    formError.value = 'Content must be at least 10 characters'
+    return
   }
 
-  const formData = new FormData();
-  formData.append("title", title.value.trim());
-  formData.append("content", JSON.stringify(content.value));
-  formData.append("status", status.value);
-  if (excerpt.value.trim()) formData.append("excerpt", excerpt.value.trim());
-  if (coverFile.value) formData.append("coverImage", coverFile.value);
+  const formData = new FormData()
+  formData.append('title', title.value.trim())
+  formData.append('content', JSON.stringify(content.value))
+  formData.append('status', status.value)
+  if (excerpt.value.trim()) formData.append('excerpt', excerpt.value.trim())
+  if (coverFile.value) formData.append('coverImage', coverFile.value)
 
   const tags = tagsInput.value
-    .split(",")
+    .split(',')
     .map((tag) => tag.trim())
-    .filter(Boolean);
-  if (tags.length) formData.append("tags", JSON.stringify(tags));
-  if (selectedMusic.value)
-    formData.append("music", JSON.stringify(selectedMusic.value));
+    .filter(Boolean)
+  if (tags.length) formData.append('tags', JSON.stringify(tags))
+  if (selectedMusic.value) formData.append('music', JSON.stringify(selectedMusic.value))
 
-  saving.value = true;
+  saving.value = true
   try {
-    const response = await blogAPI.createBlog(formData);
-    successMessage.value = SUCCESS_MESSAGES.BLOG_CREATED;
-    localStorage.removeItem(getDraftKey());
-    const blog = response.data.blog;
+    const response = await blogAPI.createBlog(formData)
+    successMessage.value = SUCCESS_MESSAGES.BLOG_CREATED
+    localStorage.removeItem(getDraftKey())
+    const blog = response.data.blog
     if (blog?.slug) {
-      router.push(`/blogs/${blog.slug}`);
+      router.push(`/blogs/${blog.slug}`)
     } else {
-      router.push("/blogs");
+      router.push('/blogs')
     }
   } catch (err) {
-    formError.value = err.response?.data?.message || "Failed to create blog";
+    formError.value = err.response?.data?.message || 'Failed to create blog'
   } finally {
-    saving.value = false;
+    saving.value = false
   }
-};
+}
 </script>
 
 <style scoped>
 .font-display {
-  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
 }
 </style>

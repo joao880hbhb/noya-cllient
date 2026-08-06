@@ -1,7 +1,12 @@
 <template>
-  <div class="border border-gray-300 rounded-md overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+  <div
+    class="border border-gray-300 rounded-md overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500"
+  >
     <!-- Toolbar -->
-    <div v-if="editor" class="flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 px-2 py-1.5">
+    <div
+      v-if="editor"
+      class="flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 px-2 py-1.5"
+    >
       <!-- Headings -->
       <button
         type="button"
@@ -122,9 +127,15 @@
           class="px-2 py-1 rounded text-sm"
           title="Text color"
         >
-          <span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-400" :style="{ backgroundColor: editor.getAttributes('textStyle').color || '#111827' }"></span>
+          <span
+            class="inline-block w-3.5 h-3.5 rounded-full border border-gray-400"
+            :style="{ backgroundColor: editor.getAttributes('textStyle').color || '#111827' }"
+          ></span>
         </button>
-        <div v-if="showTextPalette" class="absolute left-0 top-full mt-1 z-20 flex flex-wrap gap-1 bg-white border border-gray-200 rounded-md shadow-lg p-2 w-44">
+        <div
+          v-if="showTextPalette"
+          class="absolute left-0 top-full mt-1 z-20 flex flex-wrap gap-1 bg-white border border-gray-200 rounded-md shadow-lg p-2 w-44"
+        >
           <button
             v-for="color in textColors"
             :key="color"
@@ -153,9 +164,16 @@
           class="px-2 py-1 rounded text-sm"
           title="Highlight"
         >
-          <span class="inline-block px-1 rounded-sm text-xs font-bold" :style="{ backgroundColor: currentHighlightColor() || '#fef08a' }">HL</span>
+          <span
+            class="inline-block px-1 rounded-sm text-xs font-bold"
+            :style="{ backgroundColor: currentHighlightColor() || '#fef08a' }"
+            >HL</span
+          >
         </button>
-        <div v-if="showHighlightPalette" class="absolute left-0 top-full mt-1 z-20 flex flex-wrap gap-1 bg-white border border-gray-200 rounded-md shadow-lg p-2 w-44">
+        <div
+          v-if="showHighlightPalette"
+          class="absolute left-0 top-full mt-1 z-20 flex flex-wrap gap-1 bg-white border border-gray-200 rounded-md shadow-lg p-2 w-44"
+        >
           <button
             v-for="color in highlightColors"
             :key="color"
@@ -224,13 +242,27 @@ const btnClass = 'px-2 py-1 rounded text-sm text-gray-600 hover:bg-gray-200'
 const activeBtnClass = 'px-2 py-1 rounded text-sm bg-indigo-600 text-white'
 
 const textColors = [
-  '#111827', '#ef4444', '#f97316', '#f59e0b', '#22c55e',
-  '#10b981', '#3b82f6', '#6366f1', '#8b5cf6', '#ec4899',
+  '#111827',
+  '#ef4444',
+  '#f97316',
+  '#f59e0b',
+  '#22c55e',
+  '#10b981',
+  '#3b82f6',
+  '#6366f1',
+  '#8b5cf6',
+  '#ec4899',
 ]
 
 const highlightColors = [
-  '#fef08a', '#fde68a', '#fed7aa', '#fecaca',
-  '#bbf7d0', '#bfdbfe', '#ddd6fe', '#fbcfe8',
+  '#fef08a',
+  '#fde68a',
+  '#fed7aa',
+  '#fecaca',
+  '#bbf7d0',
+  '#bfdbfe',
+  '#ddd6fe',
+  '#fbcfe8',
 ]
 
 const showTextPalette = ref(false)
@@ -238,12 +270,7 @@ const showHighlightPalette = ref(false)
 
 const editor = useEditor({
   content: props.modelValue || '',
-  extensions: [
-    StarterKit,
-    TextStyle,
-    Color,
-    Highlight.configure({ multicolor: true }),
-  ],
+  extensions: [StarterKit, TextStyle, Color, Highlight.configure({ multicolor: true })],
   editorProps: {
     attributes: {
       class: 'prose-editor focus:outline-none',
@@ -276,13 +303,16 @@ const applyHighlight = (color) => {
   }
 }
 
-watch(() => props.modelValue, (value) => {
-  if (!editor.value) return
-  const next = value || ''
-  if (JSON.stringify(editor.value.getJSON()) !== JSON.stringify(next)) {
-    editor.value.commands.setContent(next)
-  }
-})
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (!editor.value) return
+    const next = value || ''
+    if (JSON.stringify(editor.value.getJSON()) !== JSON.stringify(next)) {
+      editor.value.commands.setContent(next)
+    }
+  },
+)
 </script>
 
 <style>

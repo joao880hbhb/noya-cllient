@@ -10,16 +10,11 @@
 
       <!-- Loading state -->
       <div v-if="loading" class="flex justify-center items-center h-64">
-        <div
-          class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"
-        ></div>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
 
       <!-- Error state -->
-      <div
-        v-else-if="error"
-        class="bg-red-50 border border-red-200 rounded-lg p-6"
-      >
+      <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6">
         <h3 class="text-red-800 font-semibold">Error loading your blogs</h3>
         <p class="text-red-600 mt-2">{{ error }}</p>
         <button
@@ -31,14 +26,9 @@
       </div>
 
       <!-- Empty state -->
-      <div
-        v-else-if="blogs.length === 0"
-        class="bg-white rounded-lg shadow p-12 text-center"
-      >
+      <div v-else-if="blogs.length === 0" class="bg-white rounded-lg shadow p-12 text-center">
         <h2 class="text-xl font-semibold text-gray-900">No blog posts yet</h2>
-        <p class="mt-2 text-gray-600">
-          Start sharing your thoughts with the community.
-        </p>
+        <p class="mt-2 text-gray-600">Start sharing your thoughts with the community.</p>
         <router-link
           to="/blogs/create"
           class="mt-6 inline-block px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700"
@@ -89,9 +79,7 @@
             </div>
 
             <router-link :to="`/blogs/${blog.slug}`" class="block group">
-              <h2
-                class="text-lg font-semibold text-gray-900 group-hover:text-indigo-600"
-              >
+              <h2 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-600">
                 {{ blog.title }}
               </h2>
             </router-link>
@@ -120,7 +108,7 @@
                 :disabled="deletingId === blog._id"
                 class="inline-flex items-center px-3 py-1.5 border border-red-300 rounded-md text-xs font-medium text-red-700 bg-white hover:bg-red-50 disabled:opacity-50"
               >
-                {{ deletingId === blog._id ? "Deleting..." : "Delete" }}
+                {{ deletingId === blog._id ? 'Deleting...' : 'Delete' }}
               </button>
             </div>
           </div>
@@ -136,9 +124,7 @@
         >
           &larr; Previous
         </button>
-        <span class="text-sm text-gray-600">
-          Page {{ currentPage }} of {{ totalPages }}
-        </span>
+        <span class="text-sm text-gray-600"> Page {{ currentPage }} of {{ totalPages }} </span>
         <button
           @click="changePage(currentPage + 1)"
           :disabled="currentPage >= totalPages"
@@ -152,64 +138,64 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { blogAPI } from "@/services/api";
-import { getInitials, formatRelativeTime, truncateText } from "@/utils/helpers";
-import { DEFAULT_PAGE_SIZE } from "@/utils/constants";
+import { ref, onMounted } from 'vue'
+import { blogAPI } from '@/services/api'
+import { getInitials, formatRelativeTime, truncateText } from '@/utils/helpers'
+import { DEFAULT_PAGE_SIZE } from '@/utils/constants'
 
-const blogs = ref([]);
-const loading = ref(false);
-const error = ref("");
-const currentPage = ref(1);
-const totalPages = ref(1);
-const totalBlogs = ref(0);
-const deletingId = ref(null);
+const blogs = ref([])
+const loading = ref(false)
+const error = ref('')
+const currentPage = ref(1)
+const totalPages = ref(1)
+const totalBlogs = ref(0)
+const deletingId = ref(null)
 
 const fetchBlogs = async () => {
-  loading.value = true;
-  error.value = "";
+  loading.value = true
+  error.value = ''
 
   try {
     const response = await blogAPI.getMyBlogs({
       page: currentPage.value,
       limit: DEFAULT_PAGE_SIZE,
-    });
+    })
 
-    const data = response.data;
-    blogs.value = data.blogs || [];
-    totalBlogs.value = data.totalBlogs || 0;
-    totalPages.value = data.totalPages || 1;
+    const data = response.data
+    blogs.value = data.blogs || []
+    totalBlogs.value = data.totalBlogs || 0
+    totalPages.value = data.totalPages || 1
   } catch (err) {
-    error.value = err.response?.data?.message || "Failed to load your blogs";
+    error.value = err.response?.data?.message || 'Failed to load your blogs'
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 const changePage = (page) => {
-  if (page < 1 || page > totalPages.value) return;
-  currentPage.value = page;
-  fetchBlogs();
-};
+  if (page < 1 || page > totalPages.value) return
+  currentPage.value = page
+  fetchBlogs()
+}
 
 const handleDelete = async (blog) => {
-  if (!confirm(`Delete "${blog.title}"? This action cannot be undone.`)) return;
+  if (!confirm(`Delete "${blog.title}"? This action cannot be undone.`)) return
 
-  deletingId.value = blog._id;
-  error.value = "";
+  deletingId.value = blog._id
+  error.value = ''
 
   try {
-    await blogAPI.deleteBlog(blog._id);
+    await blogAPI.deleteBlog(blog._id)
     if (blogs.value.length === 1 && currentPage.value > 1) {
-      currentPage.value -= 1;
+      currentPage.value -= 1
     }
-    await fetchBlogs();
+    await fetchBlogs()
   } catch (err) {
-    error.value = err.response?.data?.message || "Failed to delete blog";
+    error.value = err.response?.data?.message || 'Failed to delete blog'
   } finally {
-    deletingId.value = null;
+    deletingId.value = null
   }
-};
+}
 
-onMounted(fetchBlogs);
+onMounted(fetchBlogs)
 </script>

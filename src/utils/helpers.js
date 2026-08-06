@@ -20,35 +20,35 @@ export const formatDate = (date) => {
  */
 export const formatRelativeTime = (date) => {
   if (!date) return ''
-  
+
   const now = new Date()
   const past = new Date(date)
   const diffInSeconds = Math.floor((now - past) / 1000)
-  
+
   if (diffInSeconds < 60) {
     return 'just now'
   }
-  
+
   const diffInMinutes = Math.floor(diffInSeconds / 60)
   if (diffInMinutes < 60) {
     return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`
   }
-  
+
   const diffInHours = Math.floor(diffInMinutes / 60)
   if (diffInHours < 24) {
     return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
   }
-  
+
   const diffInDays = Math.floor(diffInHours / 24)
   if (diffInDays < 30) {
     return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
   }
-  
+
   const diffInMonths = Math.floor(diffInDays / 30)
   if (diffInMonths < 12) {
     return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`
   }
-  
+
   const diffInYears = Math.floor(diffInMonths / 12)
   return `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`
 }
@@ -96,12 +96,12 @@ export const formatNumber = (num) => {
  */
 export const generateColor = (seed) => {
   if (!seed) return '#6366f1' // Default indigo
-  
+
   let hash = 0
   for (let i = 0; i < seed.length; i++) {
     hash = seed.charCodeAt(i) + ((hash << 5) - hash)
   }
-  
+
   const colors = [
     '#6366f1', // indigo
     '#8b5cf6', // violet
@@ -112,7 +112,7 @@ export const generateColor = (seed) => {
     '#3b82f6', // blue
     '#f97316', // orange
   ]
-  
+
   return colors[Math.abs(hash) % colors.length]
 }
 
@@ -197,12 +197,12 @@ export const throttle = (func, limit = 300) => {
  */
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes'
-  
+
   const k = 1024
   const sizes = ['Bytes', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
+
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i]
 }
 
 /**
@@ -222,7 +222,7 @@ export const getErrorMessage = (error) => {
  * @param {number} ms - Milliseconds to sleep
  * @returns {Promise<void>}
  */
-export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 /**
  * Check if user is on mobile device

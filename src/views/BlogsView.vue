@@ -3,12 +3,8 @@
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-6">
-        <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900">
-          Semua cerita
-        </h1>
-        <p class="mt-1 text-sm text-gray-500">
-          Jelajahi semua blog dari komunitas Noya
-        </p>
+        <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900">Semua cerita</h1>
+        <p class="mt-1 text-sm text-gray-500">Jelajahi semua blog dari komunitas Noya</p>
       </div>
 
       <!-- Sort tabs -->
@@ -33,14 +29,8 @@
         v-if="loading"
         class="flex flex-col divide-y divide-gray-100 bg-white rounded-[20px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] px-4"
       >
-        <div
-          v-for="i in 6"
-          :key="i"
-          class="flex items-center gap-4 py-4 first:pt-4 animate-pulse"
-        >
-          <div
-            class="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-xl bg-gray-100"
-          ></div>
+        <div v-for="i in 6" :key="i" class="flex items-center gap-4 py-4 first:pt-4 animate-pulse">
+          <div class="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-xl bg-gray-100"></div>
           <div class="flex-1 min-w-0">
             <div class="h-4 bg-gray-100 rounded mb-2 w-3/4"></div>
             <div class="h-3 bg-gray-100 rounded mb-2 w-full"></div>
@@ -83,13 +73,8 @@
                 class="h-full w-full object-cover"
                 loading="lazy"
               />
-              <div
-                v-else
-                class="h-full w-full flex items-center justify-center"
-              >
-                <span class="text-xl font-bold text-gray-300">{{
-                  getInitials(blog.title)
-                }}</span>
+              <div v-else class="h-full w-full flex items-center justify-center">
+                <span class="text-xl font-bold text-gray-300">{{ getInitials(blog.title) }}</span>
               </div>
             </div>
 
@@ -100,10 +85,7 @@
               >
                 {{ blog.title }}
               </h3>
-              <p
-                v-if="blog.excerpt"
-                class="mt-1 text-xs text-gray-500 line-clamp-2"
-              >
+              <p v-if="blog.excerpt" class="mt-1 text-xs text-gray-500 line-clamp-2">
                 {{ blog.excerpt }}
               </p>
 
@@ -118,20 +100,12 @@
                   />
                 </svg>
                 {{ blog.song?.artist ?? blog.music?.artist
-                }}{{ blog.song?.artist || blog.music?.artist ? " – " : ""
-                }}{{
-                  blog.song?.title ??
-                  blog.music?.title ??
-                  blog.song ??
-                  blog.music
-                }}
+                }}{{ blog.song?.artist || blog.music?.artist ? ' – ' : ''
+                }}{{ blog.song?.title ?? blog.music?.title ?? blog.song ?? blog.music }}
               </span>
 
               <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
-                <span
-                  v-if="blog.author"
-                  class="inline-flex items-center gap-1.5 min-w-0"
-                >
+                <span v-if="blog.author" class="inline-flex items-center gap-1.5 min-w-0">
                   <img
                     v-if="blog.author?.picture"
                     :src="blog.author.picture"
@@ -142,23 +116,14 @@
                     v-else
                     class="h-5 w-5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-bold text-gray-500 shrink-0"
                   >
-                    {{
-                      getInitials(
-                        blog.author?.displayName || blog.author?.publicId,
-                      )
-                    }}
+                    {{ getInitials(blog.author?.displayName || blog.author?.publicId) }}
                   </div>
                   <span class="truncate">{{
                     blog.author?.displayName || blog.author?.publicId
                   }}</span>
                 </span>
                 <span class="inline-flex items-center gap-1">
-                  <svg
-                    class="h-3.5 w-3.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -169,12 +134,7 @@
                   {{ blog.likesCount ?? blog.likes ?? 0 }}
                 </span>
                 <span class="inline-flex items-center gap-1">
-                  <svg
-                    class="h-3.5 w-3.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -204,113 +164,133 @@
         v-else
         class="rounded-[20px] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] py-16 px-6 text-center"
       >
-        <div
-          class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gray-50"
-        >
-          <svg
-            class="h-7 w-7 text-gray-300"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gray-50">
+          <svg class="h-7 w-7 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
             <path
               d="M4 3a1 1 0 011-1h8.586a1 1 0 01.707.293l2.414 2.414A1 1 0 0117 5.414V17a1 1 0 01-1 1H5a1 1 0 01-1-1V3zm9 1v3h3l-3-3z"
             />
           </svg>
         </div>
-        <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">
-          Belum ada cerita
-        </h3>
-        <p class="mt-1 text-sm text-gray-500">
-          Jadilah yang pertama menulis di Noya.
-        </p>
+        <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">Belum ada cerita</h3>
+        <p class="mt-1 text-sm text-gray-500">Jadilah yang pertama menulis di Noya.</p>
       </div>
 
-      <!-- Pagination -->
-      <div
-        v-if="totalPages > 1"
-        class="mt-10 flex items-center justify-center gap-3"
-      >
-        <button
-          :disabled="currentPage <= 1"
-          @click="goToPage(currentPage - 1)"
-          class="px-4 py-2 rounded-full border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          &larr; Sebelumnya
-        </button>
-        <span class="text-sm text-gray-500">
-          Halaman {{ currentPage }} / {{ totalPages }}
+      <!-- Infinite Scroll Trigger Sentinel -->
+      <div ref="loadMoreTrigger" class="mt-8 mb-12 flex items-center justify-center py-6">
+        <!-- Loading spinner for more items -->
+        <div v-if="loadingMore" class="flex flex-col items-center gap-2">
+          <div
+            class="h-6 w-6 animate-spin rounded-full border-2 border-gray-200 border-t-[#5B4BFF]"
+          ></div>
+          <span class="text-xs text-gray-500 font-medium">Memuat cerita lainnya...</span>
+        </div>
+        <!-- No more items text -->
+        <span v-else-if="!hasMore && blogs.length > 0" class="text-xs text-gray-400 font-medium">
+          Semua cerita telah dimuat
         </span>
-        <button
-          :disabled="currentPage >= totalPages"
-          @click="goToPage(currentPage + 1)"
-          class="px-4 py-2 rounded-full border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          Berikutnya &rarr;
-        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { blogAPI } from "@/services/api";
-import { getInitials, formatRelativeTime } from "@/utils/helpers";
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { blogAPI } from '@/services/api'
+import { getInitials, formatRelativeTime } from '@/utils/helpers'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 const tabs = [
-  { label: "Trending", value: "trending" },
-  { label: "Terbaru", value: "latest" },
-];
+  { label: 'Trending', value: 'trending' },
+  { label: 'Terbaru', value: 'latest' },
+]
 
-const sort = ref(route.query.sort === "latest" ? "latest" : "trending");
-const blogs = ref([]);
-const loading = ref(false);
-const error = ref("");
-const currentPage = ref(1);
-const totalPages = ref(1);
-const pageSize = 9;
+const sort = ref(route.query.sort === 'latest' ? 'latest' : 'trending')
+const blogs = ref([])
+const loading = ref(false)
+const error = ref('')
+const currentPage = ref(1)
+const totalPages = ref(1)
+const pageSize = 9
 
-const fetchBlogs = async () => {
-  loading.value = true;
-  error.value = "";
+const loadingMore = ref(false)
+const loadMoreTrigger = ref(null)
+const hasMore = computed(() => currentPage.value < totalPages.value)
+let observer = null
+
+const fetchBlogs = async (isLoadMore = false) => {
+  if (isLoadMore) {
+    loadingMore.value = true
+  } else {
+    loading.value = true
+    currentPage.value = 1
+  }
+  error.value = ''
   try {
     const params = {
       page: currentPage.value,
       limit: pageSize,
-    };
-    if (sort.value === "trending") {
-      params.sort = "trending";
     }
-    const response = await blogAPI.getAllBlogs(params);
-    blogs.value = response.data.blogs || [];
-    totalPages.value = Math.max(1, response.data.totalPages || 1);
+    if (sort.value === 'trending') {
+      params.sort = 'trending'
+    }
+    const response = await blogAPI.getAllBlogs(params)
+    const newBlogs = response.data.blogs || []
+    if (isLoadMore) {
+      blogs.value = [...blogs.value, ...newBlogs]
+    } else {
+      blogs.value = newBlogs
+    }
+    totalPages.value = Math.max(1, response.data.totalPages || 1)
   } catch (err) {
-    error.value = err.response?.data?.message || "Gagal memuat blog";
+    error.value = err.response?.data?.message || 'Gagal memuat blog'
   } finally {
-    loading.value = false;
+    loading.value = false
+    loadingMore.value = false
   }
-};
+}
+
+const loadNextPage = () => {
+  if (loadingMore.value || !hasMore.value) return
+  currentPage.value += 1
+  fetchBlogs(true)
+}
 
 const switchSort = (value) => {
-  if (sort.value === value) return;
-  sort.value = value;
-  currentPage.value = 1;
+  if (sort.value === value) return
+  sort.value = value
+  currentPage.value = 1
   router.replace({
-    query: { sort: value === "latest" ? "latest" : "trending" },
-  });
-  fetchBlogs();
-};
+    query: { sort: value === 'latest' ? 'latest' : 'trending' },
+  })
+  fetchBlogs(false)
+}
 
-const goToPage = (page) => {
-  if (page < 1 || page > totalPages.value) return;
-  currentPage.value = page;
-  fetchBlogs();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+onMounted(() => {
+  fetchBlogs(false)
 
-onMounted(fetchBlogs);
+  observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0]
+      if (entry.isIntersecting && hasMore.value && !loading.value && !loadingMore.value) {
+        loadNextPage()
+      }
+    },
+    {
+      rootMargin: '200px',
+    },
+  )
+
+  if (loadMoreTrigger.value) {
+    observer.observe(loadMoreTrigger.value)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>

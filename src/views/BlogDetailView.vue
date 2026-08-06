@@ -20,25 +20,14 @@
           stroke="currentColor"
           stroke-width="2"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M15 19l-7-7 7-7"
-          />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
         Back
       </button>
 
       <!-- Loading state -->
-      <div
-        v-if="loading"
-        class="flex flex-col items-center justify-center h-72 gap-3"
-      >
-        <svg
-          class="animate-spin h-6 w-6 text-[#111111]"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
+      <div v-if="loading" class="flex flex-col items-center justify-center h-72 gap-3">
+        <svg class="animate-spin h-6 w-6 text-[#111111]" fill="none" viewBox="0 0 24 24">
           <circle
             class="opacity-20"
             cx="12"
@@ -53,16 +42,11 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">
-          Loading story
-        </p>
+        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">Loading story</p>
       </div>
 
       <!-- Error state -->
-      <div
-        v-else-if="error"
-        class="border border-[#E7E7E7] rounded-[3px] p-10 text-center"
-      >
+      <div v-else-if="error" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
         <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
           Couldn't load this story
         </p>
@@ -83,21 +67,14 @@
             class="h-20 w-20 rounded-[2px] object-cover shrink-0 border border-white/10"
           />
           <div class="flex-1 min-w-0">
-            <p
-              class="text-[10px] tracking-[0.2em] text-white/50 uppercase mb-1"
-            >
-              Now playing
-            </p>
+            <p class="text-[10px] tracking-[0.2em] text-white/50 uppercase mb-1">Now playing</p>
             <h3 class="font-display italic text-[18px] leading-tight truncate">
               {{ blog.music.title }}
             </h3>
             <p class="mt-0.5 text-[13px] text-white/70 truncate">
               {{ blog.music.artist }}
             </p>
-            <p
-              v-if="blog.music.album"
-              class="text-[11px] text-white/40 truncate"
-            >
+            <p v-if="blog.music.album" class="text-[11px] text-white/40 truncate">
               {{ blog.music.album }}
             </p>
             <div class="mt-3 flex flex-wrap items-center gap-3">
@@ -129,9 +106,7 @@
         <!-- Cover image -->
 
         <!-- Title -->
-        <h1
-          class="font-display italic text-[32px] sm:text-[44px] leading-[1.1] text-[#111111]"
-        >
+        <h1 class="font-display italic text-[32px] sm:text-[44px] leading-[1.1] text-[#111111]">
           {{ blog.title }}
         </h1>
 
@@ -141,11 +116,7 @@
         >
           <component
             :is="blog.author?.publicId ? 'router-link' : 'div'"
-            :to="
-              blog.author?.publicId
-                ? `/profile/${blog.author.publicId}`
-                : undefined
-            "
+            :to="blog.author?.publicId ? `/profile/${blog.author.publicId}` : undefined"
             class="flex items-center gap-3 group"
           >
             <img
@@ -161,17 +132,15 @@
               {{ getInitials(authorName) }}
             </div>
             <div>
-              <p class="text-[11px] tracking-wide text-[#B0B0B0]">
-                Ditulis oleh
-              </p>
+              <p class="text-[11px] tracking-wide text-[#B0B0B0]">Ditulis oleh</p>
               <p
                 class="text-[13px] font-medium text-[#111111] group-hover:underline underline-offset-2"
               >
                 {{ authorName }}
               </p>
               <p class="text-[12px] text-[#B0B0B0]">
-                {{ formatDate(blog.publishedAt || blog.createdAt) }} &middot;
-                {{ readingTime }} min read
+                {{ formatDate(blog.publishedAt || blog.createdAt) }} &middot; {{ readingTime }} min
+                read
               </p>
             </div>
           </component>
@@ -254,9 +223,7 @@
             </button>
 
             <!-- Views -->
-            <span
-              class="inline-flex items-center gap-1.5 text-[13px] text-[#B0B0B0]"
-            >
+            <span class="inline-flex items-center gap-1.5 text-[13px] text-[#B0B0B0]">
               <svg
                 class="h-4 w-4"
                 fill="none"
@@ -269,13 +236,7 @@
                   stroke-linejoin="round"
                   d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"
                 />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="2.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+                <circle cx="12" cy="12" r="2.6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <span class="tabular-nums">{{ blog.views || 0 }}</span>
             </span>
@@ -286,11 +247,7 @@
           v-if="blog.coverImage"
           class="mb-10 border border-[#E7E7E7] rounded-[3px] overflow-hidden"
         >
-          <img
-            :src="blog.coverImage"
-            :alt="blog.title"
-            class="w-full h-64 sm:h-96 object-cover"
-          />
+          <img :src="blog.coverImage" :alt="blog.title" class="w-full h-64 sm:h-96 object-cover" />
         </div>
         <!-- Excerpt -->
         <p
@@ -322,11 +279,7 @@
 
       <!-- Comments section -->
       <div ref="commentsSection" class="mt-14 border-t border-[#F0F0F0] pt-10">
-        <h2
-          class="font-display italic text-[24px] sm:text-[28px] text-[#111111]"
-        >
-          Komentar
-        </h2>
+        <h2 class="font-display italic text-[24px] sm:text-[28px] text-[#111111]">Komentar</h2>
 
         <!-- Comment form -->
         <div class="mt-6">
@@ -341,7 +294,7 @@
               v-else
               class="h-9 w-9 rounded-full bg-[#111111] flex items-center justify-center text-white text-[12px] font-medium shrink-0"
             >
-              {{ getInitials(authStore.user?.displayName || "U") }}
+              {{ getInitials(authStore.user?.displayName || 'U') }}
             </div>
             <form class="flex-1" @submit.prevent="submitComment">
               <textarea
@@ -354,20 +307,15 @@
                 @keydown.meta.enter="submitComment"
               ></textarea>
               <div class="flex items-center justify-between mt-2">
-                <span class="text-[11px] text-[#B0B0B0] tabular-nums">{{
-                  commentText.length
-                }}
-                / 1000</span>
+                <span class="text-[11px] text-[#B0B0B0] tabular-nums"
+                  >{{ commentText.length }} / 1000</span
+                >
                 <button
                   type="submit"
                   :disabled="commentSubmitting"
                   class="inline-flex items-center px-4 py-1.5 bg-[#111111] text-white rounded-full text-[12px] font-medium hover:bg-black disabled:opacity-50 transition-colors"
                 >
-                  {{
-                    commentSubmitting
-                      ? "Mengirim…"
-                      : "Kirim"
-                  }}
+                  {{ commentSubmitting ? 'Mengirim…' : 'Kirim' }}
                 </button>
               </div>
             </form>
@@ -383,11 +331,7 @@
 
         <!-- Comment list -->
         <div v-if="commentsLoading" class="mt-6 space-y-4">
-          <div
-            v-for="i in 3"
-            :key="i"
-            class="flex gap-3 animate-pulse"
-          >
+          <div v-for="i in 3" :key="i" class="flex gap-3 animate-pulse">
             <div class="h-9 w-9 rounded-full bg-[#F0F0F0] shrink-0"></div>
             <div class="flex-1 space-y-2">
               <div class="h-3 w-32 bg-[#F0F0F0] rounded"></div>
@@ -396,19 +340,12 @@
           </div>
         </div>
 
-        <div
-          v-else-if="commentsError"
-          class="mt-6 border border-[#FDF7F6] bg-[#FDF7F6] px-4 py-3"
-        >
+        <div v-else-if="commentsError" class="mt-6 border border-[#FDF7F6] bg-[#FDF7F6] px-4 py-3">
           <p class="text-[13px] text-[#8C1D14]">{{ commentsError }}</p>
         </div>
 
         <div v-else-if="comments.length" class="mt-6 flex flex-col divide-y divide-[#F0F0F0]">
-          <div
-            v-for="comment in comments"
-            :key="comment._id"
-            class="py-5"
-          >
+          <div v-for="comment in comments" :key="comment._id" class="py-5">
             <div class="flex items-start gap-3">
               <img
                 v-if="comment.author?.picture"
@@ -431,10 +368,7 @@
                     formatRelativeTime(comment.createdAt)
                   }}</span>
                   <button
-                    v-if="
-                      authStore.isAuthenticated &&
-                      comment.author?._id === authStore.user?.id
-                    "
+                    v-if="authStore.isAuthenticated && comment.author?._id === authStore.user?.id"
                     @click="deleteComment(comment._id)"
                     class="ml-auto text-[11px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
                   >
@@ -452,11 +386,7 @@
               v-if="comment.replies && comment.replies.length"
               class="mt-3 ml-12 flex flex-col divide-y divide-[#F5F5F5]"
             >
-              <div
-                v-for="reply in comment.replies"
-                :key="reply._id"
-                class="py-3"
-              >
+              <div v-for="reply in comment.replies" :key="reply._id" class="py-3">
                 <div class="flex items-start gap-3">
                   <img
                     v-if="reply.author?.picture"
@@ -479,17 +409,16 @@
                         formatRelativeTime(reply.createdAt)
                       }}</span>
                       <button
-                        v-if="
-                          authStore.isAuthenticated &&
-                          reply.author?._id === authStore.user?.id
-                        "
+                        v-if="authStore.isAuthenticated && reply.author?._id === authStore.user?.id"
                         @click="deleteComment(reply._id)"
                         class="ml-auto text-[11px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
                       >
                         Hapus
                       </button>
                     </div>
-                    <p class="mt-1 text-[13.5px] leading-relaxed text-[#333333] whitespace-pre-wrap">
+                    <p
+                      class="mt-1 text-[13.5px] leading-relaxed text-[#333333] whitespace-pre-wrap"
+                    >
                       {{ reply.content }}
                     </p>
                   </div>
@@ -525,22 +454,14 @@
           v-else
           class="mt-6 border border-dashed border-[#D8D8D8] rounded-[3px] py-10 px-6 text-center"
         >
-          <p class="text-[13px] text-[#8A8A8A]">
-            Belum ada komentar. Jadilah yang pertama!
-          </p>
+          <p class="text-[13px] text-[#8A8A8A]">Belum ada komentar. Jadilah yang pertama!</p>
         </div>
       </div>
     </div>
 
     <!-- Login prompt modal -->
-    <div
-      v-if="showLoginPrompt"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4"
-    >
-      <div
-        class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
-        @click="closeLoginPrompt"
-      ></div>
+    <div v-if="showLoginPrompt" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]" @click="closeLoginPrompt"></div>
       <div
         class="relative w-full max-w-sm bg-white rounded-[6px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)] p-8 text-center"
       >
@@ -587,321 +508,316 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { blogAPI, likeAPI, repostAPI, commentAPI, BASE_URL } from "@/services/api";
-import { useAuthStore } from "@/stores/auth";
-import BlogContent from "@/components/BlogContent.vue";
-import { getInitials, formatDate, formatRelativeTime } from "@/utils/helpers";
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { blogAPI, likeAPI, repostAPI, commentAPI, BASE_URL } from '@/services/api'
+import { useAuthStore } from '@/stores/auth'
+import BlogContent from '@/components/BlogContent.vue'
+import { getInitials, formatDate, formatRelativeTime } from '@/utils/helpers'
 
-const route = useRoute();
-const router = useRouter();
-const authStore = useAuthStore();
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
 
-const blog = ref(null);
-const loading = ref(false);
-const error = ref("");
-const liked = ref(false);
-const likesCount = ref(0);
-const liking = ref(false);
-const progress = ref(0);
-const reposted = ref(false);
-const repostsCount = ref(0);
-const reposting = ref(false);
-const commentsCount = ref(0);
-const comments = ref([]);
-const commentsLoading = ref(false);
-const commentsError = ref("");
-const commentText = ref("");
-const commentSubmitting = ref(false);
-const replyTexts = ref({});
-const commentsSection = ref(null);
-const loginPromptReason = ref("like");
-const audioEl = ref(null);
-const showLoginPrompt = ref(false);
-const musicPreviewUrl = ref("");
+const blog = ref(null)
+const loading = ref(false)
+const error = ref('')
+const liked = ref(false)
+const likesCount = ref(0)
+const liking = ref(false)
+const progress = ref(0)
+const reposted = ref(false)
+const repostsCount = ref(0)
+const reposting = ref(false)
+const commentsCount = ref(0)
+const comments = ref([])
+const commentsLoading = ref(false)
+const commentsError = ref('')
+const commentText = ref('')
+const commentSubmitting = ref(false)
+const replyTexts = ref({})
+const commentsSection = ref(null)
+const loginPromptReason = ref('like')
+const audioEl = ref(null)
+const showLoginPrompt = ref(false)
+const musicPreviewUrl = ref('')
 
 const loginPromptTitle = computed(() => {
-  if (loginPromptReason.value === "repost") return "Masuk untuk merepost";
-  if (loginPromptReason.value === "comment") return "Masuk untuk berkomentar";
-  return "Masuk untuk menyukai";
-});
+  if (loginPromptReason.value === 'repost') return 'Masuk untuk merepost'
+  if (loginPromptReason.value === 'comment') return 'Masuk untuk berkomentar'
+  return 'Masuk untuk menyukai'
+})
 
 const loginPromptMessage = computed(() => {
-  if (loginPromptReason.value === "repost") {
-    return "Kamu perlu login dulu untuk bisa merepost cerita ini.";
+  if (loginPromptReason.value === 'repost') {
+    return 'Kamu perlu login dulu untuk bisa merepost cerita ini.'
   }
-  if (loginPromptReason.value === "comment") {
-    return "Kamu perlu login dulu untuk bisa menulis komentar.";
+  if (loginPromptReason.value === 'comment') {
+    return 'Kamu perlu login dulu untuk bisa menulis komentar.'
   }
-  return "Kamu perlu login dulu untuk bisa menyukai cerita ini.";
-});
+  return 'Kamu perlu login dulu untuk bisa menyukai cerita ini.'
+})
 
-const openLoginPrompt = (reason = "like") => {
-  loginPromptReason.value = reason;
-  showLoginPrompt.value = true;
-};
+const openLoginPrompt = (reason = 'like') => {
+  loginPromptReason.value = reason
+  showLoginPrompt.value = true
+}
 
 // Audio di-stream lewat server kita (/api/music/preview/:trackId).
 // Server selalu mengambil URL segar dari Deezer saat itu juga, jadi
 // URL expired/mixed-content tidak lagi jadi masalah.
 const refreshMusicPreview = async (music) => {
-  if (!music?.trackId) return;
-  musicPreviewUrl.value = `${BASE_URL}/music/preview/${music.trackId}`;
-};
+  if (!music?.trackId) return
+  musicPreviewUrl.value = `${BASE_URL}/music/preview/${music.trackId}`
+}
 
 const authorName = computed(() => {
-  const author = blog.value?.author;
-  if (!author) return "Unknown";
-  if (author.displayName) return author.displayName;
+  const author = blog.value?.author
+  if (!author) return 'Unknown'
+  if (author.displayName) return author.displayName
   if (author.firstName || author.lastName) {
-    return `${author.firstName || ""} ${author.lastName || ""}`.trim();
+    return `${author.firstName || ''} ${author.lastName || ''}`.trim()
   }
-  return "Unknown";
-});
+  return 'Unknown'
+})
 
 const countTextContent = (doc) => {
-  if (!doc) return 0;
-  if (typeof doc === "string") return doc.length;
-  let count = 0;
+  if (!doc) return 0
+  if (typeof doc === 'string') return doc.length
+  let count = 0
   const walk = (node) => {
-    if (!node) return;
-    if (node.type === "text" && node.text) count += node.text.length;
-    if (Array.isArray(node.content)) node.content.forEach(walk);
-  };
-  walk(doc);
-  return count;
-};
+    if (!node) return
+    if (node.type === 'text' && node.text) count += node.text.length
+    if (Array.isArray(node.content)) node.content.forEach(walk)
+  }
+  walk(doc)
+  return count
+}
 
 const readingTime = computed(() => {
-  const chars = countTextContent(blog.value?.content);
-  const words = Math.ceil(chars / 5);
-  return Math.max(1, Math.round(words / 200));
-});
+  const chars = countTextContent(blog.value?.content)
+  const words = Math.ceil(chars / 5)
+  return Math.max(1, Math.round(words / 200))
+})
 
 const updateProgress = () => {
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight
   progress.value =
-    docHeight > 0
-      ? Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100))
-      : 0;
-};
+    docHeight > 0 ? Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100)) : 0
+}
 
 const fetchBlog = async () => {
-  loading.value = true;
-  error.value = "";
+  loading.value = true
+  error.value = ''
 
   try {
-    const response = await blogAPI.getBlogBySlug(route.params.slug);
-    blog.value = response.data.blog || null;
+    const response = await blogAPI.getBlogBySlug(route.params.slug)
+    blog.value = response.data.blog || null
     if (blog.value) {
-      likesCount.value = blog.value.likesCount || 0;
-      liked.value = !!response.data.userLiked;
-      reposted.value = !!response.data.userReposted;
-      repostsCount.value = response.data.repostsCount || 0;
-      commentsCount.value = response.data.commentsCount || 0;
-      musicPreviewUrl.value = "";
-      refreshMusicPreview(blog.value.music);
-      loadComments();
+      likesCount.value = blog.value.likesCount || 0
+      liked.value = !!response.data.userLiked
+      reposted.value = !!response.data.userReposted
+      repostsCount.value = response.data.repostsCount || 0
+      commentsCount.value = response.data.commentsCount || 0
+      musicPreviewUrl.value = ''
+      refreshMusicPreview(blog.value.music)
+      loadComments()
     } else {
-      error.value = "Blog not found";
+      error.value = 'Blog not found'
     }
   } catch (err) {
-    error.value = err.response?.data?.message || "Failed to load blog";
+    error.value = err.response?.data?.message || 'Failed to load blog'
   } finally {
-    loading.value = false;
-    requestAnimationFrame(updateProgress);
+    loading.value = false
+    requestAnimationFrame(updateProgress)
   }
-};
+}
 
 const handleToggleLike = async () => {
   if (!authStore.isAuthenticated) {
-    openLoginPrompt("like");
-    return;
+    openLoginPrompt('like')
+    return
   }
-  if (liking.value || !blog.value?._id) return;
+  if (liking.value || !blog.value?._id) return
 
-  liking.value = true;
+  liking.value = true
   try {
-    const response = await likeAPI.toggleLike(blog.value._id);
-    liked.value = response.data.liked;
-    likesCount.value = response.data.likesCount;
+    const response = await likeAPI.toggleLike(blog.value._id)
+    liked.value = response.data.liked
+    likesCount.value = response.data.likesCount
   } catch (err) {
     if (err.response?.status === 401) {
-      openLoginPrompt("like");
+      openLoginPrompt('like')
     }
   } finally {
-    liking.value = false;
+    liking.value = false
   }
-};
+}
 
 const goToLogin = () => {
-  showLoginPrompt.value = false;
-  router.push({ name: "login", query: { redirect: route.fullPath } });
-};
+  showLoginPrompt.value = false
+  router.push({ name: 'login', query: { redirect: route.fullPath } })
+}
 
 const closeLoginPrompt = () => {
-  showLoginPrompt.value = false;
-};
+  showLoginPrompt.value = false
+}
 
 const handleToggleRepost = async () => {
   if (!authStore.isAuthenticated) {
-    openLoginPrompt("repost");
-    return;
+    openLoginPrompt('repost')
+    return
   }
-  if (reposting.value || !blog.value?._id) return;
+  if (reposting.value || !blog.value?._id) return
 
-  reposting.value = true;
+  reposting.value = true
   try {
-    const response = await repostAPI.toggleRepost(blog.value._id);
-    reposted.value = response.data.reposted;
-    repostsCount.value = response.data.repostsCount;
+    const response = await repostAPI.toggleRepost(blog.value._id)
+    reposted.value = response.data.reposted
+    repostsCount.value = response.data.repostsCount
   } catch (err) {
     if (err.response?.status === 401) {
-      openLoginPrompt("repost");
+      openLoginPrompt('repost')
     }
   } finally {
-    reposting.value = false;
+    reposting.value = false
   }
-};
+}
 
 const scrollToComments = () => {
-  commentsSection.value?.scrollIntoView({ behavior: "smooth" });
-};
+  commentsSection.value?.scrollIntoView({ behavior: 'smooth' })
+}
 
 const commentAuthorName = (comment) =>
   comment.author?.displayName ||
-  [comment.author?.firstName, comment.author?.lastName].filter(Boolean).join(" ") ||
-  "User";
+  [comment.author?.firstName, comment.author?.lastName].filter(Boolean).join(' ') ||
+  'User'
 
-const replyAuthorName = commentAuthorName;
+const replyAuthorName = commentAuthorName
 
 const loadComments = async () => {
-  if (!blog.value?._id) return;
-  commentsLoading.value = true;
-  commentsError.value = "";
+  if (!blog.value?._id) return
+  commentsLoading.value = true
+  commentsError.value = ''
   try {
-    const response = await commentAPI.getComments(blog.value._id, { limit: 50 });
-    comments.value = response.data.comments || [];
-    commentsCount.value = response.data.totalComments ?? commentsCount.value;
+    const response = await commentAPI.getComments(blog.value._id, { limit: 50 })
+    comments.value = response.data.comments || []
+    commentsCount.value = response.data.totalComments ?? commentsCount.value
   } catch (err) {
-    commentsError.value =
-      err.response?.data?.message || "Gagal memuat komentar";
+    commentsError.value = err.response?.data?.message || 'Gagal memuat komentar'
   } finally {
-    commentsLoading.value = false;
+    commentsLoading.value = false
   }
-};
+}
 
 const submitComment = async () => {
   if (!authStore.isAuthenticated) {
-    openLoginPrompt("comment");
-    return;
+    openLoginPrompt('comment')
+    return
   }
-  const text = commentText.value.trim();
-  if (!text || commentSubmitting.value || !blog.value?._id) return;
+  const text = commentText.value.trim()
+  if (!text || commentSubmitting.value || !blog.value?._id) return
 
-  commentSubmitting.value = true;
+  commentSubmitting.value = true
   try {
     const response = await commentAPI.createComment(blog.value._id, {
       content: text,
-    });
-    comments.value.unshift(response.data.comment);
-    commentsCount.value = response.data.commentsCount;
-    commentText.value = "";
+    })
+    comments.value.unshift(response.data.comment)
+    commentsCount.value = response.data.commentsCount
+    commentText.value = ''
   } catch (err) {
-    commentsError.value =
-      err.response?.data?.message || "Gagal mengirim komentar";
+    commentsError.value = err.response?.data?.message || 'Gagal mengirim komentar'
   } finally {
-    commentSubmitting.value = false;
+    commentSubmitting.value = false
   }
-};
+}
 
 const submitReply = async (comment) => {
   if (!authStore.isAuthenticated) {
-    openLoginPrompt("comment");
-    return;
+    openLoginPrompt('comment')
+    return
   }
-  const text = (replyTexts.value[comment._id] || "").trim();
-  if (!text || !blog.value?._id) return;
+  const text = (replyTexts.value[comment._id] || '').trim()
+  if (!text || !blog.value?._id) return
 
   try {
     const response = await commentAPI.createComment(blog.value._id, {
       content: text,
       parent: comment._id,
-    });
-    if (!comment.replies) comment.replies = [];
-    comment.replies.push(response.data.comment);
-    commentsCount.value = response.data.commentsCount;
-    replyTexts.value[comment._id] = "";
+    })
+    if (!comment.replies) comment.replies = []
+    comment.replies.push(response.data.comment)
+    commentsCount.value = response.data.commentsCount
+    replyTexts.value[comment._id] = ''
   } catch (err) {
-    commentsError.value =
-      err.response?.data?.message || "Gagal mengirim balasan";
+    commentsError.value = err.response?.data?.message || 'Gagal mengirim balasan'
   }
-};
+}
 
 const deleteComment = async (commentId) => {
-  if (!confirm("Hapus komentar ini?")) return;
+  if (!confirm('Hapus komentar ini?')) return
   try {
-    await commentAPI.deleteComment(commentId);
-    comments.value = comments.value.filter((c) => c._id !== commentId);
-    commentsCount.value = Math.max(0, commentsCount.value - 1);
+    await commentAPI.deleteComment(commentId)
+    comments.value = comments.value.filter((c) => c._id !== commentId)
+    commentsCount.value = Math.max(0, commentsCount.value - 1)
   } catch (err) {
-    commentsError.value = err.response?.data?.message || "Gagal menghapus komentar";
+    commentsError.value = err.response?.data?.message || 'Gagal menghapus komentar'
   }
-};
+}
 
-watch(() => route.params.slug, fetchBlog);
+watch(() => route.params.slug, fetchBlog)
 
 // Putar lagu otomatis begitu elemen audio muncul
 watch(audioEl, (el) => {
   if (el) {
-    const playPromise = el.play();
-    if (playPromise) playPromise.catch(() => {});
+    const playPromise = el.play()
+    if (playPromise) playPromise.catch(() => {})
   }
-});
+})
 
 // Saat URL segar dari Deezer tiba, muat ulang & putar audio
 watch(musicPreviewUrl, (url) => {
-  const el = audioEl.value;
+  const el = audioEl.value
   if (el && url) {
-    el.load();
-    const playPromise = el.play();
-    if (playPromise) playPromise.catch(() => {});
+    el.load()
+    const playPromise = el.play()
+    if (playPromise) playPromise.catch(() => {})
   }
-});
+})
 
 // Fallback: jika autoplay diblokir browser, coba putar saat user berinteraksi
 const tryPlayMusic = () => {
-  const el = audioEl.value;
+  const el = audioEl.value
   if (el && el.paused) {
-    const playPromise = el.play();
-    if (playPromise) playPromise.catch(() => {});
+    const playPromise = el.play()
+    if (playPromise) playPromise.catch(() => {})
   }
-};
+}
 
 onMounted(() => {
-  fetchBlog();
-  window.addEventListener("scroll", updateProgress, { passive: true });
-  window.addEventListener("resize", updateProgress);
-  window.addEventListener("click", tryPlayMusic);
-});
+  fetchBlog()
+  window.addEventListener('scroll', updateProgress, { passive: true })
+  window.addEventListener('resize', updateProgress)
+  window.addEventListener('click', tryPlayMusic)
+})
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", updateProgress);
-  window.removeEventListener("resize", updateProgress);
-  window.removeEventListener("click", tryPlayMusic);
-});
+  window.removeEventListener('scroll', updateProgress)
+  window.removeEventListener('resize', updateProgress)
+  window.removeEventListener('click', tryPlayMusic)
+})
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap');
 
 .font-display {
-  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
 }
 
 .reading-content {
-  font-family: "Source Serif 4", ui-serif, Georgia, serif;
+  font-family: 'Source Serif 4', ui-serif, Georgia, serif;
   font-size: 18px;
   line-height: 1.8;
 }
@@ -911,7 +827,7 @@ onUnmounted(() => {
 }
 
 .reading-content :deep(h2) {
-  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
   font-style: italic;
   font-size: 26px;
   line-height: 1.3;
@@ -921,7 +837,7 @@ onUnmounted(() => {
 }
 
 .reading-content :deep(h3) {
-  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
   font-style: italic;
   font-size: 21px;
   line-height: 1.35;
