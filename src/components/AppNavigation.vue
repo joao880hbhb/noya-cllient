@@ -14,6 +14,22 @@
 
         <!-- Right side -->
         <div class="flex items-center gap-3 sm:gap-4">
+          <!-- Global Theme Toggle Switch -->
+          <button
+            @click="toggleTheme"
+            class="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-zinc-800 transition-colors focus:outline-none cursor-pointer"
+            aria-label="Toggle theme"
+          >
+            <!-- Moon Icon (shown in light mode to switch to dark) -->
+            <svg v-if="!isDark" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <!-- Sun Icon (shown in dark mode to switch to light) -->
+            <svg v-else class="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m2.828 9.9a5 5 0 117.072 0l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+            </svg>
+          </button>
+
           <template v-if="authStore.isAuthenticated">
             <!-- Create Blog (desktop) -->
             <router-link
@@ -236,6 +252,25 @@ const authStore = useAuthStore()
 const showUserMenu = ref(false)
 const showNotifications = ref(false)
 
+const isDark = ref(document.documentElement.classList.contains("dark"))
+
+const toggleTheme = () => {
+  if (document.documentElement.classList.contains("dark")) {
+    document.documentElement.classList.remove("dark")
+    localStorage.setItem("theme", "light")
+    isDark.value = false
+  } else {
+    document.documentElement.classList.add("dark")
+    localStorage.setItem("theme", "dark")
+    isDark.value = true
+  }
+  window.dispatchEvent(new Event("theme-changed"))
+}
+
+const handleThemeChanged = () => {
+  isDark.value = document.documentElement.classList.contains("dark")
+}
+
 const notifications = ref([])
 const unreadCount = ref(0)
 const notifLoading = ref(false)
@@ -337,6 +372,7 @@ watch(
 
 onMounted(() => {
   window.addEventListener('click', handleClickOutside)
+  window.addEventListener('theme-changed', handleThemeChanged)
   if (authStore.isAuthenticated) {
     fetchNotifications()
     pollTimer = setInterval(fetchNotifications, 30000)
@@ -345,6 +381,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('theme-changed', handleThemeChanged)
   if (pollTimer) clearInterval(pollTimer)
 })
 </script>

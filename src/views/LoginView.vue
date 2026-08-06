@@ -1,23 +1,71 @@
 <template>
-  <div class="min-h-screen bg-[#060608] text-white selection:bg-purple-600 selection:text-white relative overflow-x-hidden">
-    <!-- Ambient glowing backgrounds -->
-    <div class="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-purple-600/5 blur-[120px] pointer-events-none"></div>
-    <div class="absolute top-[30vh] right-[10%] w-[400px] h-[400px] rounded-full bg-indigo-600/5 blur-[120px] pointer-events-none"></div>
-    <div class="absolute bottom-[10vh] left-[5%] w-[400px] h-[400px] rounded-full bg-purple-900/5 blur-[120px] pointer-events-none"></div>
+  <div 
+    :class="[
+      'min-h-screen transition-colors duration-300 relative overflow-x-hidden selection:bg-purple-600 selection:text-white',
+      isDark ? 'bg-[#060608] text-white' : 'bg-[#fafaf9] text-stone-900'
+    ]"
+  >
+    <!-- Ambient glowing backgrounds (only visible or very subtle in light mode) -->
+    <div 
+      :class="[
+        'absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none transition-colors duration-300',
+        isDark ? 'bg-purple-600/5' : 'bg-purple-500/[0.02]'
+      ]"
+    ></div>
+    <div 
+      :class="[
+        'absolute top-[30vh] right-[10%] w-[400px] h-[400px] rounded-full blur-[120px] pointer-events-none transition-colors duration-300',
+        isDark ? 'bg-indigo-600/5' : 'bg-indigo-500/[0.02]'
+      ]"
+    ></div>
+    <div 
+      :class="[
+        'absolute bottom-[10vh] left-[5%] w-[400px] h-[400px] rounded-full blur-[120px] pointer-events-none transition-colors duration-300',
+        isDark ? 'bg-purple-900/5' : 'bg-purple-900/[0.01]'
+      ]"
+    ></div>
 
     <!-- Header / Navbar -->
-    <header class="w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between border-b border-white/[0.05]">
+    <header 
+      :class="[
+        'w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between border-b transition-colors duration-300',
+        isDark ? 'border-white/[0.05]' : 'border-stone-200'
+      ]"
+    >
       <div class="flex items-center gap-3">
         <img
           src="@/assets/logonoya.png"
           alt="Noya"
           class="h-8 w-8 rounded-full object-cover ring-2 ring-purple-500/20"
         />
-        <span class="font-display italic text-2xl font-bold tracking-tight text-white">Noya</span>
+        <span 
+          :class="[
+            'font-display italic text-2xl font-bold tracking-tight transition-colors duration-300',
+            isDark ? 'text-white' : 'text-stone-900'
+          ]"
+        >
+          Noya
+        </span>
       </div>
-      <div class="text-[11px] tracking-[0.15em] uppercase text-purple-300 bg-purple-500/10 border border-purple-500/20 px-3.5 py-1 rounded-full font-medium">
-        Beta Community
-      </div>
+      
+      <!-- Theme Toggle Switch (Replaces Beta Community badge) -->
+      <button
+        @click="toggleTheme"
+        :class="[
+          'p-2 rounded-full border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer',
+          isDark ? 'border-white/10 bg-white/5 hover:bg-white/10' : 'border-stone-200 bg-stone-100 hover:bg-stone-200'
+        ]"
+        aria-label="Toggle theme"
+      >
+        <!-- Moon Icon (shown in light mode to switch to dark) -->
+        <svg v-if="!isDark" class="h-4 w-4 text-stone-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+        <!-- Sun Icon (shown in dark mode to switch to light) -->
+        <svg v-else class="h-4 w-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m2.828 9.9a5 5 0 117.072 0l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+      </button>
     </header>
 
     <!-- SECTION 1: HERO & LOGIN CARD -->
@@ -25,21 +73,39 @@
       <div class="grid lg:grid-cols-12 gap-12 items-center min-h-[70vh]">
         <!-- Hero Text -->
         <div class="lg:col-span-7 space-y-6 text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-purple-200">
+          <div 
+            :class="[
+              'inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-300',
+              isDark ? 'bg-white/[0.04] border-white/[0.08] text-purple-200' : 'bg-purple-50 border-purple-100 text-purple-700'
+            ]"
+          >
             <span class="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
             Share stories that echo
           </div>
-          <h1 class="font-display italic text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-white tracking-tight">
+          <h1 
+            :class="[
+              'font-display italic text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight transition-colors duration-300',
+              isDark ? 'text-white' : 'text-stone-900'
+            ]"
+          >
             Write something<br/>
             worth <span class="bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">reading.</span>
           </h1>
-          <p class="text-base sm:text-lg text-gray-400 max-w-xl leading-relaxed">
+          <p 
+            :class="[
+              'text-base sm:text-lg leading-relaxed max-w-xl transition-colors duration-300',
+              isDark ? 'text-gray-400' : 'text-stone-600'
+            ]"
+          >
             Noya adalah ruang tenang untuk menulis cerita, menyematkan musik latar kesukaan Anda, dan berinteraksi secara hangat bersama penulis lainnya.
           </p>
-          <div class="pt-4 flex flex-wrap gap-4 items-center">
+          <div class="pt-2 flex flex-wrap gap-4 items-center">
             <button
               @click="scrollToFeatures"
-              class="group flex items-center gap-2 text-sm text-purple-300 hover:text-white transition-colors cursor-pointer"
+              :class="[
+                'group flex items-center gap-2 text-sm transition-colors cursor-pointer',
+                isDark ? 'text-purple-300 hover:text-white' : 'text-purple-700 hover:text-purple-900 font-medium'
+              ]"
             >
               Pelajari fitur utama
               <span class="transform group-hover:translate-y-1 transition-transform duration-200">&darr;</span>
@@ -49,12 +115,24 @@
 
         <!-- Login Card -->
         <div id="login-card" class="lg:col-span-5 flex justify-center lg:justify-end">
-          <div class="w-full max-w-md bg-white/[0.02] border border-white/[0.08] rounded-3xl p-8 sm:p-10 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-12 -right-12 h-36 w-36 rounded-full bg-purple-500/10 blur-2xl"></div>
+          <div 
+            :class="[
+              'w-full max-w-md border rounded-3xl p-8 sm:p-10 backdrop-blur-xl transition-all duration-300 relative overflow-hidden',
+              isDark 
+                ? 'bg-white/[0.02] border-white/[0.08] text-white shadow-2xl' 
+                : 'bg-white border-stone-200 text-stone-900 shadow-xl shadow-stone-100'
+            ]"
+          >
+            <div 
+              :class="[
+                'absolute -top-12 -right-12 h-36 w-36 rounded-full blur-2xl transition-colors duration-300',
+                isDark ? 'bg-purple-500/10' : 'bg-purple-500/5'
+              ]"
+            ></div>
 
             <div class="text-center mb-8">
-              <h2 class="text-2xl font-bold text-white">Sign in to Noya</h2>
-              <p class="text-sm text-gray-400 mt-1">Gunakan akun Google Anda</p>
+              <h2 class="text-2xl font-bold">Sign in to Noya</h2>
+              <p :class="['text-sm mt-1', isDark ? 'text-gray-400' : 'text-stone-500']">Gunakan akun Google Anda</p>
             </div>
 
             <!-- Error message -->
@@ -124,12 +202,18 @@
             </div>
 
             <!-- Remember Me Toggle -->
-            <div class="flex items-center justify-center gap-3 py-2 border-t border-white/[0.05]">
+            <div 
+              :class="[
+                'flex items-center justify-center gap-3 py-2 border-t transition-colors duration-300',
+                isDark ? 'border-white/[0.05]' : 'border-stone-100'
+              ]"
+            >
               <button
                 @click="toggleRememberMe"
                 :class="[
-                  'relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-[#060608]',
-                  authStore.rememberMe ? 'bg-purple-600' : 'bg-white/10'
+                  'relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2',
+                  authStore.rememberMe ? 'bg-purple-600' : (isDark ? 'bg-white/10' : 'bg-stone-200'),
+                  isDark ? 'focus:ring-offset-[#060608]' : 'focus:ring-offset-white'
                 ]"
                 role="switch"
                 :aria-checked="authStore.rememberMe"
@@ -141,7 +225,7 @@
                   ]"
                 />
               </button>
-              <span class="text-xs text-gray-400">Ingat saya</span>
+              <span :class="['text-xs', isDark ? 'text-gray-400' : 'text-stone-500']">Ingat saya</span>
             </div>
           </div>
         </div>
@@ -149,49 +233,112 @@
     </main>
 
     <!-- SECTION 2: FEATURES SECTION -->
-    <section id="features-section" class="w-full border-t border-white/[0.05] bg-white/[0.01] py-20">
+    <section 
+      id="features-section" 
+      :class="[
+        'w-full border-t transition-colors duration-300 py-20',
+        isDark ? 'border-white/[0.05] bg-white/[0.01]' : 'border-stone-200 bg-stone-50/30'
+      ]"
+    >
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center max-w-xl mx-auto mb-16">
-          <h2 class="font-display italic text-3xl sm:text-4xl text-white">Menulis, Mendengarkan, Terhubung.</h2>
-          <p class="text-sm text-gray-400 mt-2">Didesain minimalis untuk menghadirkan ketenangan dalam berkarya.</p>
+          <h2 
+            :class="[
+              'font-display italic text-3xl sm:text-4xl transition-colors duration-300',
+              isDark ? 'text-white' : 'text-stone-900'
+            ]"
+          >
+            Menulis, Mendengarkan, Terhubung.
+          </h2>
+          <p :class="['text-sm mt-2', isDark ? 'text-gray-400' : 'text-stone-500']">
+            Didesain minimalis untuk menghadirkan ketenangan dalam berkarya.
+          </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
           <!-- Feature 1 -->
-          <div class="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 hover:border-purple-500/20 hover:bg-white/[0.03] transition-all duration-300">
-            <div class="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6 border border-purple-500/20">
+          <div 
+            :class="[
+              'border rounded-2xl p-8 transition-all duration-300',
+              isDark 
+                ? 'bg-white/[0.02] border-white/[0.05] hover:border-purple-500/20 hover:bg-white/[0.03]' 
+                : 'bg-white border-stone-200 shadow-sm hover:shadow-md hover:border-purple-500/10'
+            ]"
+          >
+            <div 
+              :class="[
+                'h-10 w-10 rounded-lg flex items-center justify-center mb-6 border transition-colors duration-300',
+                isDark 
+                  ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' 
+                  : 'bg-purple-50 border-purple-200/60 text-purple-600'
+              ]"
+            >
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
-            <h3 class="font-display italic text-xl font-bold mb-3 text-white">Editor Tanpa Batas</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">
+            <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
+              Editor Tanpa Batas
+            </h3>
+            <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
               Fokus penuh pada tulisan Anda dengan antarmuka penulisan bergaya minimalis, bersih, bebas dari gangguan notifikasi yang bising.
             </p>
           </div>
 
           <!-- Feature 2 -->
-          <div class="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 hover:border-purple-500/20 hover:bg-white/[0.03] transition-all duration-300">
-            <div class="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6 border border-purple-500/20">
+          <div 
+            :class="[
+              'border rounded-2xl p-8 transition-all duration-300',
+              isDark 
+                ? 'bg-white/[0.02] border-white/[0.05] hover:border-purple-500/20 hover:bg-white/[0.03]' 
+                : 'bg-white border-stone-200 shadow-sm hover:shadow-md hover:border-purple-500/10'
+            ]"
+          >
+            <div 
+              :class="[
+                'h-10 w-10 rounded-lg flex items-center justify-center mb-6 border transition-colors duration-300',
+                isDark 
+                  ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' 
+                  : 'bg-purple-50 border-purple-200/60 text-purple-600'
+              ]"
+            >
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
               </svg>
             </div>
-            <h3 class="font-display italic text-xl font-bold mb-3 text-white">Soundtrack Suasana</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">
+            <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
+              Soundtrack Suasana
+            </h3>
+            <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
               Sematkan musik latar dari Deezer untuk memperkuat emosi dan atmosfer cerita Anda, memberikan pengalaman membaca yang unik.
             </p>
           </div>
 
           <!-- Feature 3 -->
-          <div class="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 hover:border-purple-500/20 hover:bg-white/[0.03] transition-all duration-300">
-            <div class="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6 border border-purple-500/20">
+          <div 
+            :class="[
+              'border rounded-2xl p-8 transition-all duration-300',
+              isDark 
+                ? 'bg-white/[0.02] border-white/[0.05] hover:border-purple-500/20 hover:bg-white/[0.03]' 
+                : 'bg-white border-stone-200 shadow-sm hover:shadow-md hover:border-purple-500/10'
+            ]"
+          >
+            <div 
+              :class="[
+                'h-10 w-10 rounded-lg flex items-center justify-center mb-6 border transition-colors duration-300',
+                isDark 
+                  ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' 
+                  : 'bg-purple-50 border-purple-200/60 text-purple-600'
+              ]"
+            >
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
               </svg>
             </div>
-            <h3 class="font-display italic text-xl font-bold mb-3 text-white">Interaksi Hangat</h3>
-            <p class="text-sm text-gray-400 leading-relaxed">
+            <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
+              Interaksi Hangat
+            </h3>
+            <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
               Bagikan cerita, tinggalkan komentar mendalam, sukai tulisan, dan lakukan repost postingan menarik dari sesama penulis.
             </p>
           </div>
@@ -200,11 +347,25 @@
     </section>
 
     <!-- SECTION 3: TRENDING SHOWCASE -->
-    <section class="w-full border-t border-white/[0.05] py-20">
+    <section 
+      :class="[
+        'w-full border-t transition-colors duration-300 py-20',
+        isDark ? 'border-white/[0.05]' : 'border-stone-200'
+      ]"
+    >
       <div class="max-w-4xl mx-auto px-6">
         <div class="text-center max-w-xl mx-auto mb-16">
-          <h2 class="font-display italic text-3xl sm:text-4xl text-white">Sedang Hangat Dibicarakan</h2>
-          <p class="text-sm text-gray-400 mt-2">Intip beberapa tulisan terbaru dari komunitas Noya.</p>
+          <h2 
+            :class="[
+              'font-display italic text-3xl sm:text-4xl transition-colors duration-300',
+              isDark ? 'text-white' : 'text-stone-900'
+            ]"
+          >
+            Sedang Hangat Dibicarakan
+          </h2>
+          <p :class="['text-sm mt-2', isDark ? 'text-gray-400' : 'text-stone-500']">
+            Intip beberapa tulisan terbaru dari komunitas Noya.
+          </p>
         </div>
 
         <!-- Blog Cards Grid -->
@@ -213,7 +374,14 @@
             v-if="trendingLoading"
             class="space-y-4"
           >
-            <div v-for="i in 3" :key="i" class="bg-white/[0.01] border border-white/[0.05] rounded-2xl p-6 animate-pulse flex items-center justify-between">
+            <div 
+              v-for="i in 3" 
+              :key="i" 
+              :class="[
+                'border rounded-2xl p-6 animate-pulse flex items-center justify-between transition-colors duration-300',
+                isDark ? 'bg-white/[0.01] border-white/[0.05]' : 'bg-white border-stone-200 shadow-sm'
+              ]"
+            >
               <div class="flex-1 space-y-3">
                 <div class="h-4 bg-white/10 rounded w-1/3"></div>
                 <div class="h-3 bg-white/5 rounded w-3/4"></div>
@@ -229,23 +397,39 @@
             <div
               v-for="blog in trendingBlogs"
               :key="blog._id"
-              class="group block bg-white/[0.01] border border-white/[0.05] hover:border-purple-500/10 rounded-2xl p-6 hover:bg-white/[0.02] transition-all duration-300"
+              :class="[
+                'group block border rounded-2xl p-6 transition-all duration-300',
+                isDark 
+                  ? 'bg-white/[0.01] border-white/[0.05] hover:border-purple-500/10 hover:bg-white/[0.02]' 
+                  : 'bg-white border-stone-200 hover:border-purple-500/20 shadow-sm hover:shadow-md'
+              ]"
             >
               <div class="flex items-center justify-between gap-6">
                 <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-2 text-xs text-gray-400">
-                    <span>{{ blog.author?.displayName || 'Penulis Noya' }}</span>
+                  <div :class="['flex items-center gap-2 mb-2 text-xs transition-colors', isDark ? 'text-gray-450' : 'text-stone-500']">
+                    <span class="font-medium">{{ blog.author?.displayName || 'Penulis Noya' }}</span>
                     <span>&middot;</span>
                     <span>{{ formatRelativeTime(blog.publishedAt || blog.createdAt) }}</span>
                   </div>
-                  <h3 class="font-display italic text-lg sm:text-xl font-bold text-white group-hover:text-purple-300 transition-colors line-clamp-1">
+                  <h3 
+                    :class="[
+                      'font-display italic text-lg sm:text-xl font-bold group-hover:text-purple-500 transition-colors line-clamp-1',
+                      isDark ? 'text-white' : 'text-stone-900'
+                    ]"
+                  >
                     {{ blog.title }}
                   </h3>
-                  <p class="text-xs sm:text-sm text-gray-400 mt-1.5 line-clamp-2 leading-relaxed">
+                  <p :class="['text-xs sm:text-sm mt-1.5 line-clamp-2 leading-relaxed transition-colors', isDark ? 'text-gray-400' : 'text-stone-600']">
                     {{ blog.excerpt || 'Klik untuk membaca selengkapnya cerita menarik ini...' }}
                   </p>
                 </div>
-                <div v-if="blog.coverImage" class="h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-xl overflow-hidden bg-gray-900 border border-white/5">
+                <div 
+                  v-if="blog.coverImage" 
+                  :class="[
+                    'h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-xl overflow-hidden border transition-colors',
+                    isDark ? 'bg-gray-900 border-white/5' : 'bg-stone-100 border-stone-200'
+                  ]"
+                >
                   <img :src="blog.coverImage" :alt="blog.title" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 </div>
               </div>
@@ -260,14 +444,35 @@
     </section>
 
     <!-- SECTION 4: CALL TO ACTION -->
-    <section class="w-full border-t border-white/[0.05] bg-gradient-to-b from-transparent to-purple-950/10 py-24 text-center">
+    <section 
+      :class="[
+        'w-full border-t transition-colors duration-300 py-24 text-center',
+        isDark 
+          ? 'border-white/[0.05] bg-gradient-to-b from-transparent to-purple-950/10' 
+          : 'border-stone-200 bg-gradient-to-b from-transparent to-purple-500/[0.02]'
+      ]"
+    >
       <div class="max-w-xl mx-auto px-6 space-y-6">
-        <h2 class="font-display italic text-4xl sm:text-5xl text-white">Siap untuk membagikan ceritamu?</h2>
-        <p class="text-sm text-gray-400">Gabung sekarang dan jadilah bagian dari komunitas menulis yang hangat di Noya.</p>
+        <h2 
+          :class="[
+            'font-display italic text-4xl sm:text-5xl transition-colors duration-300',
+            isDark ? 'text-white' : 'text-stone-900'
+          ]"
+        >
+          Siap untuk membagikan ceritamu?
+        </h2>
+        <p :class="['text-sm', isDark ? 'text-gray-400' : 'text-stone-600']">
+          Gabung sekarang dan jadilah bagian dari komunitas menulis yang hangat di Noya.
+        </p>
         <div class="pt-4">
           <button
             @click="scrollToLogin"
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-semibold text-sm hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-900/10 cursor-pointer"
+            :class="[
+              'inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm hover:scale-105 transition-all duration-300 shadow-xl cursor-pointer',
+              isDark 
+                ? 'bg-white text-black hover:bg-gray-100 shadow-purple-900/10' 
+                : 'bg-stone-900 text-white hover:bg-stone-800 shadow-stone-200'
+            ]"
           >
             Mulai Menulis
             <span>&rarr;</span>
@@ -277,14 +482,19 @@
     </section>
 
     <!-- Footer -->
-    <footer class="w-full border-t border-white/[0.05] py-8 text-center text-xs text-gray-500">
+    <footer 
+      :class="[
+        'w-full border-t py-8 text-center text-xs transition-colors duration-300',
+        isDark ? 'border-white/[0.05] text-gray-550' : 'border-stone-200 text-stone-400'
+      ]"
+    >
       <p>&copy; 2026 Noya. All rights reserved.</p>
     </footer>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { blogAPI } from "@/services/api";
@@ -294,6 +504,26 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+// Sync theme dynamically with document.documentElement class
+const isDark = ref(document.documentElement.classList.contains("dark"));
+
+const toggleTheme = () => {
+  if (document.documentElement.classList.contains("dark")) {
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+    isDark.value = false;
+  } else {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+    isDark.value = true;
+  }
+  window.dispatchEvent(new Event("theme-changed"));
+};
+
+const handleThemeChanged = () => {
+  isDark.value = document.documentElement.classList.contains("dark");
+};
 
 const trendingBlogs = ref([]);
 const trendingLoading = ref(true);
@@ -316,7 +546,13 @@ const scrollToLogin = () => {
   }
 };
 
+onBeforeUnmount(() => {
+  window.removeEventListener("theme-changed", handleThemeChanged);
+});
+
 onMounted(async () => {
+  window.addEventListener("theme-changed", handleThemeChanged);
+
   if (authStore.isAuthenticated) {
     router.push("/");
     return;
