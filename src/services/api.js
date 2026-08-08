@@ -81,19 +81,23 @@ apiClient.interceptors.response.use(
       try {
         // Coba refresh token
         const rememberMe = localStorage.getItem('rememberMe') !== 'false'
+        const localRefreshToken = localStorage.getItem('refreshToken')
         const response = await axios.post(
           `${BASE_URL}/auth/refresh`,
-          {},
+          { refreshToken: localRefreshToken },
           {
             withCredentials: true,
             headers: { 'X-Remember-Me': String(rememberMe) },
           },
         )
 
-        const { accessToken } = response.data.data
+        const { accessToken, refreshToken } = response.data.data
 
         // Simpan ke localStorage
         localStorage.setItem('accessToken', accessToken)
+        if (refreshToken) {
+          localStorage.setItem('refreshToken', refreshToken)
+        }
 
         // PENTING: sync ke Pinia store agar isAuthenticated tidak false
         if (_syncTokenToStore) _syncTokenToStore(accessToken)
@@ -108,6 +112,7 @@ apiClient.interceptors.response.use(
         // Refresh gagal → proses antrian dengan error, clear token
         processQueue(refreshError, null)
         localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
         if (_syncTokenToStore) _syncTokenToStore(null)
 
         // JANGAN redirect di sini — biarkan store/router guard yang handle
@@ -138,7 +143,8 @@ export const authAPI = {
   // Refresh token
   refreshToken: () => {
     const rememberMe = localStorage.getItem('rememberMe') !== 'false'
-    return apiClient.post('/auth/refresh', {}, {
+    const localRefreshToken = localStorage.getItem('refreshToken')
+    return apiClient.post('/auth/refresh', { refreshToken: localRefreshToken }, {
       headers: { 'X-Remember-Me': String(rememberMe) },
     })
   },

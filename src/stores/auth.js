@@ -56,7 +56,10 @@ export const useAuthStore = defineStore('auth', () => {
   // agar saat token direfresh oleh interceptor, store ikut terupdate
   setSyncTokenCallback((token) => {
     accessToken.value = token
-    if (!token) user.value = null
+    if (!token) {
+      user.value = null
+      localStorage.removeItem('refreshToken')
+    }
   })
 
   // Login with Google OAuth
@@ -66,9 +69,12 @@ export const useAuthStore = defineStore('auth', () => {
       clearError()
 
       const response = await authAPI.oauthCallback(credential, rememberMe.value)
-      const { accessToken: token, user: userData } = response.data.data
+      const { accessToken: token, refreshToken: rToken, user: userData } = response.data.data
 
       setToken(token)
+      if (rToken) {
+        localStorage.setItem('refreshToken', rToken)
+      }
       setUser(userData)
 
       return { success: true, data: response.data }
@@ -109,9 +115,12 @@ export const useAuthStore = defineStore('auth', () => {
   const refreshToken = async (retries = 0) => {
     try {
       const response = await authAPI.refreshToken()
-      const { accessToken: token } = response.data.data
+      const { accessToken: token, refreshToken: rToken } = response.data.data
 
       setToken(token)
+      if (rToken) {
+        localStorage.setItem('refreshToken', rToken)
+      }
       return { success: true }
     } catch (err) {
       if (isRateLimited(err) && retries < MAX_RETRIES) {
@@ -138,6 +147,7 @@ export const useAuthStore = defineStore('auth', () => {
       // Clear local state regardless of API call result
       setToken(null)
       setUser(null)
+      localStorage.removeItem('refreshToken')
       isLoading.value = false
     }
   }
