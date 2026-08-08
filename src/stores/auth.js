@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authAPI, profileAPI } from '@/services/api'
+import router from '@/router'
 
 const RETRY_DELAY = 3000 // ms antar retry saat rate limited
 const MAX_RETRIES = 2
@@ -71,19 +72,20 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   // Fetch user profile (retry otomatis saat 429)
-  const fetchUserProfile = async (retries = 0) => {
+  // axiosConfig: optional config tambahan, misalnya { _skipRefresh: true }
+  const fetchUserProfile = async (retries = 0, axiosConfig = {}) => {
     try {
       isLoading.value = true
       clearError()
 
-      const response = await profileAPI.getMyProfile()
+      const response = await profileAPI.getMyProfile(axiosConfig)
       setUser(response.data?.data ?? response.data)
 
       return { success: true, data: response.data }
     } catch (err) {
       if (isRateLimited(err) && retries < MAX_RETRIES) {
         await sleep(RETRY_DELAY)
-        return fetchUserProfile(retries + 1)
+        return fetchUserProfile(retries + 1, axiosConfig)
       }
       const errorMessage = err.response?.data?.message || 'Failed to fetch profile'
       setError(errorMessage)
@@ -106,13 +108,9 @@ export const useAuthStore = defineStore('auth', () => {
         await sleep(RETRY_DELAY)
         return refreshToken(retries + 1)
       }
-      // Hanya logout jika server secara eksplisit menolak token (401)
-      // Jangan logout pada network error, 500, dll
-      const status = err?.response?.status
-      if (status === 401) {
-        await logout()
-      }
-      return { success: false, rateLimited: isRateLimited(err) }
+      // Kembalikan status saja — biarkan pemanggil (initializeAuth atau interceptor)
+      // yang memutuskan apakah perlu logout/redirect
+      return { success: false, rateLimited: isRateLimited(err), status: err?.response?.status }
     }
   }
 
@@ -136,25 +134,44 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Initialize auth state (call on app mount)
   const initializeAuth = async () => {
-    if (accessToken.value) {
-      // If we have a token, try to fetch user profile
-      const result = await fetchUserProfile()
-      if (!result.success) {
-        // Jika kena rate limit, jangan refresh/logout — coba lagi nanti
-        if (result.rateLimited) {
-          setTimeout(initializeAuth, REINIT_DELAY)
-          return
-        }
-        // Bukan 429 → token mungkin kedaluwarsa, coba refresh
-        const refreshResult = await refreshToken()
-        if (refreshResult.success) {
-          // If refresh succeeds, try to fetch profile again
-          await fetchUserProfile()
-        } else if (refreshResult.rateLimited) {
-          // Refresh kena 429 — coba lagi nanti, tanpa logout
-          setTimeout(initializeAuth, REINIT_DELAY)
-        }
-      }
+    if (!accessToken.value) return
+
+    // Tandai request ini dengan _skipRefresh supaya interceptor axios
+    // tidak ikut campur — kita urus sendiri logika refresh di sini
+    const skipConfig = { _skipRefresh: true }
+
+    // Coba fetch profil dengan access token yang ada
+    const result = await fetchUserProfile(0, skipConfig)
+
+    if (result.success) return // sudah ok
+
+    if (result.rateLimited) {
+      // Kena rate limit — coba lagi nanti, jangan logout
+      setTimeout(initializeAuth, REINIT_DELAY)
+      return
+    }
+
+    // Fetch gagal (kemungkinan access token expired) → coba refresh
+    const refreshResult = await refreshToken()
+
+    if (refreshResult.success) {
+      // Refresh berhasil, coba fetch profil lagi
+      const retryResult = await fetchUserProfile(0, skipConfig)
+      if (retryResult.success) return
+    }
+
+    if (refreshResult.rateLimited) {
+      // Refresh kena rate limit — coba lagi nanti
+      setTimeout(initializeAuth, REINIT_DELAY)
+      return
+    }
+
+    // Refresh gagal total (401) → sesi benar-benar habis, redirect ke login
+    setToken(null)
+    setUser(null)
+    // Hanya redirect jika bukan sudah di halaman login
+    if (router.currentRoute.value.path !== '/login') {
+      router.push('/login')
     }
   }
 

@@ -48,6 +48,12 @@ apiClient.interceptors.response.use(
       return Promise.reject(error)
     }
 
+    // Jangan intercept request yang ditandai _skipRefresh
+    // (misalnya dari initializeAuth, yang punya logika refreshnya sendiri)
+    if (originalRequest._skipRefresh) {
+      return Promise.reject(error)
+    }
+
     // Jika error 401 dan belum retry
     if (error.response?.status === 401 && !originalRequest._retry) {
       // Jika sedang refresh, antri request ini
@@ -79,12 +85,12 @@ apiClient.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
         return apiClient(originalRequest)
       } catch (refreshError) {
-        // Refresh gagal → proses antrian dengan error
+        // Refresh gagal → proses antrian dengan error, clear token
         processQueue(refreshError, null)
-
-        // Clear token dan redirect ke login
         localStorage.removeItem('accessToken')
-        window.location.href = '/login'
+
+        // JANGAN redirect di sini — biarkan store/router guard yang handle
+        // supaya tidak menimpa logika initializeAuth
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
@@ -124,8 +130,8 @@ export const authAPI = {
 // ============================================
 export const profileAPI = {
   // Get my profile
-  getMyProfile: () => {
-    return apiClient.get('/profile/me')
+  getMyProfile: (extraConfig = {}) => {
+    return apiClient.get('/profile/me', extraConfig)
   },
 
   // Update my profile (PUT - full update)
