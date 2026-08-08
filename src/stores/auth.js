@@ -186,12 +186,17 @@ export const useAuthStore = defineStore('auth', () => {
       return
     }
 
-    // Refresh gagal total (401) → sesi benar-benar habis, redirect ke login
-    setToken(null)
-    setUser(null)
-    // Hanya redirect jika bukan sudah di halaman login
-    if (router.currentRoute.value.path !== '/login') {
-      router.push('/login')
+    // Refresh gagal karena session expired (401) → hapus session & redirect
+    if (refreshResult.status === 401) {
+      setToken(null)
+      setUser(null)
+      if (router.currentRoute.value.path !== '/login') {
+        router.push('/login')
+      }
+    } else {
+      // Jika gagal karena network/500, biarkan token tetap tersimpan agar 
+      // user tidak ter-logout saat koneksi internet terputus sementara.
+      console.warn('⚠️ Refresh token gagal karena masalah jaringan/server. Sesi dipertahankan.')
     }
   }
 
