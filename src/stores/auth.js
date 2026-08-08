@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { authAPI, profileAPI } from '@/services/api'
+import { authAPI, profileAPI, setSyncTokenCallback } from '@/services/api'
+import i18n from '@/i18n'
 import router from '@/router'
+
+const { t } = i18n.global
 
 const RETRY_DELAY = 3000 // ms antar retry saat rate limited
 const MAX_RETRIES = 2
@@ -20,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Computed
   const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
-  const userDisplayName = computed(() => user.value?.name || user.value?.email || 'User')
+  const userDisplayName = computed(() => user.value?.name || user.value?.email || t('common.user'))
 
   // Actions
   const setToken = (token) => {
@@ -49,6 +52,13 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('rememberMe', value ? 'true' : 'false')
   }
 
+  // Daftarkan setToken sebagai callback ke interceptor axios
+  // agar saat token direfresh oleh interceptor, store ikut terupdate
+  setSyncTokenCallback((token) => {
+    accessToken.value = token
+    if (!token) user.value = null
+  })
+
   // Login with Google OAuth
   const loginWithGoogle = async (credential) => {
     try {
@@ -63,7 +73,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       return { success: true, data: response.data }
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Login failed'
+      const errorMessage = err.response?.data?.message || t('auth.loginFailed')
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -87,7 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
         await sleep(RETRY_DELAY)
         return fetchUserProfile(retries + 1, axiosConfig)
       }
-      const errorMessage = err.response?.data?.message || 'Failed to fetch profile'
+      const errorMessage = err.response?.data?.message || t('auth.fetchProfileFailed')
       setError(errorMessage)
       return { success: false, error: errorMessage, rateLimited: isRateLimited(err) }
     } finally {
@@ -186,7 +196,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       return { success: true, data: response.data }
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Failed to update profile'
+      const errorMessage = err.response?.data?.message || t('auth.updateProfileFailed')
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {

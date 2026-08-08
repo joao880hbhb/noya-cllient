@@ -5,11 +5,11 @@
       <div class="flex items-start justify-between gap-6 mb-10">
         <div>
           <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-2">
-            Compose &middot; New entry
+            {{ t('blogCreate.composeNew') }}
           </p>
           <h1 class="font-display italic text-[34px] sm:text-[42px] leading-[1.05] text-[#111111]">
-            Write something<br class="hidden sm:block" />
-            worth reading.
+            {{ t('blogCreate.writeSomething') }}<br class="hidden sm:block" />
+            {{ t('blogCreate.worthReading') }}
           </h1>
           <p v-if="draftStatus" class="sm:hidden text-[10px] text-[#8A8A8A] mt-2 italic">
             {{ draftStatus }}
@@ -19,7 +19,7 @@
           <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">
             {{ todayStamp }}
           </p>
-          <p class="text-[11px] text-[#B0B0B0] tabular-nums mt-0.5">{{ contentLength }} chars</p>
+          <p class="text-[11px] text-[#B0B0B0] tabular-nums mt-0.5">{{ contentLength }} {{ t('blogCreate.chars') }}</p>
           <p
             v-if="draftStatus"
             class="text-[10px] text-[#8A8A8A] mt-1.5 italic transition-all duration-300"
@@ -51,7 +51,7 @@
             <div
               class="flex items-center justify-between px-6 sm:px-10 pt-7 pb-5 border-b border-[#F0F0F0]"
             >
-              <span class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase">Status</span>
+              <span class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase">{{ t('blogCreate.status') }}</span>
               <div class="flex items-center gap-5">
                 <button
                   v-for="opt in statusOptions"
@@ -78,7 +78,7 @@
                 for="title"
                 class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
               >
-                Title <span class="text-[#B3261E]">*</span>
+                {{ t('blogCreate.title') }} <span class="text-[#B3261E]">*</span>
               </label>
               <div>
                 <input
@@ -87,7 +87,7 @@
                   type="text"
                   :maxlength="BLOG_TITLE_MAX_LENGTH"
                   class="w-full p-3 text-[22px] font-display text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 pb-2 bg-transparent transition-colors"
-                  placeholder="Give your post a title"
+                  :placeholder="t('blogCreate.titlePlaceholder')"
                 />
                 <p class="mt-2 text-[11px] text-[#B0B0B0] tabular-nums">
                   {{ title.length }} / {{ BLOG_TITLE_MAX_LENGTH }}
@@ -100,12 +100,12 @@
               class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
             >
               <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                Body <span class="text-[#B3261E]">*</span>
+                {{ t('blogCreate.body') }} <span class="text-[#B3261E]">*</span>
               </label>
               <div>
                 <BlogEditor v-model="content" />
                 <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
-                  {{ contentLength }} characters
+                  {{ contentLength }} {{ t('blogCreate.characters') }}
                 </p>
               </div>
             </div>
@@ -118,7 +118,7 @@
                 for="excerpt"
                 class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
               >
-                Excerpt
+                {{ t('blogCreate.excerpt') }}
               </label>
               <div>
                 <textarea
@@ -127,7 +127,7 @@
                   rows="2"
                   :maxlength="BLOG_EXCERPT_LENGTH"
                   class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[2px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
-                  placeholder="A short line shown in blog listings"
+                  :placeholder="t('blogCreate.excerptPlaceholder')"
                 ></textarea>
                 <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
                   {{ excerpt.length }} / {{ BLOG_EXCERPT_LENGTH }}
@@ -140,7 +140,7 @@
               class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
             >
               <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                Cover
+                {{ t('blogCreate.cover') }}
               </label>
               <div>
                 <div
@@ -157,7 +157,7 @@
                   v-else
                   class="border border-dashed border-[#D8D8D8] rounded-[2px] h-28 flex items-center justify-center mb-3"
                 >
-                  <span class="text-[12px] text-[#B0B0B0]">No image selected</span>
+                  <span class="text-[12px] text-[#B0B0B0]">{{ t('blogCreate.noImage') }}</span>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -172,7 +172,7 @@
                     for="coverImage"
                     class="inline-flex items-center px-3.5 py-1.5 border border-[#111111] rounded-[2px] text-[12px] font-medium text-[#111111] hover:bg-[#111111] hover:text-white transition-colors cursor-pointer"
                   >
-                    {{ coverPreview ? 'Replace' : 'Upload image' }}
+                    {{ coverPreview ? t('blogCreate.replace') : t('blogCreate.uploadImage') }}
                   </label>
                   <button
                     v-if="coverPreview"
@@ -180,10 +180,10 @@
                     @click="removeCover"
                     class="text-[12px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
                   >
-                    Remove
+                    {{ t('blogCreate.remove') }}
                   </button>
                   <span class="text-[11px] text-[#C4C4C4] ml-auto"
-                    >Max {{ MAX_FILE_SIZE / 1024 / 1024 }}MB</span
+                    >{{ t('blogCreate.maxFileSize', { max: MAX_FILE_SIZE / 1024 / 1024 }) }}</span
                   >
                 </div>
               </div>
@@ -194,7 +194,7 @@
               class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
             >
               <label for="tags" class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                Tags
+                {{ t('blogCreate.tags') }}
               </label>
               <div>
                 <input
@@ -202,7 +202,7 @@
                   v-model="tagsInput"
                   type="text"
                   class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 p-3 bg-transparent transition-colors"
-                  placeholder="music, review, tutorial"
+                  :placeholder="t('blogCreate.tagsPlaceholder')"
                 />
                 <div v-if="parsedTags.length" class="flex flex-wrap gap-1.5 mt-3">
                   <span
@@ -214,7 +214,7 @@
                   </span>
                 </div>
                 <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
-                  Separate with commas &mdash; optional
+                  {{ t('blogCreate.tagsHint') }}
                 </p>
               </div>
             </div>
@@ -222,7 +222,7 @@
             <!-- Music -->
             <div class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8">
               <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                Soundtrack
+                {{ t('blogCreate.soundtrack') }}
               </label>
               <div>
                 <!-- Selected -->
@@ -249,7 +249,7 @@
                     @click="selectedMusic = null"
                     class="text-[12px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors shrink-0"
                   >
-                    Remove
+                    {{ t('blogCreate.remove') }}
                   </button>
                 </div>
 
@@ -259,7 +259,7 @@
                     v-model="searchQuery"
                     type="text"
                     class="flex-1 text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 p-3 bg-transparent transition-colors"
-                    placeholder="Search for a track&hellip;"
+                    :placeholder="t('blogCreate.searchTrack')"
                     @keyup.enter.prevent="searchMusic"
                   />
                   <svg
@@ -319,7 +319,7 @@
                   {{ musicSearchError }}
                 </p>
                 <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
-                  Optional &mdash; attach a track to this post
+                  {{ t('blogCreate.trackOptional') }}
                 </p>
               </div>
             </div>
@@ -333,7 +333,7 @@
             @click="router.push('/blogs')"
             class="px-4 py-2 text-[13px] font-medium text-[#6B6B6B] hover:text-[#111111] transition-colors"
           >
-            Cancel
+            {{ t('blogCreate.cancel') }}
           </button>
           <button
             type="submit"
@@ -360,7 +360,7 @@
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
               ></path>
             </svg>
-            {{ saving ? 'Publishing…' : 'Create post' }}
+            {{ saving ? t('blogCreate.publishing') : t('blogCreate.createPost') }}
           </button>
         </div>
       </form>
@@ -371,6 +371,7 @@
 <script setup>
 import { ref, watch, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { blogAPI, musicAPI } from '@/services/api'
 import BlogEditor from '@/components/BlogEditor.vue'
@@ -380,11 +381,11 @@ import {
   BLOG_EXCERPT_LENGTH,
   MAX_FILE_SIZE,
   ALLOWED_IMAGE_TYPES,
-  SUCCESS_MESSAGES,
 } from '@/utils/constants'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { t, locale } = useI18n()
 const draftStatus = ref('')
 
 // Form state
@@ -394,11 +395,11 @@ const excerpt = ref('')
 const tagsInput = ref('')
 const status = ref('draft')
 
-const statusOptions = [
-  { value: 'draft', label: 'Draft' },
-  { value: 'private', label: 'Private' },
-  { value: 'published', label: 'Published' },
-]
+const statusOptions = computed(() => [
+  { value: 'draft', label: t('blogCreate.statusDraft') },
+  { value: 'private', label: t('blogCreate.statusPrivate') },
+  { value: 'published', label: t('blogCreate.statusPublished') },
+])
 
 // Cover image
 const coverFile = ref(null)
@@ -416,11 +417,13 @@ const saving = ref(false)
 const formError = ref('')
 const successMessage = ref('')
 
-const todayStamp = new Date().toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-})
+const todayStamp = computed(() =>
+  new Date().toLocaleDateString(locale.value === 'en' ? 'en-US' : 'id-ID', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }),
+)
 
 const parsedTags = computed(() =>
   tagsInput.value
@@ -442,12 +445,12 @@ const handleCoverChange = (event) => {
   if (!file) return
 
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    formError.value = 'Invalid file type. Please upload an image file.'
+    formError.value = t('blogCreate.invalidFileType')
     return
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    formError.value = `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`
+    formError.value = t('blogCreate.fileTooLarge', { max: MAX_FILE_SIZE / 1024 / 1024 })
     return
   }
 
@@ -479,10 +482,10 @@ const searchMusic = async () => {
     })
     musicResults.value = response.data.data || []
     if (!musicResults.value.length) {
-      musicSearchError.value = 'No tracks found. Try a different search.'
+      musicSearchError.value = t('blogCreate.noTracksFound')
     }
   } catch (err) {
-    musicSearchError.value = err.response?.data?.message || 'Failed to search music'
+    musicSearchError.value = err.response?.data?.message || t('blogCreate.searchFailed')
   } finally {
     musicSearching.value = false
   }
@@ -539,7 +542,7 @@ const saveDraft = () => {
     return
   }
 
-  draftStatus.value = 'Saving...'
+  draftStatus.value = t('blogCreate.saving')
   const draftData = {
     title: title.value,
     content: content.value,
@@ -552,8 +555,8 @@ const saveDraft = () => {
 
   // Update status saved setelah delay kecil
   setTimeout(() => {
-    if (draftStatus.value === 'Saving...') {
-      draftStatus.value = 'Draft saved locally'
+    if (draftStatus.value === t('blogCreate.saving')) {
+      draftStatus.value = t('blogCreate.draftSaved')
     }
   }, 500)
 }
@@ -582,9 +585,9 @@ onMounted(() => {
       if (parsed.selectedMusic) selectedMusic.value = parsed.selectedMusic
       if (parsed.status) status.value = parsed.status
 
-      draftStatus.value = 'Draft restored from local storage'
+      draftStatus.value = t('blogCreate.draftRestored')
       setTimeout(() => {
-        draftStatus.value = 'Draft saved locally'
+        draftStatus.value = t('blogCreate.draftSaved')
       }, 3000)
     } catch (e) {
       console.error('Failed to restore draft', e)
@@ -597,15 +600,15 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   if (!title.value.trim()) {
-    formError.value = 'Title is required'
+    formError.value = t('blogCreate.titleRequired')
     return
   }
   if (title.value.trim().length < 3) {
-    formError.value = 'Title must be at least 3 characters'
+    formError.value = t('blogCreate.titleTooShort')
     return
   }
   if (contentLength.value < 10) {
-    formError.value = 'Content must be at least 10 characters'
+    formError.value = t('blogCreate.contentTooShort')
     return
   }
 
@@ -626,7 +629,7 @@ const handleSubmit = async () => {
   saving.value = true
   try {
     const response = await blogAPI.createBlog(formData)
-    successMessage.value = SUCCESS_MESSAGES.BLOG_CREATED
+    successMessage.value = t('blogCreate.createdSuccess')
     localStorage.removeItem(getDraftKey())
     const blog = response.data.blog
     if (blog?.slug) {
@@ -635,7 +638,7 @@ const handleSubmit = async () => {
       router.push('/blogs')
     }
   } catch (err) {
-    formError.value = err.response?.data?.message || 'Failed to create blog'
+    formError.value = err.response?.data?.message || t('blogCreate.createFailed')
   } finally {
     saving.value = false
   }

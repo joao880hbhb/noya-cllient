@@ -38,6 +38,13 @@ const processQueue = (error, token = null) => {
   failedQueue = []
 }
 
+// Sync token ke Pinia store tanpa circular import
+// Store akan inject fungsi ini saat init
+let _syncTokenToStore = null
+export const setSyncTokenCallback = (fn) => {
+  _syncTokenToStore = fn
+}
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -73,10 +80,23 @@ apiClient.interceptors.response.use(
 
       try {
         // Coba refresh token
-        const response = await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true })
+        const rememberMe = localStorage.getItem('rememberMe') !== 'false'
+        const response = await axios.post(
+          `${BASE_URL}/auth/refresh`,
+          {},
+          {
+            withCredentials: true,
+            headers: { 'X-Remember-Me': String(rememberMe) },
+          },
+        )
 
         const { accessToken } = response.data.data
+
+        // Simpan ke localStorage
         localStorage.setItem('accessToken', accessToken)
+
+        // PENTING: sync ke Pinia store agar isAuthenticated tidak false
+        if (_syncTokenToStore) _syncTokenToStore(accessToken)
 
         // Proses antrian request yang menunggu
         processQueue(null, accessToken)
@@ -88,6 +108,7 @@ apiClient.interceptors.response.use(
         // Refresh gagal → proses antrian dengan error, clear token
         processQueue(refreshError, null)
         localStorage.removeItem('accessToken')
+        if (_syncTokenToStore) _syncTokenToStore(null)
 
         // JANGAN redirect di sini — biarkan store/router guard yang handle
         // supaya tidak menimpa logika initializeAuth
@@ -116,7 +137,10 @@ export const authAPI = {
 
   // Refresh token
   refreshToken: () => {
-    return apiClient.post('/auth/refresh')
+    const rememberMe = localStorage.getItem('rememberMe') !== 'false'
+    return apiClient.post('/auth/refresh', {}, {
+      headers: { 'X-Remember-Me': String(rememberMe) },
+    })
   },
 
   // Logout

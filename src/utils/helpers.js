@@ -3,10 +3,21 @@
  * @param {string|Date} date - Date to format
  * @returns {string} Formatted date string
  */
+import i18n from '@/i18n'
+
+const currentLocale = () => {
+  try {
+    const locale = i18n.global.locale.value
+    return locale === 'en' ? 'en-US' : 'id-ID'
+  } catch {
+    return 'id-ID'
+  }
+}
+
 export const formatDate = (date) => {
   if (!date) return ''
   const d = new Date(date)
-  return d.toLocaleDateString('en-US', {
+  return d.toLocaleDateString(currentLocale(), {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -25,32 +36,34 @@ export const formatRelativeTime = (date) => {
   const past = new Date(date)
   const diffInSeconds = Math.floor((now - past) / 1000)
 
+  const rtf = new Intl.RelativeTimeFormat(currentLocale(), { numeric: 'auto' })
+
   if (diffInSeconds < 60) {
-    return 'just now'
+    return rtf.format(0, 'second')
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60)
   if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`
+    return rtf.format(-diffInMinutes, 'minute')
   }
 
   const diffInHours = Math.floor(diffInMinutes / 60)
   if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
+    return rtf.format(-diffInHours, 'hour')
   }
 
   const diffInDays = Math.floor(diffInHours / 24)
   if (diffInDays < 30) {
-    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
+    return rtf.format(-diffInDays, 'day')
   }
 
   const diffInMonths = Math.floor(diffInDays / 30)
   if (diffInMonths < 12) {
-    return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`
+    return rtf.format(-diffInMonths, 'month')
   }
 
   const diffInYears = Math.floor(diffInMonths / 12)
-  return `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`
+  return rtf.format(-diffInYears, 'year')
 }
 
 /**

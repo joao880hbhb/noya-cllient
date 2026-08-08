@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { blogAPI } from '@/services/api'
 import BlogCard from '@/components/BlogCard.vue'
@@ -7,6 +8,7 @@ import UserSearch from '@/components/UserSearch.vue'
 import { getInitials, formatRelativeTime } from '@/utils/helpers'
 
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const trendingBlogs = ref([])
 const latestBlogs = ref([])
@@ -34,7 +36,7 @@ const fetchFeed = async () => {
     latestBlogs.value = latestRes.data.blogs || []
     totalPages.value = latestRes.data.totalPages || 1
   } catch (err) {
-    error.value = err.response?.data?.message || 'Failed to load beranda'
+    error.value = err.response?.data?.message || t('home.loadFailed')
   } finally {
     loading.value = false
   }
@@ -96,15 +98,15 @@ onBeforeUnmount(() => {
       <div class="mb-6 flex items-end justify-between">
         <div>
           <h1 class="text-2xl font-bold text-gray-900">
-            Haloo, {{ authStore.user?.displayName || 'User' }} 👋🏻
+            {{ t('home.greeting', { name: authStore.user?.displayName || t('common.user') }) }}
           </h1>
-          <p class="mt-1 text-sm text-gray-500">Temukan cerita terhangat dan terbaru</p>
+          <p class="mt-1 text-sm text-gray-500">{{ t('home.subtitle') }}</p>
         </div>
         <router-link
           to="/blogs"
           class="inline-flex items-center text-sm font-medium text-black whitespace-nowrap shrink-0"
         >
-          View all &rarr;
+          {{ t('home.viewAll') }} &rarr;
         </router-link>
       </div>
       <!-- Loading state -->
@@ -132,7 +134,7 @@ onBeforeUnmount(() => {
           @click="fetchFeed"
           class="mt-4 px-4 py-2 bg-[#5B4BFF] text-white rounded-full text-sm font-medium hover:bg-[#4a3dcc]"
         >
-          Coba lagi
+          {{ t('common.tryAgain') }}
         </button>
       </div>
 
@@ -140,7 +142,7 @@ onBeforeUnmount(() => {
         <!-- Trending on Noya -->
         <section v-if="trendingBlogs.length" class="mb-10">
           <div class="mb-4 flex items-center gap-2">
-            <h2 class="font-serif text-xl font-bold text-gray-900">Trending on Noya</h2>
+            <h2 class="font-serif text-xl font-bold text-gray-900">{{ t('home.trendingOnNoya') }}</h2>
             <!-- <span
               class="rounded-full bg-[#5B4BFF]/10 px-2 py-0.5 text-xs font-semibold text-[#e49d2c]"
             >
@@ -247,7 +249,7 @@ onBeforeUnmount(() => {
         <!-- Latest stories -->
         <section>
           <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-serif text-xl font-bold text-gray-900">Cerita terbaru</h2>
+            <h2 class="font-serif text-xl font-bold text-gray-900">{{ t('home.latestStories') }}</h2>
             <span class="h-px flex-1 bg-gray-100"></span>
           </div>
 
@@ -379,14 +381,14 @@ onBeforeUnmount(() => {
                 />
               </svg>
             </div>
-            <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">Belum ada cerita</h3>
-            <p class="mt-1 text-sm text-gray-500">Jadilah yang pertama menulis di Noya.</p>
+            <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">{{ t('home.noStories') }}</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ t('home.firstWriter') }}</p>
             <router-link
               v-if="authStore.isAuthenticated"
               to="/blogs/create"
               class="mt-5 inline-flex items-center gap-2 rounded-full bg-[#5B4BFF] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#4a3dcc]"
             >
-              Tulis cerita
+              {{ t('home.writeStory') }}
             </router-link>
           </div>
 
@@ -397,14 +399,14 @@ onBeforeUnmount(() => {
               <div
                 class="h-6 w-6 animate-spin rounded-full border-2 border-gray-200 border-t-[#5B4BFF]"
               ></div>
-              <span class="text-xs text-gray-500 font-medium">Memuat cerita lainnya...</span>
+              <span class="text-xs text-gray-500 font-medium">{{ t('home.loadingMore') }}</span>
             </div>
             <!-- No more items text -->
             <span
               v-else-if="!hasMore && latestBlogs.length > 0"
               class="text-xs text-gray-400 font-medium"
             >
-              Semua cerita telah dimuat
+              {{ t('home.allLoaded') }}
             </span>
           </div>
         </section>

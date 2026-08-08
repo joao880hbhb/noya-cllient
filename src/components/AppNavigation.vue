@@ -14,11 +14,57 @@
 
         <!-- Right side -->
         <div class="flex items-center gap-3 sm:gap-4">
+          <!-- Language Switcher -->
+          <div class="relative">
+            <button
+              @click="toggleLanguageMenu"
+              class="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-zinc-800 transition-colors focus:outline-none cursor-pointer"
+              :aria-label="t('nav.language')"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <circle cx="12" cy="12" r="9" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z"
+                />
+              </svg>
+            </button>
+
+            <div
+              v-if="showLanguageMenu"
+              class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-1 z-10 border border-gray-100"
+            >
+              <button
+                @click="selectLanguage('id')"
+                class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                :class="locale === 'id' ? 'font-semibold text-[#5B4BFF]' : ''"
+              >
+                <span>🇮🇩 {{ t('nav.indonesian') }}</span>
+                <span v-if="locale === 'id'" class="text-[#5B4BFF]">✓</span>
+              </button>
+              <button
+                @click="selectLanguage('en')"
+                class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                :class="locale === 'en' ? 'font-semibold text-[#5B4BFF]' : ''"
+              >
+                <span>🇬🇧 {{ t('nav.english') }}</span>
+                <span v-if="locale === 'en'" class="text-[#5B4BFF]">✓</span>
+              </button>
+            </div>
+          </div>
+
           <!-- Global Theme Toggle Switch -->
           <button
             @click="toggleTheme"
             class="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-zinc-800 transition-colors focus:outline-none cursor-pointer"
-            aria-label="Toggle theme"
+            :aria-label="t('nav.toggleTheme')"
           >
             <!-- Moon Icon (shown in light mode to switch to dark) -->
             <svg v-if="!isDark" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +80,7 @@
             <!-- Create Blog (desktop) -->
             <router-link
               to="/blogs/create"
-              class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#000000] text-white text-sm font-medium rounded-full hover:bg-[#48484b]"
+              class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#000000] text-white text-sm font-medium rounded-full hover:bg-[#48484b]"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -43,7 +89,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              Tulis
+              {{ t('nav.write') }}
             </router-link>
 
             <!-- Notification bell -->
@@ -80,7 +126,7 @@
                     @click="handleMarkAllRead"
                     class="text-xs font-medium text-[#5B4BFF] hover:underline"
                   >
-                    Tandai semua dibaca
+                    {{ t('nav.markAllRead') }}
                   </button>
                 </div>
 
@@ -114,9 +160,9 @@
                     <div class="min-w-0">
                       <p class="text-sm text-gray-800 leading-snug">
                         <span class="font-semibold">
-                          {{ notification.actor?.displayName || 'Seseorang' }}
+                          {{ notification.actor?.displayName || t('nav.someone') }}
                         </span>
-                        menyukai blog kamu
+                        {{ t('nav.likedYourBlog') }}
                       </p>
                       <p class="text-xs text-gray-500 mt-0.5 truncate">
                         {{ notification.blog?.title }}
@@ -146,7 +192,7 @@
                       d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                     />
                   </svg>
-                  <p class="mt-2 text-sm text-gray-500">Belum ada notifikasi</p>
+                  <p class="mt-2 text-sm text-gray-500">{{ t('nav.noNotifications') }}</p>
                 </div>
               </div>
             </div>
@@ -193,7 +239,7 @@
                       clip-rule="evenodd"
                     />
                   </svg>
-                  Your Profile
+                  {{ t('nav.yourProfile') }}
                 </router-link>
                 <router-link
                   to="/blogs/my-posts"
@@ -205,7 +251,7 @@
                       d="M4 3a1 1 0 011-1h8.586a1 1 0 01.707.293l2.414 2.414A1 1 0 0117 5.414V17a1 1 0 01-1 1H5a1 1 0 01-1-1V3zm9 1v3h3l-3-3z"
                     />
                   </svg>
-                  My Blogs
+                  {{ t('nav.myBlogs') }}
                 </router-link>
                 <button
                   @click="handleLogout"
@@ -218,7 +264,7 @@
                       clip-rule="evenodd"
                     />
                   </svg>
-                  Sign out
+                  {{ t('nav.signOut') }}
                 </button>
               </div>
             </div>
@@ -231,7 +277,7 @@
               to="/login"
               class="inline-flex items-center gap-2 px-5 py-2 bg-[#0e0e0e] text-white text-sm font-medium rounded-full hover:bg-[#070707]"
             >
-              Masuk
+              {{ t('nav.login') }}
             </router-link>
           </template>
         </div>
@@ -243,16 +289,31 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { notificationAPI } from '@/services/api'
 import { formatRelativeTime } from '@/utils/helpers'
+import { setLocale } from '@/i18n'
 import logoNoya from '@/assets/logonoya.png'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const { t, locale } = useI18n()
 const showUserMenu = ref(false)
 const showNotifications = ref(false)
+const showLanguageMenu = ref(false)
+
+const toggleLanguageMenu = () => {
+  showLanguageMenu.value = !showLanguageMenu.value
+  showUserMenu.value = false
+  showNotifications.value = false
+}
+
+const selectLanguage = (lang) => {
+  setLocale(lang)
+  showLanguageMenu.value = false
+}
 
 const isDark = ref(document.documentElement.classList.contains("dark"))
 
@@ -347,11 +408,12 @@ const handleLogout = async () => {
 }
 
 const handleClickOutside = (event) => {
-  if (showUserMenu.value || showNotifications.value) {
+  if (showUserMenu.value || showNotifications.value || showLanguageMenu.value) {
     const insideMenu = event.target.closest('.relative')
     if (!insideMenu) {
       showUserMenu.value = false
       showNotifications.value = false
+      showLanguageMenu.value = false
     }
   }
 }

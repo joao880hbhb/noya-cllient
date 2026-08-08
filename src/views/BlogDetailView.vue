@@ -22,7 +22,7 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
-        Back
+        {{ t('blogDetail.back') }}
       </button>
 
       <!-- Loading state -->
@@ -42,13 +42,13 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">Loading story</p>
+        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">{{ t('blogDetail.loadingStory') }}</p>
       </div>
 
       <!-- Error state -->
       <div v-else-if="error" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
         <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
-          Couldn't load this story
+          {{ t('blogDetail.loadError') }}
         </p>
         <p class="text-[15px] text-[#4B4B4B]">{{ error }}</p>
       </div>
@@ -67,7 +67,7 @@
             class="h-20 w-20 rounded-[2px] object-cover shrink-0 border border-white/10"
           />
           <div class="flex-1 min-w-0">
-            <p class="text-[10px] tracking-[0.2em] text-white/50 uppercase mb-1">Now playing</p>
+            <p class="text-[10px] tracking-[0.2em] text-white/50 uppercase mb-1">{{ t('blogDetail.nowPlaying') }}</p>
             <h3 class="font-display italic text-[18px] leading-tight truncate">
               {{ blog.music.title }}
             </h3>
@@ -88,7 +88,7 @@
                 type="audio/mpeg"
                 class="h-8 max-w-[220px]"
               >
-                Your browser does not support the audio element.
+                {{ t('blogDetail.audioNotSupported') }}
               </audio>
               <a
                 v-if="blog.music.deezerUrl"
@@ -97,7 +97,7 @@
                 rel="noopener noreferrer"
                 class="text-[12px] font-medium border border-white/30 text-white px-3 py-1.5 rounded-[2px] hover:bg-white hover:text-[#111111] transition-colors"
               >
-                Open in Deezer
+                {{ t('blogDetail.openInDeezer') }}
               </a>
             </div>
           </div>
@@ -132,15 +132,15 @@
               {{ getInitials(authorName) }}
             </div>
             <div>
-              <p class="text-[11px] tracking-wide text-[#B0B0B0]">Ditulis oleh</p>
+              <p class="text-[11px] tracking-wide text-[#B0B0B0]">{{ t('blogDetail.writtenBy') }}</p>
               <p
                 class="text-[13px] font-medium text-[#111111] group-hover:underline underline-offset-2"
               >
                 {{ authorName }}
               </p>
               <p class="text-[12px] text-[#B0B0B0]">
-                {{ formatDate(blog.publishedAt || blog.createdAt) }} &middot; {{ readingTime }} min
-                read
+                {{ formatDate(blog.publishedAt || blog.createdAt) }} &middot;
+                {{ t('blogDetail.minRead', { min: readingTime }) }}
               </p>
             </div>
           </component>
@@ -279,7 +279,7 @@
 
       <!-- Comments section -->
       <div ref="commentsSection" class="mt-14 border-t border-[#F0F0F0] pt-10">
-        <h2 class="font-display italic text-[24px] sm:text-[28px] text-[#111111]">Komentar</h2>
+        <h2 class="font-display italic text-[24px] sm:text-[28px] text-[#111111]">{{ t('blogDetail.comments') }}</h2>
 
         <!-- Comment form -->
         <div class="mt-6">
@@ -302,7 +302,7 @@
                 rows="2"
                 maxlength="1000"
                 class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[3px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
-                placeholder="Tulis komentar..."
+                :placeholder="t('blogDetail.commentPlaceholder')"
                 @keydown.ctrl.enter="submitComment"
                 @keydown.meta.enter="submitComment"
               ></textarea>
@@ -315,7 +315,7 @@
                   :disabled="commentSubmitting"
                   class="inline-flex items-center px-4 py-1.5 bg-[#111111] text-white rounded-full text-[12px] font-medium hover:bg-black disabled:opacity-50 transition-colors"
                 >
-                  {{ commentSubmitting ? 'Mengirim…' : 'Kirim' }}
+                  {{ commentSubmitting ? t('blogDetail.sending') : t('blogDetail.send') }}
                 </button>
               </div>
             </form>
@@ -325,7 +325,7 @@
             @click="openLoginPrompt('login-comment')"
             class="w-full text-left border border-dashed border-[#D8D8D8] rounded-[3px] px-4 py-3.5 text-[13px] text-[#B0B0B0] hover:border-[#111111] hover:text-[#111111] transition-colors"
           >
-            Masuk untuk berkomentar…
+            {{ t('blogDetail.loginToComment') }}
           </button>
         </div>
 
@@ -372,7 +372,7 @@
                     @click="deleteComment(comment._id)"
                     class="ml-auto text-[11px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
                   >
-                    Hapus
+                    {{ t('blogDetail.delete') }}
                   </button>
                 </div>
                 <p class="mt-1 text-[14px] leading-relaxed text-[#333333] whitespace-pre-wrap">
@@ -437,13 +437,13 @@
                 type="text"
                 maxlength="1000"
                 class="flex-1 text-[13px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[3px] focus:border-[#111111] focus:ring-0 px-3 py-1.5 transition-colors"
-                placeholder="Balas komentar…"
+                :placeholder="t('blogDetail.replyPlaceholder')"
               />
               <button
                 type="submit"
                 class="text-[12px] font-medium text-[#5B4BFF] hover:text-[#4a3dcc] shrink-0 transition-colors"
               >
-                Balas
+                {{ t('blogDetail.reply') }}
               </button>
             </form>
           </div>
@@ -454,7 +454,7 @@
           v-else
           class="mt-6 border border-dashed border-[#D8D8D8] rounded-[3px] py-10 px-6 text-center"
         >
-          <p class="text-[13px] text-[#8A8A8A]">Belum ada komentar. Jadilah yang pertama!</p>
+          <p class="text-[13px] text-[#8A8A8A]">{{ t('blogDetail.noComments') }}</p>
         </div>
       </div>
     </div>
@@ -493,13 +493,13 @@
             @click="goToLogin"
             class="w-full inline-flex items-center justify-center px-5 py-2.5 bg-[#5B4BFF] text-white rounded-full text-[13px] font-medium hover:bg-[#4a3dcc] transition-colors"
           >
-            Login
+            {{ t('blogDetail.login') }}
           </button>
           <button
             @click="closeLoginPrompt"
             class="w-full inline-flex items-center justify-center px-5 py-2.5 border border-[#E7E7E7] text-[#4B4B4B] rounded-full text-[13px] font-medium hover:bg-[#FAFAFA] transition-colors"
           >
-            Batal
+            {{ t('blogDetail.cancel') }}
           </button>
         </div>
       </div>
@@ -510,6 +510,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { blogAPI, likeAPI, repostAPI, commentAPI, BASE_URL } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 import BlogContent from '@/components/BlogContent.vue'
@@ -518,6 +519,7 @@ import { getInitials, formatDate, formatRelativeTime } from '@/utils/helpers'
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const blog = ref(null)
 const loading = ref(false)
@@ -543,19 +545,19 @@ const showLoginPrompt = ref(false)
 const musicPreviewUrl = ref('')
 
 const loginPromptTitle = computed(() => {
-  if (loginPromptReason.value === 'repost') return 'Masuk untuk merepost'
-  if (loginPromptReason.value === 'comment') return 'Masuk untuk berkomentar'
-  return 'Masuk untuk menyukai'
+  if (loginPromptReason.value === 'repost') return t('blogDetail.loginTitleRepost')
+  if (loginPromptReason.value === 'comment') return t('blogDetail.loginTitleComment')
+  return t('blogDetail.loginTitleLike')
 })
 
 const loginPromptMessage = computed(() => {
   if (loginPromptReason.value === 'repost') {
-    return 'Kamu perlu login dulu untuk bisa merepost cerita ini.'
+    return t('blogDetail.loginMsgRepost')
   }
   if (loginPromptReason.value === 'comment') {
-    return 'Kamu perlu login dulu untuk bisa menulis komentar.'
+    return t('blogDetail.loginMsgComment')
   }
-  return 'Kamu perlu login dulu untuk bisa menyukai cerita ini.'
+  return t('blogDetail.loginMsgLike')
 })
 
 const openLoginPrompt = (reason = 'like') => {
@@ -573,12 +575,12 @@ const refreshMusicPreview = async (music) => {
 
 const authorName = computed(() => {
   const author = blog.value?.author
-  if (!author) return 'Unknown'
+  if (!author) return t('blogDetail.unknownAuthor')
   if (author.displayName) return author.displayName
   if (author.firstName || author.lastName) {
     return `${author.firstName || ''} ${author.lastName || ''}`.trim()
   }
-  return 'Unknown'
+  return t('blogDetail.unknownAuthor')
 })
 
 const countTextContent = (doc) => {
@@ -623,10 +625,10 @@ const fetchBlog = async () => {
       refreshMusicPreview(blog.value.music)
       loadComments()
     } else {
-      error.value = 'Blog not found'
+      error.value = t('blogDetail.blogNotFound')
     }
   } catch (err) {
-    error.value = err.response?.data?.message || 'Failed to load blog'
+    error.value = err.response?.data?.message || t('blogDetail.loadFailed')
   } finally {
     loading.value = false
     requestAnimationFrame(updateProgress)
@@ -691,7 +693,7 @@ const scrollToComments = () => {
 const commentAuthorName = (comment) =>
   comment.author?.displayName ||
   [comment.author?.firstName, comment.author?.lastName].filter(Boolean).join(' ') ||
-  'User'
+  t('common.user')
 
 const replyAuthorName = commentAuthorName
 
@@ -704,7 +706,7 @@ const loadComments = async () => {
     comments.value = response.data.comments || []
     commentsCount.value = response.data.totalComments ?? commentsCount.value
   } catch (err) {
-    commentsError.value = err.response?.data?.message || 'Gagal memuat komentar'
+    commentsError.value = err.response?.data?.message || t('blogDetail.commentLoadFailed')
   } finally {
     commentsLoading.value = false
   }
@@ -727,7 +729,7 @@ const submitComment = async () => {
     commentsCount.value = response.data.commentsCount
     commentText.value = ''
   } catch (err) {
-    commentsError.value = err.response?.data?.message || 'Gagal mengirim komentar'
+    commentsError.value = err.response?.data?.message || t('blogDetail.commentSendFailed')
   } finally {
     commentSubmitting.value = false
   }
@@ -751,18 +753,18 @@ const submitReply = async (comment) => {
     commentsCount.value = response.data.commentsCount
     replyTexts.value[comment._id] = ''
   } catch (err) {
-    commentsError.value = err.response?.data?.message || 'Gagal mengirim balasan'
+    commentsError.value = err.response?.data?.message || t('blogDetail.replySendFailed')
   }
 }
 
 const deleteComment = async (commentId) => {
-  if (!confirm('Hapus komentar ini?')) return
+  if (!confirm(t('blogDetail.confirmDeleteComment'))) return
   try {
     await commentAPI.deleteComment(commentId)
     comments.value = comments.value.filter((c) => c._id !== commentId)
     commentsCount.value = Math.max(0, commentsCount.value - 1)
   } catch (err) {
-    commentsError.value = err.response?.data?.message || 'Gagal menghapus komentar'
+    commentsError.value = err.response?.data?.message || t('blogDetail.commentDeleteFailed')
   }
 }
 

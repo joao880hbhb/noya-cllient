@@ -1,8 +1,14 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>{{ t('about.title') }}</h1>
   </div>
 </template>
+
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
 
 <style>
 @media (min-width: 1024px) {

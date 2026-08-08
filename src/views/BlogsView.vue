@@ -3,8 +3,8 @@
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-6">
-        <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900">Semua cerita</h1>
-        <p class="mt-1 text-sm text-gray-500">Jelajahi semua blog dari komunitas Noya</p>
+        <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900">{{ t('blogs.title') }}</h1>
+        <p class="mt-1 text-sm text-gray-500">{{ t('blogs.subtitle') }}</p>
       </div>
 
       <!-- Sort tabs -->
@@ -46,7 +46,7 @@
           @click="fetchBlogs"
           class="mt-4 px-4 py-2 bg-[#5B4BFF] text-white rounded-full text-sm font-medium hover:bg-[#4a3dcc]"
         >
-          Coba lagi
+          {{ t('blogs.tryAgain') }}
         </button>
       </div>
 
@@ -171,8 +171,8 @@
             />
           </svg>
         </div>
-        <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">Belum ada cerita</h3>
-        <p class="mt-1 text-sm text-gray-500">Jadilah yang pertama menulis di Noya.</p>
+        <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">{{ t('blogs.noStories') }}</h3>
+        <p class="mt-1 text-sm text-gray-500">{{ t('blogs.firstWriter') }}</p>
       </div>
 
       <!-- Infinite Scroll Trigger Sentinel -->
@@ -182,11 +182,11 @@
           <div
             class="h-6 w-6 animate-spin rounded-full border-2 border-gray-200 border-t-[#5B4BFF]"
           ></div>
-          <span class="text-xs text-gray-500 font-medium">Memuat cerita lainnya...</span>
+          <span class="text-xs text-gray-500 font-medium">{{ t('blogs.loadingMore') }}</span>
         </div>
         <!-- No more items text -->
         <span v-else-if="!hasMore && blogs.length > 0" class="text-xs text-gray-400 font-medium">
-          Semua cerita telah dimuat
+          {{ t('blogs.allLoaded') }}
         </span>
       </div>
     </div>
@@ -196,16 +196,18 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { blogAPI } from '@/services/api'
 import { getInitials, formatRelativeTime } from '@/utils/helpers'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
-const tabs = [
-  { label: 'Trending', value: 'trending' },
-  { label: 'Terbaru', value: 'latest' },
-]
+const tabs = computed(() => [
+  { label: t('blogs.tabTrending'), value: 'trending' },
+  { label: t('blogs.tabLatest'), value: 'latest' },
+])
 
 const sort = ref(route.query.sort === 'latest' ? 'latest' : 'trending')
 const blogs = ref([])
@@ -245,7 +247,7 @@ const fetchBlogs = async (isLoadMore = false) => {
     }
     totalPages.value = Math.max(1, response.data.totalPages || 1)
   } catch (err) {
-    error.value = err.response?.data?.message || 'Gagal memuat blog'
+    error.value = err.response?.data?.message || t('blogs.failedLoad')
   } finally {
     loading.value = false
     loadingMore.value = false

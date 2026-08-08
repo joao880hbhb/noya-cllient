@@ -4,14 +4,14 @@
       <!-- Header -->
       <div class="mb-8 flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-semibold text-gray-900">Edit profile</h1>
-          <p class="mt-1 text-sm text-gray-500">Update your personal information</p>
+          <h1 class="text-2xl font-semibold text-gray-900">{{ t('editProfile.title') }}</h1>
+          <p class="mt-1 text-sm text-gray-500">{{ t('editProfile.subtitle') }}</p>
         </div>
         <button
           @click="router.push('/profile')"
           class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
         >
-          &larr; Back
+          &larr; {{ t('editProfile.back') }}
         </button>
       </div>
 
@@ -28,7 +28,7 @@
       <form @submit.prevent="handleSubmit" class="space-y-6">
         <!-- Profile picture -->
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Profile picture</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('editProfile.picture') }}</h2>
           <div class="flex items-center gap-6">
             <img
               v-if="picturePreview"
@@ -55,7 +55,7 @@
                   for="picture"
                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 cursor-pointer transition-colors"
                 >
-                  Upload photo
+                  {{ t('editProfile.uploadPhoto') }}
                 </label>
                 <button
                   v-if="pictureFile || authStore.user?.picture"
@@ -63,11 +63,11 @@
                   @click="removePicture"
                   class="text-sm font-medium text-gray-400 hover:text-red-600 transition-colors"
                 >
-                  Remove
+                  {{ t('editProfile.remove') }}
                 </button>
               </div>
               <p class="mt-2 text-xs text-gray-400">
-                JPG, PNG, GIF or WebP. Max {{ MAX_FILE_SIZE / 1024 / 1024 }}MB.
+                {{ t('editProfile.fileHint', { max: MAX_FILE_SIZE / 1024 / 1024 }) }}
               </p>
             </div>
           </div>
@@ -75,11 +75,11 @@
 
         <!-- Basic information -->
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Basic information</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('editProfile.basicInfo') }}</h2>
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div class="sm:col-span-2">
               <label for="displayName" class="block text-sm font-medium text-gray-700">
-                Username
+                {{ t('editProfile.username') }}
               </label>
               <input
                 id="displayName"
@@ -87,12 +87,12 @@
                 type="text"
                 :maxlength="NAME_MAX_LENGTH"
                 class="mt-1.5 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#111111] focus:ring-[#111111] sm:text-sm"
-                placeholder="How others see you"
+                :placeholder="t('editProfile.usernamePlaceholder')"
               />
             </div>
             <div>
               <label for="firstName" class="block text-sm font-medium text-gray-700">
-                First name
+                {{ t('editProfile.firstName') }}
               </label>
               <input
                 id="firstName"
@@ -104,7 +104,7 @@
             </div>
             <div>
               <label for="lastName" class="block text-sm font-medium text-gray-700">
-                Last name
+                {{ t('editProfile.lastName') }}
               </label>
               <input
                 id="lastName"
@@ -115,14 +115,14 @@
               />
             </div>
             <div class="sm:col-span-2">
-              <label for="bio" class="block text-sm font-medium text-gray-700"> Bio </label>
+              <label for="bio" class="block text-sm font-medium text-gray-700"> {{ t('editProfile.bio') }} </label>
               <textarea
                 id="bio"
                 v-model="bio"
                 rows="3"
                 :maxlength="BIO_MAX_LENGTH"
                 class="mt-1.5 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#111111] focus:ring-[#111111] sm:text-sm resize-none"
-                placeholder="Tell us a little about yourself"
+                :placeholder="t('editProfile.bioPlaceholder')"
               ></textarea>
               <p class="mt-1 text-xs text-gray-400 text-right">
                 {{ bio.length }} / {{ BIO_MAX_LENGTH }}
@@ -133,11 +133,11 @@
 
         <!-- Contact & personal -->
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Contact &amp; personal</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('editProfile.contactPersonal') }}</h2>
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label for="phoneNumber" class="block text-sm font-medium text-gray-700">
-                Phone number
+                {{ t('editProfile.phoneNumber') }}
               </label>
               <input
                 id="phoneNumber"
@@ -149,7 +149,7 @@
             </div>
             <div>
               <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">
-                Date of birth
+                {{ t('editProfile.dateOfBirth') }}
               </label>
               <input
                 id="dateOfBirth"
@@ -159,17 +159,17 @@
               />
             </div>
             <div>
-              <label for="gender" class="block text-sm font-medium text-gray-700"> Gender </label>
+              <label for="gender" class="block text-sm font-medium text-gray-700"> {{ t('editProfile.gender') }} </label>
               <select
                 id="gender"
                 v-model="gender"
                 class="mt-1.5 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#111111] focus:ring-[#111111] sm:text-sm"
               >
-                <option value="">Prefer not to say</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-                <option value="prefer_not_to_say">Prefer not to say</option>
+                <option value="">{{ t('editProfile.genderPreferNot') }}</option>
+                <option value="male">{{ t('editProfile.genderMale') }}</option>
+                <option value="female">{{ t('editProfile.genderFemale') }}</option>
+                <option value="other">{{ t('editProfile.genderOther') }}</option>
+                <option value="prefer_not_to_say">{{ t('editProfile.genderPreferNot') }}</option>
               </select>
             </div>
           </div>
@@ -177,10 +177,10 @@
 
         <!-- Address -->
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Address</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('editProfile.address') }}</h2>
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div class="sm:col-span-2">
-              <label for="street" class="block text-sm font-medium text-gray-700"> Street </label>
+              <label for="street" class="block text-sm font-medium text-gray-700"> {{ t('editProfile.street') }} </label>
               <input
                 id="street"
                 v-model="street"
@@ -189,7 +189,7 @@
               />
             </div>
             <div>
-              <label for="city" class="block text-sm font-medium text-gray-700"> City </label>
+              <label for="city" class="block text-sm font-medium text-gray-700"> {{ t('editProfile.city') }} </label>
               <input
                 id="city"
                 v-model="city"
@@ -198,7 +198,7 @@
               />
             </div>
             <div>
-              <label for="state" class="block text-sm font-medium text-gray-700"> State </label>
+              <label for="state" class="block text-sm font-medium text-gray-700"> {{ t('editProfile.state') }} </label>
               <input
                 id="state"
                 v-model="state"
@@ -208,7 +208,7 @@
             </div>
             <div>
               <label for="postalCode" class="block text-sm font-medium text-gray-700">
-                Postal code
+                {{ t('editProfile.postalCode') }}
               </label>
               <input
                 id="postalCode"
@@ -218,7 +218,7 @@
               />
             </div>
             <div>
-              <label for="country" class="block text-sm font-medium text-gray-700"> Country </label>
+              <label for="country" class="block text-sm font-medium text-gray-700"> {{ t('editProfile.country') }} </label>
               <input
                 id="country"
                 v-model="country"
@@ -231,10 +231,10 @@
 
         <!-- Social media -->
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Social media</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('editProfile.socialMedia') }}</h2>
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div class="sm:col-span-2">
-              <label for="website" class="block text-sm font-medium text-gray-700"> Website </label>
+              <label for="website" class="block text-sm font-medium text-gray-700"> {{ t('editProfile.website') }} </label>
               <input
                 id="website"
                 v-model="website"
@@ -256,7 +256,9 @@
               />
             </div>
             <div>
-              <label for="twitter" class="block text-sm font-medium text-gray-700"> Twitter </label>
+              <label for="twitter" class="block text-sm font-medium text-gray-700">
+                {{ t('editProfile.twitter') }}
+              </label>
               <input
                 id="twitter"
                 v-model="twitter"
@@ -282,7 +284,7 @@
 
         <!-- Privacy -->
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Privacy</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('editProfile.privacy') }}</h2>
           <div class="flex items-start">
             <input
               id="isPublic"
@@ -291,9 +293,9 @@
               class="mt-1 h-4 w-4 rounded border-gray-300 text-[#111111] focus:ring-[#111111]"
             />
             <label for="isPublic" class="ml-3 block text-sm text-gray-700">
-              <span class="font-medium">Make my profile public</span>
+              <span class="font-medium">{{ t('editProfile.makePublic') }}</span>
               <span class="block text-gray-500">
-                Allow other users to view and discover your profile.
+                {{ t('editProfile.makePublicDesc') }}
               </span>
             </label>
           </div>
@@ -306,7 +308,7 @@
             @click="router.push('/profile')"
             class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
           >
-            Cancel
+            {{ t('editProfile.cancel') }}
           </button>
           <button
             type="submit"
@@ -333,7 +335,7 @@
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
               ></path>
             </svg>
-            {{ saving ? 'Saving...' : 'Save changes' }}
+            {{ saving ? t('editProfile.saving') : t('editProfile.saveChanges') }}
           </button>
         </div>
       </form>
@@ -344,6 +346,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { getInitials } from '@/utils/helpers'
 import {
@@ -351,11 +354,11 @@ import {
   BIO_MAX_LENGTH,
   MAX_FILE_SIZE,
   ALLOWED_IMAGE_TYPES,
-  SUCCESS_MESSAGES,
 } from '@/utils/constants'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const toDateInput = (value) => {
   if (!value) return ''
@@ -430,12 +433,12 @@ const handlePictureChange = (event) => {
   if (!file) return
 
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    formError.value = 'Invalid file type. Please upload an image file.'
+    formError.value = t('editProfile.invalidFileType')
     return
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    formError.value = `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`
+    formError.value = t('editProfile.fileTooLarge', { max: MAX_FILE_SIZE / 1024 / 1024 })
     return
   }
 
@@ -455,11 +458,11 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   if (!displayName.value.trim()) {
-    formError.value = 'Username is required'
+    formError.value = t('editProfile.usernameRequired')
     return
   }
   if (displayName.value.trim().length < 2) {
-    formError.value = 'Username must be at least 2 characters'
+    formError.value = t('editProfile.usernameTooShort')
     return
   }
 
@@ -499,7 +502,7 @@ const handleSubmit = async () => {
   try {
     const result = await authStore.updateProfile(formData)
     if (result.success) {
-      successMessage.value = SUCCESS_MESSAGES.PROFILE_UPDATED
+      successMessage.value = t('common.profileUpdated')
       router.push('/profile')
     } else {
       formError.value = result.error

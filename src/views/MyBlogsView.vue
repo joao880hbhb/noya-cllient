@@ -3,8 +3,8 @@
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8 flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">My Blogs</h1>
-          <p class="mt-2 text-gray-600">Manage all of your blog posts</p>
+          <h1 class="text-3xl font-bold text-gray-900">{{ t('myBlogs.title') }}</h1>
+          <p class="mt-2 text-gray-600">{{ t('myBlogs.subtitle') }}</p>
         </div>
       </div>
 
@@ -15,25 +15,25 @@
 
       <!-- Error state -->
       <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6">
-        <h3 class="text-red-800 font-semibold">Error loading your blogs</h3>
+        <h3 class="text-red-800 font-semibold">{{ t('myBlogs.loadErrorTitle') }}</h3>
         <p class="text-red-600 mt-2">{{ error }}</p>
         <button
           @click="fetchBlogs"
           class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
         >
-          Try Again
+          {{ t('myBlogs.tryAgain') }}
         </button>
       </div>
 
       <!-- Empty state -->
       <div v-else-if="blogs.length === 0" class="bg-white rounded-lg shadow p-12 text-center">
-        <h2 class="text-xl font-semibold text-gray-900">No blog posts yet</h2>
-        <p class="mt-2 text-gray-600">Start sharing your thoughts with the community.</p>
+        <h2 class="text-xl font-semibold text-gray-900">{{ t('myBlogs.empty') }}</h2>
+        <p class="mt-2 text-gray-600">{{ t('myBlogs.emptyDesc') }}</p>
         <router-link
           to="/blogs/create"
           class="mt-6 inline-block px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700"
         >
-          Create your first blog
+          {{ t('myBlogs.createFirst') }}
         </router-link>
       </div>
 
@@ -91,8 +91,8 @@
             <div
               class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500"
             >
-              <span>{{ blog.views || 0 }} views</span>
-              <span>{{ blog.likesCount || 0 }} likes</span>
+              <span>{{ blog.views || 0 }} {{ t('myBlogs.views') }}</span>
+              <span>{{ blog.likesCount || 0 }} {{ t('myBlogs.likes') }}</span>
             </div>
 
             <!-- Actions -->
@@ -101,14 +101,14 @@
                 :to="`/blogs/${blog.slug}/edit`"
                 class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
-                Edit
+                {{ t('myBlogs.edit') }}
               </router-link>
               <button
                 @click="handleDelete(blog)"
                 :disabled="deletingId === blog._id"
                 class="inline-flex items-center px-3 py-1.5 border border-red-300 rounded-md text-xs font-medium text-red-700 bg-white hover:bg-red-50 disabled:opacity-50"
               >
-                {{ deletingId === blog._id ? 'Deleting...' : 'Delete' }}
+                {{ deletingId === blog._id ? t('myBlogs.deleting') : t('myBlogs.delete') }}
               </button>
             </div>
           </div>
@@ -122,15 +122,17 @@
           :disabled="currentPage <= 1"
           class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
         >
-          &larr; Previous
+          &larr; {{ t('myBlogs.previous') }}
         </button>
-        <span class="text-sm text-gray-600"> Page {{ currentPage }} of {{ totalPages }} </span>
+        <span class="text-sm text-gray-600">
+          {{ t('myBlogs.pageOf', { current: currentPage, total: totalPages }) }}
+        </span>
         <button
           @click="changePage(currentPage + 1)"
           :disabled="currentPage >= totalPages"
           class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
         >
-          Next &rarr;
+          {{ t('myBlogs.next') }} &rarr;
         </button>
       </div>
     </div>
@@ -139,10 +141,12 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { blogAPI } from '@/services/api'
 import { getInitials, formatRelativeTime, truncateText } from '@/utils/helpers'
 import { DEFAULT_PAGE_SIZE } from '@/utils/constants'
 
+const { t } = useI18n()
 const blogs = ref([])
 const loading = ref(false)
 const error = ref('')
@@ -166,7 +170,7 @@ const fetchBlogs = async () => {
     totalBlogs.value = data.totalBlogs || 0
     totalPages.value = data.totalPages || 1
   } catch (err) {
-    error.value = err.response?.data?.message || 'Failed to load your blogs'
+    error.value = err.response?.data?.message || t('myBlogs.failedLoad')
   } finally {
     loading.value = false
   }
@@ -179,7 +183,7 @@ const changePage = (page) => {
 }
 
 const handleDelete = async (blog) => {
-  if (!confirm(`Delete "${blog.title}"? This action cannot be undone.`)) return
+  if (!confirm(t('myBlogs.confirmDelete', { title: blog.title }))) return
 
   deletingId.value = blog._id
   error.value = ''
@@ -191,7 +195,7 @@ const handleDelete = async (blog) => {
     }
     await fetchBlogs()
   } catch (err) {
-    error.value = err.response?.data?.message || 'Failed to delete blog'
+    error.value = err.response?.data?.message || t('myBlogs.failedDelete')
   } finally {
     deletingId.value = null
   }

@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import i18n from './i18n'
 import { useAuthStore } from './stores/auth'
 
 // Initialize theme state on load
@@ -21,6 +22,9 @@ const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)
 app.use(router)
+app.use(i18n)
+
+document.documentElement.lang = i18n.global.locale.value
 
 // Initialize auth state before mounting
 const authStore = useAuthStore()

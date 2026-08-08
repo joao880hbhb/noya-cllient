@@ -13,7 +13,7 @@
         @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
         :class="editor.isActive('heading', { level: 1 }) ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm font-bold"
-        title="Heading 1"
+        :title="t('editor.heading1')"
       >
         H1
       </button>
@@ -22,7 +22,7 @@
         @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
         :class="editor.isActive('heading', { level: 2 }) ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm font-bold"
-        title="Heading 2"
+        :title="t('editor.heading2')"
       >
         H2
       </button>
@@ -31,7 +31,7 @@
         @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
         :class="editor.isActive('heading', { level: 3 }) ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm font-bold"
-        title="Heading 3"
+        :title="t('editor.heading3')"
       >
         H3
       </button>
@@ -44,7 +44,7 @@
         @click="editor.chain().focus().toggleBold().run()"
         :class="editor.isActive('bold') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm font-bold"
-        title="Bold"
+        :title="t('editor.bold')"
       >
         B
       </button>
@@ -53,7 +53,7 @@
         @click="editor.chain().focus().toggleItalic().run()"
         :class="editor.isActive('italic') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm italic"
-        title="Italic"
+        :title="t('editor.italic')"
       >
         I
       </button>
@@ -62,7 +62,7 @@
         @click="editor.chain().focus().toggleUnderline().run()"
         :class="editor.isActive('underline') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm underline"
-        title="Underline"
+        :title="t('editor.underline')"
       >
         U
       </button>
@@ -71,7 +71,7 @@
         @click="editor.chain().focus().toggleStrike().run()"
         :class="editor.isActive('strike') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm line-through"
-        title="Strikethrough"
+        :title="t('editor.strikethrough')"
       >
         S
       </button>
@@ -80,7 +80,7 @@
         @click="editor.chain().focus().toggleCode().run()"
         :class="editor.isActive('code') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm font-mono"
-        title="Inline code"
+        :title="t('editor.inlineCode')"
       >
         &lt;/&gt;
       </button>
@@ -93,27 +93,27 @@
         @click="editor.chain().focus().toggleBulletList().run()"
         :class="editor.isActive('bulletList') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm"
-        title="Bullet list"
+        :title="t('editor.bulletList')"
       >
-        &bull; List
+        &bull; {{ t('editor.list') }}
       </button>
       <button
         type="button"
         @click="editor.chain().focus().toggleOrderedList().run()"
         :class="editor.isActive('orderedList') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm"
-        title="Numbered list"
+        :title="t('editor.numberedList')"
       >
-        1. List
+        1. {{ t('editor.list') }}
       </button>
       <button
         type="button"
         @click="editor.chain().focus().toggleBlockquote().run()"
         :class="editor.isActive('blockquote') ? activeBtnClass : btnClass"
         class="px-2 py-1 rounded text-sm"
-        title="Quote"
+        :title="t('editor.quote')"
       >
-        &ldquo; Quote
+        &ldquo; {{ t('editor.quote') }}
       </button>
 
       <span class="w-px h-5 bg-gray-300 mx-1"></span>
@@ -125,7 +125,7 @@
           @click="showTextPalette = !showTextPalette"
           :class="editor.getAttributes('textStyle').color ? activeBtnClass : btnClass"
           class="px-2 py-1 rounded text-sm"
-          title="Text color"
+          :title="t('editor.textColor')"
         >
           <span
             class="inline-block w-3.5 h-3.5 rounded-full border border-gray-400"
@@ -148,7 +148,7 @@
             type="button"
             @click="applyTextColor(null)"
             class="w-6 h-6 rounded-full border border-gray-300 text-[10px] text-gray-500 hover:bg-gray-100"
-            title="Reset color"
+            :title="t('editor.resetColor')"
           >
             A
           </button>
@@ -162,7 +162,7 @@
           @click="showHighlightPalette = !showHighlightPalette"
           :class="editor.isActive('highlight') ? activeBtnClass : btnClass"
           class="px-2 py-1 rounded text-sm"
-          title="Highlight"
+          :title="t('editor.highlight')"
         >
           <span
             class="inline-block px-1 rounded-sm text-xs font-bold"
@@ -186,7 +186,7 @@
             type="button"
             @click="applyHighlight(null)"
             class="w-6 h-6 rounded-full border border-gray-300 text-[10px] text-gray-500 hover:bg-gray-100"
-            title="Remove highlight"
+            :title="t('editor.removeHighlight')"
           >
             A
           </button>
@@ -201,7 +201,7 @@
         @click="editor.chain().focus().undo().run()"
         :disabled="!editor.can().undo()"
         class="px-2 py-1 rounded text-sm text-gray-600 hover:bg-gray-200 disabled:opacity-40"
-        title="Undo"
+        :title="t('editor.undo')"
       >
         &#8630;
       </button>
@@ -210,7 +210,7 @@
         @click="editor.chain().focus().redo().run()"
         :disabled="!editor.can().redo()"
         class="px-2 py-1 rounded text-sm text-gray-600 hover:bg-gray-200 disabled:opacity-40"
-        title="Redo"
+        :title="t('editor.redo')"
       >
         &#8631;
       </button>
@@ -223,11 +223,14 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import { TextStyle } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
+
+const { t } = useI18n()
 
 const props = defineProps({
   modelValue: {

@@ -18,20 +18,20 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">Loading profile</p>
+        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">{{ t('publicProfile.loading') }}</p>
       </div>
 
       <!-- Error state -->
       <div v-else-if="error" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
         <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
-          Couldn't load this profile
+          {{ t('publicProfile.loadError') }}
         </p>
         <p class="text-[15px] text-[#4B4B4B] mb-6">{{ error }}</p>
         <button
           @click="router.push('/')"
           class="inline-flex items-center px-5 py-2.5 bg-[#111111] text-white rounded-[2px] text-[13px] font-medium shadow-[0_1px_2px_rgba(0,0,0,0.05),0_10px_20px_-8px_rgba(0,0,0,0.35)] hover:bg-black transition-colors"
         >
-          Back to home
+          {{ t('publicProfile.backHome') }}
         </button>
       </div>
 
@@ -47,7 +47,7 @@
 
           <!-- Avatar & identity -->
           <div class="flex flex-col items-center text-center">
-            <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-6">Author profile</p>
+            <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-6">{{ t('publicProfile.authorProfile') }}</p>
 
             <img
               v-if="user.picture"
@@ -113,7 +113,7 @@
                     d="M3 12h18M12 3c2.3 2.5 3.5 5.6 3.5 9s-1.2 6.5-3.5 9c-2.3-2.5-3.5-5.6-3.5-9s1.2-6.5 3.5-9z"
                   />
                 </svg>
-                Website
+                {{ t('publicProfile.website') }}
               </a>
             </div>
 
@@ -138,7 +138,7 @@
                   d="M8.1 10.7l7.8-4.4M8.1 13.3l7.8 4.4"
                 />
               </svg>
-              Bagikan profil
+              {{ t('publicProfile.shareProfile') }}
             </button>
           </div>
 
@@ -166,7 +166,7 @@
               <p class="text-[17px] font-display text-[#111111] tabular-nums">
                 {{ formatNumber(totalBlogs) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">Posts</p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">{{ t('publicProfile.posts') }}</p>
             </div>
             <div class="flex flex-col items-center gap-1.5 border-x border-[#F0F0F0]">
               <svg
@@ -185,7 +185,7 @@
               <p class="text-[17px] font-display text-[#111111] tabular-nums">
                 {{ formatNumber(totalLikes) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">Likes</p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">{{ t('publicProfile.likes') }}</p>
             </div>
             <div class="flex flex-col items-center gap-1.5">
               <svg
@@ -205,7 +205,7 @@
               <p class="text-[17px] font-display text-[#111111] tabular-nums">
                 {{ formatNumber(blogViews) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">Views</p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">{{ t('publicProfile.views') }}</p>
             </div>
           </div>
         </div>
@@ -213,7 +213,7 @@
         <!-- Section label -->
         <div class="mt-14 mb-6 flex items-center gap-4">
           <h2 class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase whitespace-nowrap">
-            Stories
+            {{ t('publicProfile.stories') }}
           </h2>
           <span class="h-px flex-1 bg-[#E7E7E7]"></span>
         </div>
@@ -243,7 +243,7 @@
                   d="M4 4v7h7M20 20v-7h-7M5.868 16.5a8 8 0 0014.1-6M18.132 7.5a8 8 0 00-14.1 6"
                 />
               </svg>
-              Repost · {{ blog.author?.displayName || 'Penulis' }}
+              {{ t('publicProfile.repost') }} · {{ blog.author?.displayName || t('publicProfile.author') }}
             </div>
             <div class="group flex items-center gap-4">
               <!-- Thumbnail -->
@@ -362,8 +362,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
             </svg>
           </div>
-          <h3 class="mt-4 font-display italic text-[19px] text-[#111111]">No articles yet</h3>
-          <p class="mt-1 text-[13px] text-[#8A8A8A]">Check back later for new stories.</p>
+          <h3 class="mt-4 font-display italic text-[19px] text-[#111111]">{{ t('publicProfile.noArticles') }}</h3>
+          <p class="mt-1 text-[13px] text-[#8A8A8A]">{{ t('publicProfile.checkBack') }}</p>
         </div>
       </template>
 
@@ -382,7 +382,7 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
         </svg>
-        Write
+        {{ t('publicProfile.write') }}
       </router-link>
 
       <!-- Toast -->
@@ -401,6 +401,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { profileAPI, blogAPI } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 import { getInitials, formatNumber, formatRelativeTime } from '@/utils/helpers'
@@ -408,6 +409,7 @@ import { getInitials, formatNumber, formatRelativeTime } from '@/utils/helpers'
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const user = ref(null)
 const blogs = ref([])
@@ -448,7 +450,7 @@ const fetchProfile = async () => {
     blogs.value = blogsRes.data.blogs || []
     totalBlogs.value = blogsRes.data.totalBlogs || 0
   } catch (err) {
-    error.value = err.response?.data?.message || 'Profile not found'
+    error.value = err.response?.data?.message || t('publicProfile.notFound')
   } finally {
     loading.value = false
   }
@@ -474,7 +476,7 @@ const handleShare = async () => {
   if (navigator.share) {
     try {
       await navigator.share({
-        title: user.value?.displayName || 'Profil Noya',
+        title: user.value?.displayName || t('publicProfile.profileName'),
         text: user.value?.bio || '',
         url,
       })
@@ -486,9 +488,9 @@ const handleShare = async () => {
 
   try {
     await navigator.clipboard.writeText(url)
-    showToast('Link profil disalin')
+    showToast(t('publicProfile.linkCopied'))
   } catch {
-    showToast('Gagal membagikan profil')
+    showToast(t('publicProfile.shareFailed'))
   }
 }
 </script>

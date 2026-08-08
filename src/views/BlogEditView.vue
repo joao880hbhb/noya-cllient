@@ -18,20 +18,20 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">Loading entry</p>
+        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">{{ t('blogEdit.loading') }}</p>
       </div>
 
       <!-- Error state -->
       <div v-else-if="loadError" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
         <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
-          Couldn't load this entry
+          {{ t('blogEdit.loadError') }}
         </p>
         <p class="text-[15px] text-[#4B4B4B] mb-6">{{ loadError }}</p>
         <button
           @click="router.push('/blogs/my-posts')"
           class="inline-flex items-center px-5 py-2.5 bg-[#111111] text-white rounded-[2px] text-[13px] font-medium shadow-[0_1px_2px_rgba(0,0,0,0.05),0_10px_20px_-8px_rgba(0,0,0,0.35)] hover:bg-black transition-colors"
         >
-          Back to my posts
+          {{ t('blogEdit.backToPosts') }}
         </button>
       </div>
 
@@ -41,13 +41,12 @@
         <div class="flex items-start justify-between gap-6 mb-14">
           <div>
             <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-2">
-              Compose &middot; Editing entry
+              {{ t('blogEdit.composeEditing') }}
             </p>
             <h1
               class="font-display italic text-[34px] sm:text-[42px] leading-[1.05] text-[#111111]"
             >
-              Revise this<br class="hidden sm:block" />
-              entry.
+              {{ t('blogEdit.revise') }}
             </h1>
           </div>
           <div class="text-right pt-1 shrink-0">
@@ -55,10 +54,10 @@
               @click="router.back()"
               class="text-[12px] font-medium text-[#6B6B6B] hover:text-[#111111] transition-colors"
             >
-              &larr; Back
+              &larr; {{ t('blogEdit.back') }}
             </button>
             <p class="hidden sm:block text-[11px] text-[#B0B0B0] tabular-nums mt-2">
-              {{ contentLength }} chars
+              {{ contentLength }} {{ t('blogEdit.chars') }}
             </p>
           </div>
         </div>
@@ -85,7 +84,7 @@
               <div
                 class="flex items-center justify-between px-8 sm:px-14 pt-9 pb-7 border-b border-[#F0F0F0]"
               >
-                <span class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase">Status</span>
+                <span class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase">{{ t('blogEdit.status') }}</span>
                 <div class="flex items-center gap-5">
                   <button
                     v-for="opt in statusOptions"
@@ -112,7 +111,7 @@
                   for="title"
                   class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
                 >
-                  Title <span class="text-[#B3261E]">*</span>
+                  {{ t('blogEdit.title') }} <span class="text-[#B3261E]">*</span>
                 </label>
                 <div>
                   <input
@@ -121,7 +120,7 @@
                     type="text"
                     :maxlength="BLOG_TITLE_MAX_LENGTH"
                     class="w-full text-[22px] font-display text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 px-0 pb-2 bg-transparent transition-colors"
-                    placeholder="Give your post a title"
+                    :placeholder="t('blogEdit.titlePlaceholder')"
                   />
                   <p class="mt-2 text-[11px] text-[#B0B0B0] tabular-nums">
                     {{ title.length }} / {{ BLOG_TITLE_MAX_LENGTH }}
@@ -134,12 +133,12 @@
                 class="grid md:grid-cols-[140px_1fr] gap-x-10 sm:gap-x-14 px-8 sm:px-14 py-10 sm:py-12 border-b border-[#F0F0F0]"
               >
                 <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                  Body <span class="text-[#B3261E]">*</span>
+                  {{ t('blogEdit.body') }} <span class="text-[#B3261E]">*</span>
                 </label>
                 <div>
                   <BlogEditor v-model="content" />
                   <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
-                    {{ contentLength }} characters
+                    {{ contentLength }} {{ t('blogEdit.characters') }}
                   </p>
                 </div>
               </div>
@@ -152,7 +151,7 @@
                   for="excerpt"
                   class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
                 >
-                  Excerpt
+                  {{ t('blogEdit.excerpt') }}
                 </label>
                 <div>
                   <textarea
@@ -161,7 +160,7 @@
                     rows="2"
                     :maxlength="BLOG_EXCERPT_LENGTH"
                     class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[2px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
-                    placeholder="A short line shown in blog listings"
+                    :placeholder="t('blogEdit.excerptPlaceholder')"
                   ></textarea>
                   <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
                     {{ excerpt.length }} / {{ BLOG_EXCERPT_LENGTH }}
@@ -174,7 +173,7 @@
                 class="grid md:grid-cols-[140px_1fr] gap-x-10 sm:gap-x-14 px-8 sm:px-14 py-10 sm:py-12 border-b border-[#F0F0F0]"
               >
                 <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                  Cover
+                  {{ t('blogEdit.cover') }}
                 </label>
                 <div>
                   <div
@@ -191,7 +190,7 @@
                     v-else
                     class="border border-dashed border-[#D8D8D8] rounded-[2px] h-28 flex items-center justify-center mb-3"
                   >
-                    <span class="text-[12px] text-[#B0B0B0]">No image selected</span>
+                    <span class="text-[12px] text-[#B0B0B0]">{{ t('blogEdit.noImage') }}</span>
                   </div>
 
                   <div class="flex items-center gap-3">
@@ -206,10 +205,10 @@
                       for="coverImage"
                       class="inline-flex items-center px-3.5 py-1.5 border border-[#111111] rounded-[2px] text-[12px] font-medium text-[#111111] hover:bg-[#111111] hover:text-white transition-colors cursor-pointer"
                     >
-                      {{ coverPreview ? 'Replace' : 'Upload image' }}
+                      {{ coverPreview ? t('blogEdit.replace') : t('blogEdit.uploadImage') }}
                     </label>
                     <span class="text-[11px] text-[#C4C4C4] ml-auto"
-                      >Max {{ MAX_FILE_SIZE / 1024 / 1024 }}MB</span
+                      >{{ t('blogEdit.maxFileSize', { max: MAX_FILE_SIZE / 1024 / 1024 }) }}</span
                     >
                   </div>
                 </div>
@@ -223,7 +222,7 @@
                   for="tags"
                   class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
                 >
-                  Tags
+                  {{ t('blogEdit.tags') }}
                 </label>
                 <div>
                   <input
@@ -231,7 +230,7 @@
                     v-model="tagsInput"
                     type="text"
                     class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 px-0 pb-2 bg-transparent transition-colors"
-                    placeholder="music, review, tutorial"
+                    :placeholder="t('blogEdit.tagsPlaceholder')"
                   />
                   <div v-if="parsedTags.length" class="flex flex-wrap gap-1.5 mt-3">
                     <span
@@ -243,7 +242,7 @@
                     </span>
                   </div>
                   <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
-                    Separate with commas &mdash; optional
+                    {{ t('blogEdit.tagsHint') }}
                   </p>
                 </div>
               </div>
@@ -253,7 +252,7 @@
                 class="grid md:grid-cols-[140px_1fr] gap-x-10 sm:gap-x-14 px-8 sm:px-14 py-10 sm:py-12"
               >
                 <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                  Soundtrack
+                  {{ t('blogEdit.soundtrack') }}
                 </label>
                 <div>
                   <!-- Selected -->
@@ -280,7 +279,7 @@
                       @click="selectedMusic = null"
                       class="text-[12px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors shrink-0"
                     >
-                      Remove
+                      {{ t('blogEdit.remove') }}
                     </button>
                   </div>
 
@@ -290,7 +289,7 @@
                       v-model="searchQuery"
                       type="text"
                       class="flex-1 text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 px-0 pb-2 bg-transparent transition-colors"
-                      placeholder="Search for a track&hellip;"
+                      :placeholder="t('blogEdit.searchTrack')"
                       @keyup.enter.prevent="searchMusic"
                     />
                     <svg
@@ -350,7 +349,7 @@
                     {{ musicSearchError }}
                   </p>
                   <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
-                    Optional &mdash; attach a track to this post
+                    {{ t('blogEdit.trackOptional') }}
                   </p>
                 </div>
               </div>
@@ -364,7 +363,7 @@
               @click="router.push(`/blogs/${blog.slug}`)"
               class="px-4 py-2 text-[13px] font-medium text-[#6B6B6B] hover:text-[#111111] transition-colors"
             >
-              Cancel
+              {{ t('blogEdit.cancel') }}
             </button>
             <button
               type="submit"
@@ -391,7 +390,7 @@
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                 ></path>
               </svg>
-              {{ saving ? 'Saving…' : 'Save changes' }}
+              {{ saving ? t('blogEdit.saving') : t('blogEdit.saveChanges') }}
             </button>
           </div>
         </form>
@@ -403,6 +402,7 @@
 <script setup>
 import { ref, watch, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { blogAPI, musicAPI } from '@/services/api'
 import BlogEditor from '@/components/BlogEditor.vue'
 import { debounce } from '@/utils/helpers'
@@ -411,11 +411,11 @@ import {
   BLOG_EXCERPT_LENGTH,
   MAX_FILE_SIZE,
   ALLOWED_IMAGE_TYPES,
-  SUCCESS_MESSAGES,
 } from '@/utils/constants'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 // Blog being edited
 const blog = ref(null)
@@ -429,11 +429,11 @@ const excerpt = ref('')
 const tagsInput = ref('')
 const status = ref('draft')
 
-const statusOptions = [
-  { value: 'draft', label: 'Draft' },
-  { value: 'private', label: 'Private' },
-  { value: 'published', label: 'Published' },
-]
+const statusOptions = computed(() => [
+  { value: 'draft', label: t('blogEdit.statusDraft') },
+  { value: 'private', label: t('blogEdit.statusPrivate') },
+  { value: 'published', label: t('blogEdit.statusPublished') },
+])
 
 // Cover image
 const coverFile = ref(null)
@@ -488,7 +488,7 @@ const fetchBlog = async () => {
     const response = await blogAPI.getBlogBySlug(route.params.slug)
     const data = response.data.blog
     if (!data) {
-      loadError.value = 'Blog not found'
+      loadError.value = t('blogEdit.blogNotFound')
       return
     }
 
@@ -501,7 +501,7 @@ const fetchBlog = async () => {
     coverPreview.value = data.coverImage || ''
     if (data.music?.title) selectedMusic.value = data.music
   } catch (err) {
-    loadError.value = err.response?.data?.message || 'Failed to load blog'
+    loadError.value = err.response?.data?.message || t('blogEdit.loadFailed')
   } finally {
     loading.value = false
   }
@@ -513,12 +513,12 @@ const handleCoverChange = (event) => {
   if (!file) return
 
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    formError.value = 'Invalid file type. Please upload an image file.'
+    formError.value = t('blogEdit.invalidFileType')
     return
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    formError.value = `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`
+    formError.value = t('blogEdit.fileTooLarge', { max: MAX_FILE_SIZE / 1024 / 1024 })
     return
   }
 
@@ -545,10 +545,10 @@ const searchMusic = async () => {
     })
     musicResults.value = response.data.data || []
     if (!musicResults.value.length) {
-      musicSearchError.value = 'No tracks found. Try a different search.'
+      musicSearchError.value = t('blogEdit.noTracksFound')
     }
   } catch (err) {
-    musicSearchError.value = err.response?.data?.message || 'Failed to search music'
+    musicSearchError.value = err.response?.data?.message || t('blogEdit.searchFailed')
   } finally {
     musicSearching.value = false
   }
@@ -582,15 +582,15 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   if (!title.value.trim()) {
-    formError.value = 'Title is required'
+    formError.value = t('blogEdit.titleRequired')
     return
   }
   if (title.value.trim().length < 3) {
-    formError.value = 'Title must be at least 3 characters'
+    formError.value = t('blogEdit.titleTooShort')
     return
   }
   if (contentLength.value < 10) {
-    formError.value = 'Content must be at least 10 characters'
+    formError.value = t('blogEdit.contentTooShort')
     return
   }
 
@@ -615,7 +615,7 @@ const handleSubmit = async () => {
   saving.value = true
   try {
     const response = await blogAPI.updateBlog(blog.value._id, formData)
-    successMessage.value = SUCCESS_MESSAGES.BLOG_UPDATED
+    successMessage.value = t('blogEdit.updatedSuccess')
     const updated = response.data.blog
     if (updated?.slug) {
       router.push(`/blogs/${updated.slug}`)
@@ -623,7 +623,7 @@ const handleSubmit = async () => {
       router.push(`/blogs/${blog.value.slug}`)
     }
   } catch (err) {
-    formError.value = err.response?.data?.message || 'Failed to update blog'
+    formError.value = err.response?.data?.message || t('blogEdit.updateFailed')
   } finally {
     saving.value = false
   }

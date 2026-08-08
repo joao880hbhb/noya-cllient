@@ -16,7 +16,7 @@
       <input
         v-model="query"
         type="text"
-        placeholder="Cari pengguna berdasarkan username"
+        :placeholder="t('userSearch.placeholder')"
         class="w-full pl-11 pr-4 py-3 rounded-full bg-gray-100 border border-transparent focus:bg-white focus:border-[#5B4BFF] focus:ring-2 focus:ring-[#5B4BFF]/20 text-sm text-gray-900 placeholder-gray-400 outline-none transition"
         @input="onInput"
         @focus="open = true"
@@ -69,7 +69,7 @@
           </div>
           <div class="min-w-0">
             <p class="text-sm font-semibold text-gray-900 truncate">
-              {{ user.displayName || 'User' }}
+              {{ user.displayName || t('userSearch.user') }}
             </p>
             <!-- <p class="text-xs text-gray-400 truncate">@{{ shortenId(user.publicId) }}</p> -->
             <p v-if="user.bio" class="text-xs text-gray-500 truncate">{{ user.bio }}</p>
@@ -89,7 +89,7 @@
       </div>
 
       <div v-else class="p-6 text-center">
-        <p class="text-sm text-gray-500">Tidak ada pengguna ditemukan</p>
+        <p class="text-sm text-gray-500">{{ t('userSearch.noUsers') }}</p>
       </div>
     </div>
   </div>
@@ -98,10 +98,12 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { profileAPI } from '@/services/api'
 import { getInitials } from '@/utils/helpers'
 
 const router = useRouter()
+const { t } = useI18n()
 
 const query = ref('')
 const users = ref([])
@@ -123,7 +125,7 @@ const onInput = () => {
       users.value = response.data.users || []
       error.value = ''
     } catch (err) {
-      error.value = err.response?.data?.message || 'Gagal mencari pengguna'
+      error.value = err.response?.data?.message || t('userSearch.searchFailed')
     } finally {
       loading.value = false
     }

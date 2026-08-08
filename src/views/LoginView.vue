@@ -37,7 +37,7 @@
             ]"
           >
             <span class="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
-            Share stories that echo
+            {{ t('login.badge') }}
           </div>
           <h1 
             :class="[
@@ -45,8 +45,8 @@
               isDark ? 'text-white' : 'text-stone-900'
             ]"
           >
-            Write something<br/>
-            worth <span class="bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">reading.</span>
+            {{ t('login.headline1') }}<br/>
+            <span class="bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">{{ t('login.headline2') }}</span>
           </h1>
           <p 
             :class="[
@@ -54,14 +54,14 @@
               isDark ? 'text-gray-400' : 'text-stone-600'
             ]"
           >
-            Noya adalah ruang tenang untuk menulis cerita, menyematkan musik latar kesukaan Anda, dan berinteraksi secara hangat bersama penulis lainnya.
+            {{ t('login.hero') }}
           </p>
           <div class="pt-2 flex flex-wrap gap-4 items-center">
             <button
               @click="router.push('/')"
               class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg shadow-purple-600/10"
             >
-              Mulai tanpa login
+              {{ t('login.startWithoutLogin') }}
               <span>&rarr;</span>
             </button>
             <button
@@ -73,7 +73,7 @@
                   : 'text-purple-700 border-stone-200 hover:text-purple-900 hover:bg-stone-100 font-medium'
               ]"
             >
-              Pelajari fitur utama
+              {{ t('login.learnFeatures') }}
             </button>
           </div>
         </div>
@@ -96,8 +96,8 @@
             ></div>
 
             <div class="text-center mb-8">
-              <h2 class="text-2xl font-bold">Sign in to Noya</h2>
-              <p :class="['text-sm mt-1', isDark ? 'text-gray-400' : 'text-stone-500']">Gunakan akun Google Anda</p>
+              <h2 class="text-2xl font-bold">{{ t('login.signInTitle') }}</h2>
+              <p :class="['text-sm mt-1', isDark ? 'text-gray-400' : 'text-stone-500']">{{ t('login.useGoogle') }}</p>
             </div>
 
             <!-- Error message -->
@@ -122,7 +122,7 @@
                     @click="authStore.clearError"
                     class="ml-auto flex-shrink-0 rounded-md p-1 text-red-400 hover:bg-red-500/20 hover:text-red-300 focus:outline-none"
                   >
-                    <span class="sr-only">Dismiss</span>
+                    <span class="sr-only">{{ t('login.dismiss') }}</span>
                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                       <path
                         fill-rule="evenodd"
@@ -145,7 +145,7 @@
 
                 <div v-if="authStore.isLoading" class="flex flex-col items-center justify-center py-3">
                   <div class="h-6 w-6 animate-spin rounded-full border-2 border-purple-500/20 border-t-purple-500"></div>
-                  <p class="mt-3 text-sm text-purple-300">Signing in...</p>
+                  <p class="mt-3 text-sm text-purple-300">{{ t('login.signingIn') }}</p>
                 </div>
               </div>
             </div>
@@ -174,7 +174,7 @@
                   ]"
                 />
               </button>
-              <span :class="['text-xs', isDark ? 'text-gray-400' : 'text-stone-500']">Ingat saya</span>
+              <span :class="['text-xs', isDark ? 'text-gray-400' : 'text-stone-500']">{{ t('login.rememberMe') }}</span>
             </div>
           </div>
         </div>
@@ -197,10 +197,10 @@
               isDark ? 'text-white' : 'text-stone-900'
             ]"
           >
-            Menulis, Mendengarkan, Terhubung.
+            {{ t('login.featuresTitle') }}
           </h2>
           <p :class="['text-sm mt-2', isDark ? 'text-gray-400' : 'text-stone-500']">
-            Didesain minimalis untuk menghadirkan ketenangan dalam berkarya.
+            {{ t('login.featuresSubtitle') }}
           </p>
         </div>
 
@@ -227,10 +227,10 @@
               </svg>
             </div>
             <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
-              Editor Tanpa Batas
+              {{ t('login.feature1Title') }}
             </h3>
             <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
-              Fokus penuh pada tulisan Anda dengan antarmuka penulisan bergaya minimalis, bersih, bebas dari gangguan notifikasi yang bising.
+              {{ t('login.feature1Desc') }}
             </p>
           </div>
 
@@ -256,10 +256,10 @@
               </svg>
             </div>
             <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
-              Soundtrack Suasana
+              {{ t('login.feature2Title') }}
             </h3>
             <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
-              Sematkan musik latar dari Deezer untuk memperkuat emosi dan atmosfer cerita Anda, memberikan pengalaman membaca yang unik.
+              {{ t('login.feature2Desc') }}
             </p>
           </div>
 
@@ -285,10 +285,10 @@
               </svg>
             </div>
             <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
-              Interaksi Hangat
+              {{ t('login.feature3Title') }}
             </h3>
             <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
-              Bagikan cerita, tinggalkan komentar mendalam, sukai tulisan, dan lakukan repost postingan menarik dari sesama penulis.
+              {{ t('login.feature3Desc') }}
             </p>
           </div>
         </div>
@@ -310,10 +310,10 @@
               isDark ? 'text-white' : 'text-stone-900'
             ]"
           >
-            Sedang Hangat Dibicarakan
+            {{ t('login.trendingTitle') }}
           </h2>
           <p :class="['text-sm mt-2', isDark ? 'text-gray-400' : 'text-stone-500']">
-            Intip beberapa tulisan terbaru dari komunitas Noya.
+            {{ t('login.trendingSubtitle') }}
           </p>
         </div>
 
@@ -356,7 +356,7 @@
               <div class="flex items-center justify-between gap-6">
                 <div class="flex-1 min-w-0">
                   <div :class="['flex items-center gap-2 mb-2 text-xs transition-colors', isDark ? 'text-gray-450' : 'text-stone-500']">
-                    <span class="font-medium">{{ blog.author?.displayName || 'Penulis Noya' }}</span>
+                    <span class="font-medium">{{ blog.author?.displayName || t('login.authorNoya') }}</span>
                     <span>&middot;</span>
                     <span>{{ formatRelativeTime(blog.publishedAt || blog.createdAt) }}</span>
                   </div>
@@ -369,7 +369,7 @@
                     {{ blog.title }}
                   </h3>
                   <p :class="['text-xs sm:text-sm mt-1.5 line-clamp-2 leading-relaxed transition-colors', isDark ? 'text-gray-400' : 'text-stone-600']">
-                    {{ blog.excerpt || 'Klik untuk membaca selengkapnya cerita menarik ini...' }}
+                    {{ blog.excerpt || t('login.excerptFallback') }}
                   </p>
                 </div>
                 <div 
@@ -386,7 +386,7 @@
           </div>
 
           <div v-else class="text-center py-10 text-gray-500 text-sm">
-            Belum ada cerita publik yang dapat ditampilkan.
+            {{ t('login.noPublicStories') }}
           </div>
         </div>
       </div>
@@ -408,10 +408,10 @@
             isDark ? 'text-white' : 'text-stone-900'
           ]"
         >
-          Siap untuk membagikan ceritamu?
+          {{ t('login.ctaTitle') }}
         </h2>
         <p :class="['text-sm', isDark ? 'text-gray-400' : 'text-stone-600']">
-          Gabung sekarang dan jadilah bagian dari komunitas menulis yang hangat di Noya.
+          {{ t('login.ctaDesc') }}
         </p>
         <div class="pt-4">
           <button
@@ -423,7 +423,7 @@
                 : 'bg-stone-900 text-white hover:bg-stone-800 shadow-stone-200'
             ]"
           >
-            Mulai Menulis
+            {{ t('login.startWriting') }}
             <span>&rarr;</span>
           </button>
         </div>
@@ -437,7 +437,7 @@
         isDark ? 'border-white/[0.05] text-gray-550' : 'border-stone-200 text-stone-400'
       ]"
     >
-      <p>&copy; 2026 Noya. All rights reserved.</p>
+      <p>&copy; 2026 Noya. {{ t('login.allRightsReserved') }}</p>
     </footer>
   </div>
 </template>
@@ -445,12 +445,14 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/auth";
 import { blogAPI } from "@/services/api";
 import { formatRelativeTime } from "@/utils/helpers";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { t } = useI18n();
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 

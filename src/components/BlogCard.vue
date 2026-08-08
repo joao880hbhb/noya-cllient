@@ -45,7 +45,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        Trending
+        {{ t('blogCard.trending') }}
       </span>
     </div>
 
@@ -95,7 +95,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { getInitials, formatNumber, formatRelativeTime } from '@/utils/helpers'
+
+const { t } = useI18n()
 
 defineProps({
   blog: {

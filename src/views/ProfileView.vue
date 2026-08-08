@@ -18,8 +18,7 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-sm text-gray-400">Loading account…</p>
-      </div>
+        <p class="text-sm text-gray-400">{{ t('profile.loading') }}</p>      </div>
 
       <template v-else-if="authStore.user">
         <!-- Header card -->
@@ -60,7 +59,7 @@
                 class="h-1.5 w-1.5 rounded-full"
                 :class="authStore.user.isPublic === false ? 'bg-gray-400' : 'bg-green-500'"
               ></span>
-              {{ authStore.user.isPublic === false ? 'Private profile' : 'Public profile' }}
+              {{ authStore.user.isPublic === false ? t('profile.privateProfile') : t('profile.publicProfile') }}
             </span>
           </div>
 
@@ -72,62 +71,61 @@
                 @click="handleEditProfile"
                 class="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-lg hover:bg-black transition-colors"
               >
-                Edit profile
-              </button>
+              {{ t('profile.editProfile') }}
+            </button>
               <router-link
                 v-if="authStore.user.publicId"
                 :to="`/profile/${authStore.user.publicId}`"
                 class="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
               >
-                View public profile
+                {{ t('profile.viewPublicProfile') }}
               </router-link>
             </div>
             <button
               @click="handleLogout"
               class="text-sm font-medium text-gray-400 hover:text-red-600 transition-colors"
             >
-              Logout
-            </button>
-          </div>
+              {{ t('profile.logout') }}
+            </button>          </div>
         </div>
 
         <!-- Personal information -->
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Personal information</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('profile.personalInfo') }}</h2>
           <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
             <div v-if="authStore.user.firstName">
-              <dt class="text-xs text-gray-400">First name</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.firstName') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.firstName }}
               </dd>
             </div>
             <div v-if="authStore.user.lastName">
-              <dt class="text-xs text-gray-400">Last name</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.lastName') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.lastName }}
               </dd>
             </div>
             <div v-if="authStore.user.phoneNumber">
-              <dt class="text-xs text-gray-400">Phone number</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.phoneNumber') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.phoneNumber }}
               </dd>
             </div>
             <div v-if="dateOfBirthDisplay">
-              <dt class="text-xs text-gray-400">Date of birth</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.dateOfBirth') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ dateOfBirthDisplay }}
               </dd>
             </div>
             <div v-if="authStore.user.gender">
-              <dt class="text-xs text-gray-400">Gender</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.gender') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900 capitalize">
                 {{ formattedGender }}
               </dd>
             </div>
           </dl>
           <p v-if="!hasPersonalInfo" class="text-sm text-gray-400">
-            No personal information added yet.
+            {{ t('profile.noPersonalInfo') }}
           </p>
         </div>
 
@@ -136,34 +134,34 @@
           v-if="hasAddress"
           class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8"
         >
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Address</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('profile.address') }}</h2>
           <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
             <div v-if="authStore.user.address?.street" class="sm:col-span-2">
-              <dt class="text-xs text-gray-400">Street</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.street') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.address.street }}
               </dd>
             </div>
             <div v-if="authStore.user.address?.city">
-              <dt class="text-xs text-gray-400">City</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.city') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.address.city }}
               </dd>
             </div>
             <div v-if="authStore.user.address?.state">
-              <dt class="text-xs text-gray-400">State</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.state') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.address.state }}
               </dd>
             </div>
             <div v-if="authStore.user.address?.postalCode">
-              <dt class="text-xs text-gray-400">Postal code</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.postalCode') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.address.postalCode }}
               </dd>
             </div>
             <div v-if="authStore.user.address?.country">
-              <dt class="text-xs text-gray-400">Country</dt>
+              <dt class="text-xs text-gray-400">{{ t('profile.country') }}</dt>
               <dd class="mt-0.5 text-sm text-gray-900">
                 {{ authStore.user.address.country }}
               </dd>
@@ -176,7 +174,7 @@
           v-if="hasSocialMedia"
           class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8"
         >
-          <h2 class="text-sm font-semibold text-gray-900 mb-5">Social media</h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-5">{{ t('profile.socialMedia') }}</h2>
           <ul class="space-y-3">
             <li v-if="authStore.user.socialMedia?.website" class="flex items-center gap-3">
               <span
@@ -296,13 +294,13 @@
         v-else-if="authStore.error"
         class="bg-white border border-gray-200 rounded-xl shadow-sm p-10 text-center"
       >
-        <p class="text-sm font-medium text-red-600 mb-2">Couldn't load your profile</p>
+        <p class="text-sm font-medium text-red-600 mb-2">{{ t('profile.loadError') }}</p>
         <p class="text-sm text-gray-500 mb-6">{{ authStore.error }}</p>
         <button
           @click="authStore.fetchUserProfile()"
           class="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-lg hover:bg-black transition-colors"
         >
-          Try again
+          {{ t('profile.tryAgain') }}
         </button>
       </div>
     </div>
@@ -312,11 +310,13 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { getInitials, formatDate } from '@/utils/helpers'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const username = computed(
   () => authStore.user?.displayName || authStore.user?.name || authStore.user?.publicId || '',
@@ -355,7 +355,7 @@ const handleEditProfile = () => {
 }
 
 const handleLogout = async () => {
-  if (confirm('Are you sure you want to logout?')) {
+  if (confirm(t('profile.logoutConfirm'))) {
     await authStore.logout()
     router.push('/login')
   }
