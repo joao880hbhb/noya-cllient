@@ -352,6 +352,41 @@ export const notificationAPI = {
   },
 }
 
+// ============================================
+// FOLLOW API
+// ============================================
+export const followAPI = {
+  // Follow a user
+  followUser: (userId) => {
+    return apiClient.post(`/follow/${userId}/follow`)
+  },
+
+  // Unfollow a user
+  unfollowUser: (userId) => {
+    return apiClient.delete(`/follow/${userId}/follow`)
+  },
+
+  // Get follow status between me and a user
+  getFollowStatus: (userId) => {
+    return apiClient.get(`/follow/status/${userId}`)
+  },
+
+  // Get batch follow status for a list of user IDs
+  getBatchStatus: (userIds) => {
+    return apiClient.get('/follow/status', { params: { userIds: userIds.join(',') } })
+  },
+
+  // Get followers of a user (default: me)
+  getFollowers: (params = {}) => {
+    return apiClient.get('/follow/followers', { params })
+  },
+
+  // Get users a user follows (default: me)
+  getFollowing: (params = {}) => {
+    return apiClient.get('/follow/following', { params })
+  },
+}
+
 // Export default untuk kemudahan import
 export default {
   auth: authAPI,
@@ -362,4 +397,5 @@ export default {
   notification: notificationAPI,
   repost: repostAPI,
   comment: commentAPI,
+  follow: followAPI,
 }

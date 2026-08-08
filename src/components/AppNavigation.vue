@@ -138,7 +138,11 @@
                   <router-link
                     v-for="notification in notifications"
                     :key="notification._id"
-                    :to="`/blogs/${notification.blog?.slug}`"
+                    :to="
+                      notification.type === 'follow'
+                        ? `/profile/${notification.actor?.publicId}`
+                        : `/blogs/${notification.blog?.slug}`
+                    "
                     @click="handleOpenNotification(notification)"
                     class="flex items-start gap-3 px-4 py-3 hover:bg-gray-50"
                     :class="notification.read ? 'opacity-70' : 'bg-[#5B4BFF]/5'"
@@ -162,9 +166,14 @@
                         <span class="font-semibold">
                           {{ notification.actor?.displayName || t('nav.someone') }}
                         </span>
-                        {{ t('nav.likedYourBlog') }}
+                        {{
+                          notification.type === 'follow' ? t('nav.followedYou') : t('nav.likedYourBlog')
+                        }}
                       </p>
-                      <p class="text-xs text-gray-500 mt-0.5 truncate">
+                      <p
+                        v-if="notification.type !== 'follow'"
+                        class="text-xs text-gray-500 mt-0.5 truncate"
+                      >
                         {{ notification.blog?.title }}
                       </p>
                       <p class="text-[11px] text-gray-400 mt-1">

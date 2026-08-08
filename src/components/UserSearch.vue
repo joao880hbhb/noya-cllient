@@ -49,43 +49,61 @@
       <div v-else-if="error" class="p-6 text-center text-sm text-gray-500">{{ error }}</div>
 
       <div v-else-if="users.length" class="max-h-80 overflow-y-auto py-2">
-        <button
+        <div
           v-for="user in users"
           :key="user.publicId"
-          @click="selectUser(user)"
-          class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-left"
+          class="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50"
         >
-          <img
-            v-if="user.picture"
-            :src="user.picture"
-            :alt="user.displayName || user.publicId"
-            class="h-10 w-10 rounded-full object-cover shrink-0"
-          />
-          <div
-            v-else
-            class="h-10 w-10 rounded-full bg-[#5B4BFF]/10 text-[#5B4BFF] flex items-center justify-center text-sm font-bold shrink-0"
+          <button
+            @click="selectUser(user)"
+            class="flex items-center gap-3 flex-1 min-w-0 text-left"
           >
-            {{ getInitials(user.displayName || user.publicId) }}
-          </div>
-          <div class="min-w-0">
-            <p class="text-sm font-semibold text-gray-900 truncate">
-              {{ user.displayName || t('userSearch.user') }}
-            </p>
-            <!-- <p class="text-xs text-gray-400 truncate">@{{ shortenId(user.publicId) }}</p> -->
-            <p v-if="user.bio" class="text-xs text-gray-500 truncate">{{ user.bio }}</p>
-          </div>
-          <svg
-            class="ml-auto h-4 w-4 text-gray-300 shrink-0"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clip-rule="evenodd"
+            <img
+              v-if="user.picture"
+              :src="user.picture"
+              :alt="user.displayName || user.publicId"
+              class="h-10 w-10 rounded-full object-cover shrink-0"
             />
-          </svg>
-        </button>
+            <div
+              v-else
+              class="h-10 w-10 rounded-full bg-[#5B4BFF]/10 text-[#5B4BFF] flex items-center justify-center text-sm font-bold shrink-0"
+            >
+              {{ getInitials(user.displayName || user.publicId) }}
+            </div>
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-gray-900 truncate">
+                {{ user.displayName || t('userSearch.user') }}
+              </p>
+              <!-- <p class="text-xs text-gray-400 truncate">@{{ shortenId(user.publicId) }}</p> -->
+              <p v-if="user.bio" class="text-xs text-gray-500 truncate">{{ user.bio }}</p>
+            </div>
+            <svg
+              class="ml-auto h-4 w-4 text-gray-300 shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+
+          <button
+            v-if="canFollow(user)"
+            @click="toggleFollow(user)"
+            :disabled="followLoadingId === user._id"
+            class="shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors disabled:opacity-50"
+            :class="
+              isFollowing(user)
+                ? 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                : 'bg-[#111111] text-white hover:bg-black'
+            "
+          >
+            {{ isFollowing(user) ? t('follow.unfollow') : t('follow.follow') }}
+          </button>
+        </div>
       </div>
 
       <div v-else class="p-6 text-center">
@@ -99,10 +117,12 @@
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { profileAPI } from '@/services/api'
+import { profileAPI, followAPI } from '@/services/api'
+import { useAuthStore } from '@/stores/auth'
 import { getInitials } from '@/utils/helpers'
 
 const router = useRouter()
+const authStore = useAuthStore()
 const { t } = useI18n()
 
 const query = ref('')
@@ -110,6 +130,8 @@ const users = ref([])
 const loading = ref(false)
 const error = ref('')
 const open = ref(false)
+const followMap = ref({})
+const followLoadingId = ref(null)
 let debounceTimer = null
 
 const onInput = () => {
@@ -124,12 +146,46 @@ const onInput = () => {
       const response = await profileAPI.searchUsers(query.value.trim())
       users.value = response.data.users || []
       error.value = ''
+      loadFollowStatus(users.value)
     } catch (err) {
       error.value = err.response?.data?.message || t('userSearch.searchFailed')
     } finally {
       loading.value = false
     }
   }, 300)
+}
+
+const loadFollowStatus = async (results) => {
+  if (!authStore.isAuthenticated || !results.length) return
+  try {
+    const res = await followAPI.getBatchStatus(results.map((user) => user._id))
+    followMap.value = res.data.status || {}
+  } catch (err) {
+    // ignore — follow buttons just default to "Follow"
+  }
+}
+
+const isFollowing = (user) => !!followMap.value[user._id]
+
+const canFollow = (user) =>
+  authStore.isAuthenticated && !!user._id && authStore.user?.id !== user._id
+
+const toggleFollow = async (user) => {
+  if (followLoadingId.value || !user._id) return
+  followLoadingId.value = user._id
+  try {
+    if (isFollowing(user)) {
+      await followAPI.unfollowUser(user._id)
+      followMap.value = { ...followMap.value, [user._id]: false }
+    } else {
+      await followAPI.followUser(user._id)
+      followMap.value = { ...followMap.value, [user._id]: true }
+    }
+  } catch (err) {
+    error.value = err.response?.data?.message || t('userSearch.searchFailed')
+  } finally {
+    followLoadingId.value = null
+  }
 }
 
 const selectUser = (user) => {

@@ -140,6 +140,71 @@
               </svg>
               {{ t('publicProfile.shareProfile') }}
             </button>
+
+            <!-- Follow -->
+            <div class="mt-6 flex flex-col items-center gap-3">
+              <button
+                v-if="canFollow"
+                @click="handleToggleFollow"
+                :disabled="followLoading"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-[12.5px] font-medium transition-colors disabled:opacity-50"
+                :class="
+                  followStatus.isMutual
+                    ? 'bg-[#111111] text-white hover:bg-black'
+                    : followStatus.following
+                      ? 'border border-[#111111] text-[#111111] bg-white hover:bg-[#111111] hover:text-white'
+                      : 'bg-[#111111] text-white hover:bg-black'
+                "
+              >
+                <svg
+                  v-if="followStatus.isMutual"
+                  class="h-3.5 w-3.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
+                  />
+                </svg>
+                <svg
+                  v-else-if="followStatus.following"
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <svg
+                  v-else
+                  class="h-3.5 w-3.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
+                  />
+                </svg>
+                {{ followButtonLabel }}
+              </button>
+
+              <div class="flex items-center gap-5 text-[12px] text-[#8A8A8A]">
+                <span class="inline-flex items-baseline gap-1.5">
+                  <span class="font-display text-[15px] text-[#111111] tabular-nums">{{
+                    formatNumber(followersCount)
+                  }}</span>
+                  {{ t('follow.followers') }}
+                </span>
+                <span class="h-3 w-px bg-[#E7E7E7]"></span>
+                <span class="inline-flex items-baseline gap-1.5">
+                  <span class="font-display text-[15px] text-[#111111] tabular-nums">{{
+                    formatNumber(followingCount)
+                  }}</span>
+                  {{ t('follow.followingCount') }}
+                </span>
+              </div>
+            </div>
           </div>
 
           <!-- Stats row -->
@@ -402,7 +467,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { profileAPI, blogAPI } from '@/services/api'
+import { profileAPI, blogAPI, followAPI } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 import { getInitials, formatNumber, formatRelativeTime } from '@/utils/helpers'
 
@@ -417,6 +482,10 @@ const totalBlogs = ref(0)
 const loading = ref(false)
 const error = ref('')
 const toast = ref('')
+const followersCount = ref(0)
+const followingCount = ref(0)
+const followStatus = ref({ following: false, isMutual: false })
+const followLoading = ref(false)
 let toastTimer = null
 
 const location = computed(() => {
@@ -435,6 +504,16 @@ const isOwnProfile = computed(() => {
   return !!publicId && authStore.user?.publicId === publicId
 })
 
+const canFollow = computed(
+  () => authStore.isAuthenticated && !isOwnProfile.value && !!user.value?.id,
+)
+
+const followButtonLabel = computed(() => {
+  if (followStatus.value.isMutual) return t('follow.mutual')
+  if (followStatus.value.following) return t('follow.unfollow')
+  return t('follow.follow')
+})
+
 const fetchProfile = async () => {
   const publicId = route.params.publicId
   loading.value = true
@@ -449,6 +528,23 @@ const fetchProfile = async () => {
     user.value = profileRes.data
     blogs.value = blogsRes.data.blogs || []
     totalBlogs.value = blogsRes.data.totalBlogs || 0
+    followersCount.value = profileRes.data.followersCount || 0
+    followingCount.value = profileRes.data.followingCount || 0
+
+    // Load follow status only when viewing someone else's profile
+    if (authStore.isAuthenticated && user.value?.id && !isOwnProfile.value) {
+      try {
+        const res = await followAPI.getFollowStatus(user.value.id)
+        followStatus.value = {
+          following: res.data.following,
+          isMutual: res.data.isMutual,
+        }
+      } catch (err) {
+        followStatus.value = { following: false, isMutual: false }
+      }
+    } else {
+      followStatus.value = { following: false, isMutual: false }
+    }
   } catch (err) {
     error.value = err.response?.data?.message || t('publicProfile.notFound')
   } finally {
@@ -468,6 +564,32 @@ const showToast = (message) => {
   toastTimer = setTimeout(() => {
     toast.value = ''
   }, 2000)
+}
+
+const handleToggleFollow = async () => {
+  if (!user.value?.id || followLoading.value) return
+  followLoading.value = true
+  try {
+    if (followStatus.value.following) {
+      const res = await followAPI.unfollowUser(user.value.id)
+      followStatus.value = { following: false, isMutual: false }
+      followersCount.value = res.data.followersCount ?? followersCount.value
+    } else {
+      const res = await followAPI.followUser(user.value.id)
+      followStatus.value = {
+        following: true,
+        isMutual: res.data.isMutual,
+      }
+      followersCount.value = res.data.followersCount ?? followersCount.value
+    }
+  } catch (err) {
+    showToast(
+      err.response?.data?.message ||
+        (followStatus.value.following ? t('follow.unfollowError') : t('follow.followError')),
+    )
+  } finally {
+    followLoading.value = false
+  }
 }
 
 const handleShare = async () => {
