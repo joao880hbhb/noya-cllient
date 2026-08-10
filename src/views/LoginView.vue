@@ -345,8 +345,8 @@ const renderGoogleButton = () => {
 
 // Login card (beserta #custom-google-btn) baru ada di DOM setelah pageLoading=false
 // → render ulang tombol Google setiap halaman selesai dimuat / tema berubah
-watch(pageLoading, (ready) => {
-  if (ready) nextTick(() => renderGoogleButton());
+watch(pageLoading, (loading) => {
+  if (!loading) nextTick(() => renderGoogleButton());
 });
 
 // Watch theme changes to re-render Google button dynamically with correct theme
