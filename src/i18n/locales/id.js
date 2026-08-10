@@ -61,6 +61,7 @@ export default {
   },
   login: {
     badge: 'Bagikan cerita yang bergema',
+    loadingData: 'Memuat data…',
     headline1: 'Tulislah sesuatu',
     headline2: 'yang layak dibaca.',
     hero: 'Noya adalah ruang tenang untuk menulis cerita, menyematkan musik latar kesukaan Anda, dan berinteraksi secara hangat bersama penulis lainnya.',

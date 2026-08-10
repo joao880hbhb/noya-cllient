@@ -1,5 +1,18 @@
 <template>
-  <div 
+  <!-- Loading screen: halaman baru dirender setelah semua data masuk -->
+  <div
+    v-if="pageLoading"
+    :class="[
+      'min-h-screen flex flex-col items-center justify-center gap-4 transition-colors duration-300',
+      isDark ? 'bg-[#060608] text-white' : 'bg-[#fafaf9] text-stone-900'
+    ]"
+  >
+    <div class="h-10 w-10 animate-spin rounded-full border-2 border-purple-500/20 border-t-purple-500"></div>
+    <p class="text-sm text-gray-500">{{ t('login.loadingData') }}</p>
+  </div>
+
+  <div
+    v-else
     :class="[
       'min-h-screen transition-colors duration-300 relative overflow-x-hidden selection:bg-purple-600 selection:text-white',
       isDark ? 'bg-[#060608] text-white' : 'bg-[#fafaf9] text-stone-900'
@@ -285,13 +298,14 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, watch, computed, onUnmounted } from "vue";
+import { onMounted, ref, watch, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import DomeGallery from "@/components/landingpage/DomeGallery.vue"
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/auth";
 import { blogAPI, profileAPI } from "@/services/api";
 import { formatRelativeTime } from "@/utils/helpers";
+import { useTheme } from "@/composables/useTheme";
 import UserMarquee from "@/components/UserMarquee.vue";
 const isMobile = ref(false);
 
@@ -308,28 +322,12 @@ onUnmounted(() => window.removeEventListener('resize', checkMobile));
 const router = useRouter();
 const authStore = useAuthStore();
 const { t } = useI18n();
+const { isDark } = useTheme();
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-// Sync theme dynamically with document.documentElement class
-const isDark = ref(document.documentElement.classList.contains("dark"));
-
-const toggleTheme = () => {
-  if (document.documentElement.classList.contains("dark")) {
-    document.documentElement.classList.remove("dark");
-    localStorage.setItem("theme", "light");
-    isDark.value = false;
-  } else {
-    document.documentElement.classList.add("dark");
-    localStorage.setItem("theme", "dark");
-    isDark.value = true;
-  }
-  window.dispatchEvent(new Event("theme-changed"));
-};
-
-const handleThemeChanged = () => {
-  isDark.value = document.documentElement.classList.contains("dark");
-};
+// Menunggu semua data masuk sebelum halaman dirender
+const pageLoading = ref(true);
 
 // Render Google button programmatically
 const renderGoogleButton = () => {
@@ -405,13 +403,7 @@ const scrollToLogin = () => {
   }
 };
 
-onBeforeUnmount(() => {
-  window.removeEventListener("theme-changed", handleThemeChanged);
-});
-
 onMounted(async () => {
-  window.addEventListener("theme-changed", handleThemeChanged);
-
   if (authStore.isAuthenticated) {
     router.push("/");
     return;
@@ -458,7 +450,18 @@ onMounted(async () => {
     document.head.appendChild(script);
   }
 
-  // Fetch trending stories for showcase
+  // Tunggu semua data masuk (trending + latest users) sebelum halaman dirender
+  try {
+    await Promise.all([
+      fetchTrendingBlogs(),
+      fetchLatestUsers(),
+    ]);
+  } finally {
+    pageLoading.value = false;
+  }
+});
+
+const fetchTrendingBlogs = async () => {
   try {
     const response = await blogAPI.getAllBlogs({ sort: "trending", limit: 8 });
     trendingBlogs.value = response.data.blogs || [];
@@ -467,10 +470,7 @@ onMounted(async () => {
   } finally {
     trendingLoading.value = false;
   }
-
-  // Fetch latest writers untuk marquee (berjalan paralel, tidak memblok halaman)
-  fetchLatestUsers();
-});
+};
 
 
 

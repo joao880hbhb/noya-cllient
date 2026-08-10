@@ -61,6 +61,7 @@ export default {
   },
   login: {
     badge: 'Share stories that echo',
+    loadingData: 'Loading data…',
     headline1: 'Write something',
     headline2: 'worth reading.',
     hero: 'Noya is a calm space to write stories, attach your favorite background music, and warmly interact with fellow writers.',

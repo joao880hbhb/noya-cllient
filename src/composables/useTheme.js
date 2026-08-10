@@ -7,11 +7,23 @@ import { onMounted, onUnmounted, ref } from 'vue'
  * dark mode sedang aktif, biar bg/warna-nya ikut berubah otomatis.
  *
  * Pemakaian:
- *   const { isDark } = useTheme()
+ *   const { isDark, toggleTheme } = useTheme()
  */
 export function useTheme() {
   const isDark = ref(document.documentElement.classList.contains('dark'))
   let observer = null
+
+  const toggleTheme = () => {
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    } else {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    }
+    isDark.value = document.documentElement.classList.contains('dark')
+    window.dispatchEvent(new Event('theme-changed'))
+  }
 
   onMounted(() => {
     observer = new MutationObserver(() => {
@@ -27,5 +39,5 @@ export function useTheme() {
     observer?.disconnect()
   })
 
-  return { isDark }
+  return { isDark, toggleTheme }
 }
