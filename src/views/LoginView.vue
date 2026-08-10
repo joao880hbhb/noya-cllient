@@ -298,7 +298,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch, computed, onUnmounted } from "vue";
+import { onMounted, ref, watch, computed, onUnmounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import DomeGallery from "@/components/landingpage/DomeGallery.vue"
 import { useI18n } from "vue-i18n";
@@ -342,6 +342,12 @@ const renderGoogleButton = () => {
     });
   }
 };
+
+// Login card (beserta #custom-google-btn) baru ada di DOM setelah pageLoading=false
+// → render ulang tombol Google setiap halaman selesai dimuat / tema berubah
+watch(pageLoading, (ready) => {
+  if (ready) nextTick(() => renderGoogleButton());
+});
 
 // Watch theme changes to re-render Google button dynamically with correct theme
 watch(isDark, () => {
