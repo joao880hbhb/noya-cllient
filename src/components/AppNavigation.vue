@@ -8,7 +8,7 @@
             to="/"
             class="flex items-center gap-2 text-xl sm:text-2xl font-bold text-[#5B4BFF]"
           >
-            <img :src="logoNoya" alt="Noya" class="h-16 w-16 rounded-full object-cover" />
+            <img :src="logoSrc" alt="Noya" class="h-16 w-16 rounded-full object-cover" />
           </router-link>
         </div>
 
@@ -296,14 +296,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { notificationAPI } from '@/services/api'
 import { formatRelativeTime } from '@/utils/helpers'
 import { setLocale } from '@/i18n'
-import logoNoya from '@/assets/logonoya.png'
+import { useTheme } from '@/composables/useTheme'
+import logoTerang from '@/assets/logo-terang1.png'
+import logoGelap from '@/assets/logo-gelap1.png'
 
 const router = useRouter()
 const route = useRoute()
@@ -324,23 +326,21 @@ const selectLanguage = (lang) => {
   showLanguageMenu.value = false
 }
 
-const isDark = ref(document.documentElement.classList.contains("dark"))
+// Reactive dark-mode state, always in sync with the `dark` class on <html>
+const { isDark } = useTheme()
+
+// Swap logo based on current theme
+const logoSrc = computed(() => (isDark.value ? logoGelap : logoTerang))
 
 const toggleTheme = () => {
-  if (document.documentElement.classList.contains("dark")) {
-    document.documentElement.classList.remove("dark")
-    localStorage.setItem("theme", "light")
-    isDark.value = false
+  if (document.documentElement.classList.contains('dark')) {
+    document.documentElement.classList.remove('dark')
+    localStorage.setItem('theme', 'light')
   } else {
-    document.documentElement.classList.add("dark")
-    localStorage.setItem("theme", "dark")
-    isDark.value = true
+    document.documentElement.classList.add('dark')
+    localStorage.setItem('theme', 'dark')
   }
-  window.dispatchEvent(new Event("theme-changed"))
-}
-
-const handleThemeChanged = () => {
-  isDark.value = document.documentElement.classList.contains("dark")
+  // isDark updates automatically via the MutationObserver inside useTheme()
 }
 
 const notifications = ref([])
@@ -445,7 +445,6 @@ watch(
 
 onMounted(() => {
   window.addEventListener('click', handleClickOutside)
-  window.addEventListener('theme-changed', handleThemeChanged)
   if (authStore.isAuthenticated) {
     fetchNotifications()
     pollTimer = setInterval(fetchNotifications, 30000)
@@ -454,7 +453,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside)
-  window.removeEventListener('theme-changed', handleThemeChanged)
   if (pollTimer) clearInterval(pollTimer)
 })
 </script>

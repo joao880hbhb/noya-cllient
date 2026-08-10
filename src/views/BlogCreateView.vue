@@ -1,28 +1,28 @@
 <template>
-  <div class="min-h-screen bg-white">
+  <div :class="['min-h-screen transition-colors duration-300', isDark ? 'bg-[#060608] text-white' : 'bg-white text-[#111111]']">
     <div class="max-w-3xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
       <!-- Masthead -->
       <div class="flex items-start justify-between gap-6 mb-10">
         <div>
-          <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-2">
+          <p :class="['text-[11px] tracking-[0.2em] uppercase mb-2', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
             {{ t('blogCreate.composeNew') }}
           </p>
-          <h1 class="font-display italic text-[34px] sm:text-[42px] leading-[1.05] text-[#111111]">
+          <h1 :class="['font-display italic text-[34px] sm:text-[42px] leading-[1.05]', isDark ? 'text-white' : 'text-[#111111]']">
             {{ t('blogCreate.writeSomething') }}<br class="hidden sm:block" />
             {{ t('blogCreate.worthReading') }}
           </h1>
-          <p v-if="draftStatus" class="sm:hidden text-[10px] text-[#8A8A8A] mt-2 italic">
+          <p v-if="draftStatus" :class="['sm:hidden text-[10px] mt-2 italic', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
             {{ draftStatus }}
           </p>
         </div>
         <div class="hidden sm:block text-right pt-1 shrink-0">
-          <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">
+          <p :class="['text-[11px] tracking-[0.15em] uppercase', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">
             {{ todayStamp }}
           </p>
-          <p class="text-[11px] text-[#B0B0B0] tabular-nums mt-0.5">{{ contentLength }} {{ t('blogCreate.chars') }}</p>
+          <p :class="['text-[11px] tabular-nums mt-0.5', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">{{ contentLength }} {{ t('blogCreate.chars') }}</p>
           <p
             v-if="draftStatus"
-            class="text-[10px] text-[#8A8A8A] mt-1.5 italic transition-all duration-300"
+            :class="['text-[10px] mt-1.5 italic transition-all duration-300', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']"
           >
             {{ draftStatus }}
           </p>
@@ -30,28 +30,36 @@
       </div>
 
       <!-- Feedback -->
-      <div v-if="successMessage" class="mb-6 border-l-2 border-[#111111] bg-[#FAFAFA] px-4 py-3">
-        <p class="text-sm text-[#111111]">{{ successMessage }}</p>
+      <div v-if="successMessage" :class="['mb-6 border-l-2 px-4 py-3', isDark ? 'border-white bg-white/[0.03]' : 'border-[#111111] bg-[#FAFAFA]']">
+        <p :class="['text-sm', isDark ? 'text-white' : 'text-[#111111]']">{{ successMessage }}</p>
       </div>
-      <div v-if="formError" class="mb-6 border-l-2 border-[#B3261E] bg-[#FDF7F6] px-4 py-3">
-        <p class="text-sm text-[#8C1D14]">{{ formError }}</p>
+      <div v-if="formError" :class="['mb-6 border-l-2 px-4 py-3', isDark ? 'border-red-500 bg-red-500/10' : 'border-[#B3261E] bg-[#FDF7F6]']">
+        <p :class="['text-sm', isDark ? 'text-red-400' : 'text-[#8C1D14]']">{{ formError }}</p>
       </div>
 
       <form @submit.prevent="handleSubmit">
         <div
-          class="relative border border-[#E7E7E7] rounded-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_40px_-16px_rgba(0,0,0,0.14)] bg-white"
+          :class="[
+            'relative border rounded-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_40px_-16px_rgba(0,0,0,0.14)]',
+            isDark ? 'border-white/10 bg-white/[0.02]' : 'border-[#E7E7E7] bg-white',
+          ]"
         >
           <!-- decorative margin ruler -->
           <div
-            class="hidden md:block absolute left-0 top-0 bottom-0 w-6 bg-[repeating-linear-gradient(to_bottom,#E7E7E7_0,#E7E7E7_1px,transparent_1px,transparent_10px)] opacity-70"
+            :class="[
+              'hidden md:block absolute left-0 top-0 bottom-0 w-6 opacity-70',
+              isDark
+                ? 'bg-[repeating-linear-gradient(to_bottom,rgba(255,255,255,0.1)_0,rgba(255,255,255,0.1)_1px,transparent_1px,transparent_10px)]'
+                : 'bg-[repeating-linear-gradient(to_bottom,#E7E7E7_0,#E7E7E7_1px,transparent_1px,transparent_10px)]',
+            ]"
           ></div>
 
           <div class="md:pl-6">
             <!-- Status -->
             <div
-              class="flex items-center justify-between px-6 sm:px-10 pt-7 pb-5 border-b border-[#F0F0F0]"
+              :class="['flex items-center justify-between px-6 sm:px-10 pt-7 pb-5 border-b', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
             >
-              <span class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase">{{ t('blogCreate.status') }}</span>
+              <span :class="['text-[11px] tracking-[0.15em] uppercase', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">{{ t('blogCreate.status') }}</span>
               <div class="flex items-center gap-5">
                 <button
                   v-for="opt in statusOptions"
@@ -61,8 +69,8 @@
                   class="text-[13px] pb-0.5 border-b transition-colors"
                   :class="
                     status === opt.value
-                      ? 'text-[#111111] border-[#111111] font-medium'
-                      : 'text-[#B0B0B0] border-transparent hover:text-[#6B6B6B]'
+                      ? (isDark ? 'text-white border-white font-medium' : 'text-[#111111] border-[#111111] font-medium')
+                      : (isDark ? 'text-gray-500 border-transparent hover:text-gray-300' : 'text-[#B0B0B0] border-transparent hover:text-[#6B6B6B]')
                   "
                 >
                   {{ opt.label }}
@@ -72,13 +80,13 @@
 
             <!-- Title -->
             <div
-              class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
+              :class="['grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
             >
               <label
                 for="title"
-                class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
+                :class="['text-[11px] tracking-[0.15em] uppercase pt-1', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']"
               >
-                {{ t('blogCreate.title') }} <span class="text-[#B3261E]">*</span>
+                {{ t('blogCreate.title') }} <span :class="isDark ? 'text-red-400' : 'text-[#B3261E]'">*</span>
               </label>
               <div>
                 <input
@@ -86,10 +94,13 @@
                   v-model="title"
                   type="text"
                   :maxlength="BLOG_TITLE_MAX_LENGTH"
-                  class="w-full p-3 text-[22px] font-display text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 pb-2 bg-transparent transition-colors"
+                  :class="[
+                    'w-full p-3 text-[22px] font-display border-0 border-b focus:ring-0 pb-2 bg-transparent transition-colors',
+                    isDark ? 'text-white placeholder-gray-600 border-white/15 focus:border-white' : 'text-[#111111] placeholder-[#C9C9C9] border-[#E7E7E7] focus:border-[#111111]',
+                  ]"
                   :placeholder="t('blogCreate.titlePlaceholder')"
                 />
-                <p class="mt-2 text-[11px] text-[#B0B0B0] tabular-nums">
+                <p :class="['mt-2 text-[11px] tabular-nums', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">
                   {{ title.length }} / {{ BLOG_TITLE_MAX_LENGTH }}
                 </p>
               </div>
@@ -97,14 +108,14 @@
 
             <!-- Content -->
             <div
-              class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
+              :class="['grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
             >
-              <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
-                {{ t('blogCreate.body') }} <span class="text-[#B3261E]">*</span>
+              <label :class="['text-[11px] tracking-[0.15em] uppercase pt-1', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
+                {{ t('blogCreate.body') }} <span :class="isDark ? 'text-red-400' : 'text-[#B3261E]'">*</span>
               </label>
               <div>
                 <BlogEditor v-model="content" />
-                <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
+                <p :class="['mt-2 text-[11px] text-right tabular-nums', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">
                   {{ contentLength }} {{ t('blogCreate.characters') }}
                 </p>
               </div>
@@ -112,11 +123,11 @@
 
             <!-- Excerpt -->
             <div
-              class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
+              :class="['grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
             >
               <label
                 for="excerpt"
-                class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1"
+                :class="['text-[11px] tracking-[0.15em] uppercase pt-1', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']"
               >
                 {{ t('blogCreate.excerpt') }}
               </label>
@@ -126,10 +137,15 @@
                   v-model="excerpt"
                   rows="2"
                   :maxlength="BLOG_EXCERPT_LENGTH"
-                  class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[2px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
+                  :class="[
+                    'w-full text-[14px] border rounded-[2px] focus:ring-0 px-3 py-2.5 resize-none transition-colors',
+                    isDark
+                      ? 'bg-white/[0.03] text-white placeholder-gray-600 border-white/15 focus:border-white'
+                      : 'text-[#111111] placeholder-[#C9C9C9] border-[#E7E7E7] focus:border-[#111111]',
+                  ]"
                   :placeholder="t('blogCreate.excerptPlaceholder')"
                 ></textarea>
-                <p class="mt-2 text-[11px] text-[#B0B0B0] text-right tabular-nums">
+                <p :class="['mt-2 text-[11px] text-right tabular-nums', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">
                   {{ excerpt.length }} / {{ BLOG_EXCERPT_LENGTH }}
                 </p>
               </div>
@@ -137,15 +153,15 @@
 
             <!-- Cover image -->
             <div
-              class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
+              :class="['grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
             >
-              <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
+              <label :class="['text-[11px] tracking-[0.15em] uppercase pt-1', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
                 {{ t('blogCreate.cover') }}
               </label>
               <div>
                 <div
                   v-if="coverPreview"
-                  class="relative border border-[#E7E7E7] rounded-[2px] overflow-hidden mb-3"
+                  :class="['relative border rounded-[2px] overflow-hidden mb-3', isDark ? 'border-white/10' : 'border-[#E7E7E7]']"
                 >
                   <img
                     :src="coverPreview"
@@ -155,9 +171,9 @@
                 </div>
                 <div
                   v-else
-                  class="border border-dashed border-[#D8D8D8] rounded-[2px] h-28 flex items-center justify-center mb-3"
+                  :class="['border border-dashed rounded-[2px] h-28 flex items-center justify-center mb-3', isDark ? 'border-white/20' : 'border-[#D8D8D8]']"
                 >
-                  <span class="text-[12px] text-[#B0B0B0]">{{ t('blogCreate.noImage') }}</span>
+                  <span :class="['text-[12px]', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">{{ t('blogCreate.noImage') }}</span>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -170,7 +186,10 @@
                   />
                   <label
                     for="coverImage"
-                    class="inline-flex items-center px-3.5 py-1.5 border border-[#111111] rounded-[2px] text-[12px] font-medium text-[#111111] hover:bg-[#111111] hover:text-white transition-colors cursor-pointer"
+                    :class="[
+                      'inline-flex items-center px-3.5 py-1.5 border rounded-[2px] text-[12px] font-medium transition-colors cursor-pointer',
+                      isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white',
+                    ]"
                   >
                     {{ coverPreview ? t('blogCreate.replace') : t('blogCreate.uploadImage') }}
                   </label>
@@ -178,11 +197,11 @@
                     v-if="coverPreview"
                     type="button"
                     @click="removeCover"
-                    class="text-[12px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
+                    :class="['text-[12px] transition-colors', isDark ? 'text-gray-500 hover:text-red-400' : 'text-[#B0B0B0] hover:text-[#B3261E]']"
                   >
                     {{ t('blogCreate.remove') }}
                   </button>
-                  <span class="text-[11px] text-[#C4C4C4] ml-auto"
+                  <span :class="['text-[11px] ml-auto', isDark ? 'text-gray-600' : 'text-[#C4C4C4]']"
                     >{{ t('blogCreate.maxFileSize', { max: MAX_FILE_SIZE / 1024 / 1024 }) }}</span
                   >
                 </div>
@@ -191,9 +210,9 @@
 
             <!-- Tags -->
             <div
-              class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b border-[#F0F0F0]"
+              :class="['grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8 border-b', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
             >
-              <label for="tags" class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
+              <label for="tags" :class="['text-[11px] tracking-[0.15em] uppercase pt-1', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
                 {{ t('blogCreate.tags') }}
               </label>
               <div>
@@ -201,19 +220,22 @@
                   id="tags"
                   v-model="tagsInput"
                   type="text"
-                  class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 p-3 bg-transparent transition-colors"
+                  :class="[
+                    'w-full text-[14px] border-0 border-b focus:ring-0 p-3 bg-transparent transition-colors',
+                    isDark ? 'text-white placeholder-gray-600 border-white/15 focus:border-white' : 'text-[#111111] placeholder-[#C9C9C9] border-[#E7E7E7] focus:border-[#111111]',
+                  ]"
                   :placeholder="t('blogCreate.tagsPlaceholder')"
                 />
                 <div v-if="parsedTags.length" class="flex flex-wrap gap-1.5 mt-3">
                   <span
                     v-for="tag in parsedTags"
                     :key="tag"
-                    class="text-[11px] text-[#4B4B4B] border border-[#E7E7E7] rounded-full px-2.5 py-0.5"
+                    :class="['text-[11px] border rounded-full px-2.5 py-0.5', isDark ? 'text-gray-300 border-white/15' : 'text-[#4B4B4B] border-[#E7E7E7]']"
                   >
                     {{ tag }}
                   </span>
                 </div>
-                <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
+                <p v-else :class="['mt-2 text-[11px]', isDark ? 'text-gray-600' : 'text-[#C4C4C4]']">
                   {{ t('blogCreate.tagsHint') }}
                 </p>
               </div>
@@ -221,14 +243,14 @@
 
             <!-- Music -->
             <div class="grid md:grid-cols-[140px_1fr] gap-x-8 px-6 sm:px-10 py-8">
-              <label class="text-[11px] tracking-[0.15em] text-[#8A8A8A] uppercase pt-1">
+              <label :class="['text-[11px] tracking-[0.15em] uppercase pt-1', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
                 {{ t('blogCreate.soundtrack') }}
               </label>
               <div>
                 <!-- Selected -->
                 <div
                   v-if="selectedMusic"
-                  class="flex items-center gap-4 border border-[#111111] rounded-[2px] p-3"
+                  :class="['flex items-center gap-4 border rounded-[2px] p-3', isDark ? 'border-white' : 'border-[#111111]']"
                 >
                   <img
                     v-if="selectedMusic.cover"
@@ -237,17 +259,17 @@
                     class="h-12 w-12 rounded-[2px] object-cover shrink-0"
                   />
                   <div class="flex-1 min-w-0">
-                    <p class="text-[13px] font-medium text-[#111111] truncate">
+                    <p :class="['text-[13px] font-medium truncate', isDark ? 'text-white' : 'text-[#111111]']">
                       {{ selectedMusic.title }}
                     </p>
-                    <p class="text-[12px] text-[#8A8A8A] truncate">
+                    <p :class="['text-[12px] truncate', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
                       {{ selectedMusic.artist }}
                     </p>
                   </div>
                   <button
                     type="button"
                     @click="selectedMusic = null"
-                    class="text-[12px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors shrink-0"
+                    :class="['text-[12px] transition-colors shrink-0', isDark ? 'text-gray-500 hover:text-red-400' : 'text-[#B0B0B0] hover:text-[#B3261E]']"
                   >
                     {{ t('blogCreate.remove') }}
                   </button>
@@ -258,13 +280,16 @@
                   <input
                     v-model="searchQuery"
                     type="text"
-                    class="flex-1 text-[14px] text-[#111111] placeholder-[#C9C9C9] border-0 border-b border-[#E7E7E7] focus:border-[#111111] focus:ring-0 p-3 bg-transparent transition-colors"
+                    :class="[
+                      'flex-1 text-[14px] border-0 border-b focus:ring-0 p-3 bg-transparent transition-colors',
+                      isDark ? 'text-white placeholder-gray-600 border-white/15 focus:border-white' : 'text-[#111111] placeholder-[#C9C9C9] border-[#E7E7E7] focus:border-[#111111]',
+                    ]"
                     :placeholder="t('blogCreate.searchTrack')"
                     @keyup.enter.prevent="searchMusic"
                   />
                   <svg
                     v-if="musicSearching"
-                    class="animate-spin h-4 w-4 text-[#111111] shrink-0"
+                    :class="['animate-spin h-4 w-4 shrink-0', isDark ? 'text-white' : 'text-[#111111]']"
                     fill="none"
                     viewBox="0 0 24 24"
                   >
@@ -287,14 +312,14 @@
                 <!-- Results -->
                 <div
                   v-if="musicResults.length"
-                  class="mt-3 border border-[#E7E7E7] rounded-[2px] divide-y divide-[#F0F0F0]"
+                  :class="['mt-3 border rounded-[2px] divide-y', isDark ? 'border-white/10 divide-white/10' : 'border-[#E7E7E7] divide-[#F0F0F0]']"
                 >
                   <button
                     v-for="track in musicResults"
                     :key="track.trackId"
                     type="button"
                     @click="selectTrack(track)"
-                    class="w-full flex items-center gap-3 p-2.5 hover:bg-[#FAFAFA] text-left transition-colors"
+                    :class="['w-full flex items-center gap-3 p-2.5 text-left transition-colors', isDark ? 'hover:bg-white/5' : 'hover:bg-[#FAFAFA]']"
                   >
                     <img
                       v-if="track.cover"
@@ -303,22 +328,22 @@
                       class="h-9 w-9 rounded-[2px] object-cover shrink-0"
                     />
                     <div class="flex-1 min-w-0">
-                      <p class="text-[13px] font-medium text-[#111111] truncate">
+                      <p :class="['text-[13px] font-medium truncate', isDark ? 'text-white' : 'text-[#111111]']">
                         {{ track.title }}
                       </p>
-                      <p class="text-[11px] text-[#8A8A8A] truncate">
+                      <p :class="['text-[11px] truncate', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">
                         {{ track.artist }}
                       </p>
                     </div>
-                    <span class="text-[11px] text-[#C4C4C4] tabular-nums shrink-0">{{
+                    <span :class="['text-[11px] tabular-nums shrink-0', isDark ? 'text-gray-600' : 'text-[#C4C4C4]']">{{
                       formatDuration(track.duration)
                     }}</span>
                   </button>
                 </div>
-                <p v-if="musicSearchError" class="mt-2 text-[12px] text-[#B3261E]">
+                <p v-if="musicSearchError" :class="['mt-2 text-[12px]', isDark ? 'text-red-400' : 'text-[#B3261E]']">
                   {{ musicSearchError }}
                 </p>
-                <p v-else class="mt-2 text-[11px] text-[#C4C4C4]">
+                <p v-else :class="['mt-2 text-[11px]', isDark ? 'text-gray-600' : 'text-[#C4C4C4]']">
                   {{ t('blogCreate.trackOptional') }}
                 </p>
               </div>
@@ -331,18 +356,21 @@
           <button
             type="button"
             @click="router.push('/blogs')"
-            class="px-4 py-2 text-[13px] font-medium text-[#6B6B6B] hover:text-[#111111] transition-colors"
+            :class="['px-4 py-2 text-[13px] font-medium transition-colors', isDark ? 'text-gray-400 hover:text-white' : 'text-[#6B6B6B] hover:text-[#111111]']"
           >
             {{ t('blogCreate.cancel') }}
           </button>
           <button
             type="submit"
             :disabled="saving"
-            class="inline-flex items-center px-5 py-2.5 bg-[#111111] text-white rounded-[2px] text-[13px] font-medium shadow-[0_1px_2px_rgba(0,0,0,0.05),0_10px_20px_-8px_rgba(0,0,0,0.35)] hover:bg-black disabled:opacity-50 transition-colors"
+            :class="[
+              'inline-flex items-center px-5 py-2.5 rounded-[2px] text-[13px] font-medium shadow-[0_1px_2px_rgba(0,0,0,0.05),0_10px_20px_-8px_rgba(0,0,0,0.35)] disabled:opacity-50 transition-colors',
+              isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-[#111111] text-white hover:bg-black',
+            ]"
           >
             <svg
               v-if="saving"
-              class="animate-spin -ml-1 mr-2 h-3.5 w-3.5 text-white"
+              :class="['animate-spin -ml-1 mr-2 h-3.5 w-3.5', isDark ? 'text-black' : 'text-white']"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -373,6 +401,7 @@ import { ref, watch, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { useTheme } from '@/composables/useTheme'
 import { blogAPI, musicAPI } from '@/services/api'
 import BlogEditor from '@/components/BlogEditor.vue'
 import { debounce } from '@/utils/helpers'
@@ -386,6 +415,7 @@ import {
 const router = useRouter()
 const authStore = useAuthStore()
 const { t, locale } = useI18n()
+const { isDark } = useTheme()
 const draftStatus = ref('')
 
 // Form state

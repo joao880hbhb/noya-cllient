@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen bg-white">
+  <div class="min-h-screen bg-white dark:bg-neutral-950">
     <div class="max-w-3xl mx-auto px-6 sm:px-10 py-16 sm:py-24 pb-32">
       <!-- Loading state -->
       <div v-if="loading" class="flex flex-col items-center justify-center h-72 gap-3">
-        <svg class="animate-spin h-6 w-6 text-[#111111]" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin h-6 w-6 text-[#111111] dark:text-neutral-100" fill="none" viewBox="0 0 24 24">
           <circle
             class="opacity-20"
             cx="12"
@@ -18,18 +18,18 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">{{ t('publicProfile.loading') }}</p>
+        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] dark:text-neutral-500 uppercase">{{ t('publicProfile.loading') }}</p>
       </div>
 
       <!-- Error state -->
-      <div v-else-if="error" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
-        <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
+      <div v-else-if="error" class="border border-[#E7E7E7] dark:border-neutral-800 rounded-[3px] p-10 text-center">
+        <p class="text-[11px] tracking-[0.15em] text-[#B3261E] dark:text-red-400 uppercase mb-2">
           {{ t('publicProfile.loadError') }}
         </p>
-        <p class="text-[15px] text-[#4B4B4B] mb-6">{{ error }}</p>
+        <p class="text-[15px] text-[#4B4B4B] dark:text-neutral-400 mb-6">{{ error }}</p>
         <button
           @click="router.push('/')"
-          class="inline-flex items-center px-5 py-2.5 bg-[#111111] text-white rounded-[2px] text-[13px] font-medium shadow-[0_1px_2px_rgba(0,0,0,0.05),0_10px_20px_-8px_rgba(0,0,0,0.35)] hover:bg-black transition-colors"
+          class="inline-flex items-center px-5 py-2.5 bg-[#111111] dark:bg-white text-white dark:text-black rounded-[2px] text-[13px] font-medium shadow-[0_1px_2px_rgba(0,0,0,0.05),0_10px_20px_-8px_rgba(0,0,0,0.35)] hover:bg-black dark:hover:bg-neutral-200 transition-colors"
         >
           {{ t('publicProfile.backHome') }}
         </button>
@@ -38,42 +38,42 @@
       <!-- Profile -->
       <template v-else-if="user">
         <div
-          class="relative border border-[#E7E7E7] rounded-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_40px_-16px_rgba(0,0,0,0.14)] bg-white px-8 sm:px-14 py-12 sm:py-14"
+          class="relative border border-[#E7E7E7] dark:border-neutral-800 rounded-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_40px_-16px_rgba(0,0,0,0.14)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.4),0_18px_40px_-16px_rgba(0,0,0,0.6)] bg-white dark:bg-neutral-900 px-8 sm:px-14 py-12 sm:py-14"
         >
           <!-- decorative margin ruler -->
           <div
-            class="hidden md:block absolute left-0 top-0 bottom-0 w-6 bg-[repeating-linear-gradient(to_bottom,#E7E7E7_0,#E7E7E7_1px,transparent_1px,transparent_10px)] opacity-70"
+            class="hidden md:block absolute left-0 top-0 bottom-0 w-6 bg-[repeating-linear-gradient(to_bottom,#E7E7E7_0,#E7E7E7_1px,transparent_1px,transparent_10px)] dark:bg-[repeating-linear-gradient(to_bottom,#333333_0,#333333_1px,transparent_1px,transparent_10px)] opacity-70"
           ></div>
 
           <!-- Avatar & identity -->
           <div class="flex flex-col items-center text-center">
-            <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase mb-6">{{ t('publicProfile.authorProfile') }}</p>
+            <p class="text-[11px] tracking-[0.2em] text-[#8A8A8A] dark:text-neutral-500 uppercase mb-6">{{ t('publicProfile.authorProfile') }}</p>
 
             <img
               v-if="user.picture"
               :src="user.picture"
               :alt="user.displayName"
-              class="h-24 w-24 rounded-full object-cover border border-[#E7E7E7] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.25)]"
+              class="h-24 w-24 rounded-full object-cover border border-[#E7E7E7] dark:border-neutral-700 shadow-[0_8px_20px_-8px_rgba(0,0,0,0.25)]"
             />
             <div
               v-else
-              class="h-24 w-24 rounded-full bg-[#FAFAFA] border border-[#E7E7E7] flex items-center justify-center text-[#111111] text-2xl font-display italic shadow-[0_8px_20px_-8px_rgba(0,0,0,0.25)]"
+              class="h-24 w-24 rounded-full bg-[#FAFAFA] dark:bg-neutral-800 border border-[#E7E7E7] dark:border-neutral-700 flex items-center justify-center text-[#111111] dark:text-neutral-100 text-2xl font-display italic shadow-[0_8px_20px_-8px_rgba(0,0,0,0.25)]"
             >
               {{ getInitials(user.displayName || user.publicId) }}
             </div>
 
             <h1
-              class="mt-6 font-display italic text-[30px] sm:text-[36px] leading-tight text-[#111111]"
+              class="mt-6 font-display italic text-[30px] sm:text-[36px] leading-tight text-[#111111] dark:text-neutral-50"
             >
               {{ user.displayName || user.publicId }}
             </h1>
 
-            <p v-if="user.bio" class="mt-3 text-[14px] leading-relaxed text-[#6B6B6B] max-w-sm">
+            <p v-if="user.bio" class="mt-3 text-[14px] leading-relaxed text-[#6B6B6B] dark:text-neutral-400 max-w-sm">
               {{ user.bio }}
             </p>
 
             <div
-              class="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[12px] text-[#8A8A8A]"
+              class="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[12px] text-[#8A8A8A] dark:text-neutral-500"
             >
               <span v-if="location" class="inline-flex items-center gap-1.5">
                 <svg
@@ -97,7 +97,7 @@
                 :href="website"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-1.5 text-[#111111] hover:underline underline-offset-2"
+                class="inline-flex items-center gap-1.5 text-[#111111] dark:text-neutral-100 hover:underline underline-offset-2"
               >
                 <svg
                   class="h-3.5 w-3.5"
@@ -120,7 +120,7 @@
             <!-- Share profile -->
             <button
               @click="handleShare"
-              class="mt-6 inline-flex items-center gap-2 px-4 py-2 border border-[#111111] rounded-[2px] text-[12.5px] font-medium text-[#111111] hover:bg-[#111111] hover:text-white transition-colors"
+              class="mt-6 inline-flex items-center gap-2 px-4 py-2 border border-[#111111] dark:border-neutral-200 rounded-[2px] text-[12.5px] font-medium text-[#111111] dark:text-neutral-100 hover:bg-[#111111] hover:text-white dark:hover:bg-neutral-100 dark:hover:text-black transition-colors"
             >
               <svg
                 class="h-3.5 w-3.5"
@@ -150,10 +150,10 @@
                 class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-[12.5px] font-medium transition-colors disabled:opacity-50"
                 :class="
                   followStatus.isMutual
-                    ? 'bg-[#111111] text-white hover:bg-black'
+                    ? 'bg-[#111111] text-white hover:bg-black dark:bg-white dark:text-black dark:hover:bg-neutral-200'
                     : followStatus.following
-                      ? 'border border-[#111111] text-[#111111] bg-white hover:bg-[#111111] hover:text-white'
-                      : 'bg-[#111111] text-white hover:bg-black'
+                      ? 'border border-[#111111] text-[#111111] bg-white hover:bg-[#111111] hover:text-white dark:border-neutral-200 dark:text-neutral-100 dark:bg-transparent dark:hover:bg-neutral-100 dark:hover:text-black'
+                      : 'bg-[#111111] text-white hover:bg-black dark:bg-white dark:text-black dark:hover:bg-neutral-200'
                 "
               >
                 <svg
@@ -189,16 +189,16 @@
                 {{ followButtonLabel }}
               </button>
 
-              <div class="flex items-center gap-5 text-[12px] text-[#8A8A8A]">
+              <div class="flex items-center gap-5 text-[12px] text-[#8A8A8A] dark:text-neutral-500">
                 <span class="inline-flex items-baseline gap-1.5">
-                  <span class="font-display text-[15px] text-[#111111] tabular-nums">{{
+                  <span class="font-display text-[15px] text-[#111111] dark:text-neutral-100 tabular-nums">{{
                     formatNumber(followersCount)
                   }}</span>
                   {{ t('follow.followers') }}
                 </span>
-                <span class="h-3 w-px bg-[#E7E7E7]"></span>
+                <span class="h-3 w-px bg-[#E7E7E7] dark:bg-neutral-700"></span>
                 <span class="inline-flex items-baseline gap-1.5">
-                  <span class="font-display text-[15px] text-[#111111] tabular-nums">{{
+                  <span class="font-display text-[15px] text-[#111111] dark:text-neutral-100 tabular-nums">{{
                     formatNumber(followingCount)
                   }}</span>
                   {{ t('follow.followingCount') }}
@@ -208,10 +208,10 @@
           </div>
 
           <!-- Stats row -->
-          <div class="mt-10 grid grid-cols-3 gap-4 border-t border-[#F0F0F0] pt-8">
+          <div class="mt-10 grid grid-cols-3 gap-4 border-t border-[#F0F0F0] dark:border-neutral-800 pt-8">
             <div class="flex flex-col items-center gap-1.5">
               <svg
-                class="h-4 w-4 text-[#8A8A8A]"
+                class="h-4 w-4 text-[#8A8A8A] dark:text-neutral-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -228,14 +228,14 @@
                   d="M14 3v5h5M8.5 12h7M8.5 15.5h7M8.5 8.5h2"
                 />
               </svg>
-              <p class="text-[17px] font-display text-[#111111] tabular-nums">
+              <p class="text-[17px] font-display text-[#111111] dark:text-neutral-100 tabular-nums">
                 {{ formatNumber(totalBlogs) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">{{ t('publicProfile.posts') }}</p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] dark:text-neutral-500 uppercase">{{ t('publicProfile.posts') }}</p>
             </div>
-            <div class="flex flex-col items-center gap-1.5 border-x border-[#F0F0F0]">
+            <div class="flex flex-col items-center gap-1.5 border-x border-[#F0F0F0] dark:border-neutral-800">
               <svg
-                class="h-4 w-4 text-[#8A8A8A]"
+                class="h-4 w-4 text-[#8A8A8A] dark:text-neutral-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -247,14 +247,14 @@
                   d="M12 20.2s-7.6-4.5-9.8-9A5 5 0 0112 6.5 5 5 0 0121.8 11.2c-2.2 4.5-9.8 9-9.8 9z"
                 />
               </svg>
-              <p class="text-[17px] font-display text-[#111111] tabular-nums">
+              <p class="text-[17px] font-display text-[#111111] dark:text-neutral-100 tabular-nums">
                 {{ formatNumber(totalLikes) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">{{ t('publicProfile.likes') }}</p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] dark:text-neutral-500 uppercase">{{ t('publicProfile.likes') }}</p>
             </div>
             <div class="flex flex-col items-center gap-1.5">
               <svg
-                class="h-4 w-4 text-[#8A8A8A]"
+                class="h-4 w-4 text-[#8A8A8A] dark:text-neutral-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -267,24 +267,24 @@
                 />
                 <circle cx="12" cy="12" r="2.6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-              <p class="text-[17px] font-display text-[#111111] tabular-nums">
+              <p class="text-[17px] font-display text-[#111111] dark:text-neutral-100 tabular-nums">
                 {{ formatNumber(blogViews) }}
               </p>
-              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] uppercase">{{ t('publicProfile.views') }}</p>
+              <p class="text-[11px] tracking-[0.1em] text-[#B0B0B0] dark:text-neutral-500 uppercase">{{ t('publicProfile.views') }}</p>
             </div>
           </div>
         </div>
 
         <!-- Section label -->
         <div class="mt-14 mb-6 flex items-center gap-4">
-          <h2 class="text-[11px] tracking-[0.2em] text-[#8A8A8A] uppercase whitespace-nowrap">
+          <h2 class="text-[11px] tracking-[0.2em] text-[#8A8A8A] dark:text-neutral-500 uppercase whitespace-nowrap">
             {{ t('publicProfile.stories') }}
           </h2>
-          <span class="h-px flex-1 bg-[#E7E7E7]"></span>
+          <span class="h-px flex-1 bg-[#E7E7E7] dark:bg-neutral-800"></span>
         </div>
 
         <!-- Blog list -->
-        <div v-if="blogs.length" class="flex flex-col divide-y divide-[#F0F0F0]">
+        <div v-if="blogs.length" class="flex flex-col divide-y divide-[#F0F0F0] dark:divide-neutral-800">
           <router-link
             v-for="blog in blogs"
             :key="blog._id"
@@ -293,7 +293,7 @@
           >
             <div
               v-if="blog.isRepost"
-              class="mb-2 flex items-center gap-1.5 text-[11px] text-[#8A8A8A]"
+              class="mb-2 flex items-center gap-1.5 text-[11px] text-[#8A8A8A] dark:text-neutral-500"
             >
               <svg
                 class="h-3.5 w-3.5"
@@ -313,7 +313,7 @@
             <div class="group flex items-center gap-4">
               <!-- Thumbnail -->
               <div
-                class="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-[2px] border border-[#E7E7E7] bg-[#FAFAFA]"
+                class="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-[2px] border border-[#E7E7E7] dark:border-neutral-800 bg-[#FAFAFA] dark:bg-neutral-800"
               >
                 <img
                   v-if="blog.coverImage"
@@ -323,7 +323,7 @@
                   loading="lazy"
                 />
                 <div v-else class="h-full w-full flex items-center justify-center">
-                  <span class="font-display italic text-xl text-[#D8D8D8]">{{
+                  <span class="font-display italic text-xl text-[#D8D8D8] dark:text-neutral-600">{{
                     getInitials(blog.title)
                   }}</span>
                 </div>
@@ -332,18 +332,18 @@
               <!-- Content -->
               <div class="flex-1 min-w-0">
                 <h3
-                  class="font-display italic text-[16px] sm:text-[18px] leading-snug text-[#111111] line-clamp-2 group-hover:underline underline-offset-2"
+                  class="font-display italic text-[16px] sm:text-[18px] leading-snug text-[#111111] dark:text-neutral-100 line-clamp-2 group-hover:underline underline-offset-2"
                 >
                   {{ blog.title }}
                 </h3>
-                <p v-if="blog.excerpt" class="mt-1 text-[12.5px] text-[#8A8A8A] line-clamp-2">
+                <p v-if="blog.excerpt" class="mt-1 text-[12.5px] text-[#8A8A8A] dark:text-neutral-500 line-clamp-2">
                   {{ blog.excerpt }}
                 </p>
 
                 <!-- Music tag -->
                 <span
                   v-if="blog.song || blog.music"
-                  class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#E7E7E7] px-2.5 py-0.5 text-[11px] font-medium text-[#4B4B4B]"
+                  class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#E7E7E7] dark:border-neutral-700 px-2.5 py-0.5 text-[11px] font-medium text-[#4B4B4B] dark:text-neutral-400"
                 >
                   <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -355,7 +355,7 @@
                   }}{{ blog.song?.title ?? blog.music?.title ?? blog.song ?? blog.music }}
                 </span>
 
-                <div class="mt-2 flex items-center gap-3 text-[11px] text-[#B0B0B0]">
+                <div class="mt-2 flex items-center gap-3 text-[11px] text-[#B0B0B0] dark:text-neutral-500">
                   <span class="inline-flex items-center gap-1">
                     <svg
                       class="h-3.5 w-3.5"
@@ -407,13 +407,13 @@
         <!-- Empty state -->
         <div
           v-else
-          class="border border-dashed border-[#D8D8D8] rounded-[3px] py-16 px-6 text-center"
+          class="border border-dashed border-[#D8D8D8] dark:border-neutral-700 rounded-[3px] py-16 px-6 text-center"
         >
           <div
-            class="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#E7E7E7]"
+            class="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#E7E7E7] dark:border-neutral-700"
           >
             <svg
-              class="h-5 w-5 text-[#B0B0B0]"
+              class="h-5 w-5 text-[#B0B0B0] dark:text-neutral-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -427,8 +427,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
             </svg>
           </div>
-          <h3 class="mt-4 font-display italic text-[19px] text-[#111111]">{{ t('publicProfile.noArticles') }}</h3>
-          <p class="mt-1 text-[13px] text-[#8A8A8A]">{{ t('publicProfile.checkBack') }}</p>
+          <h3 class="mt-4 font-display italic text-[19px] text-[#111111] dark:text-neutral-100">{{ t('publicProfile.noArticles') }}</h3>
+          <p class="mt-1 text-[13px] text-[#8A8A8A] dark:text-neutral-500">{{ t('publicProfile.checkBack') }}</p>
         </div>
       </template>
 
@@ -436,7 +436,7 @@
       <router-link
         v-if="isOwnProfile"
         to="/blogs/create"
-        class="fixed bottom-6 right-6 z-20 inline-flex items-center gap-2 rounded-full bg-[#111111] px-5 py-3 text-[13px] font-medium text-white shadow-[0_1px_2px_rgba(0,0,0,0.05),0_14px_28px_-10px_rgba(0,0,0,0.45)] hover:bg-black transition-colors"
+        class="fixed bottom-6 right-6 z-20 inline-flex items-center gap-2 rounded-full bg-[#111111] dark:bg-white px-5 py-3 text-[13px] font-medium text-white dark:text-black shadow-[0_1px_2px_rgba(0,0,0,0.05),0_14px_28px_-10px_rgba(0,0,0,0.45)] hover:bg-black dark:hover:bg-neutral-200 transition-colors"
       >
         <svg
           class="h-4 w-4"
@@ -454,7 +454,7 @@
       <transition name="toast">
         <div
           v-if="toast"
-          class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 px-4 py-2.5 bg-[#111111] text-white text-[13px] rounded-full shadow-[0_10px_24px_-8px_rgba(0,0,0,0.5)]"
+          class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 px-4 py-2.5 bg-[#111111] dark:bg-white text-white dark:text-black text-[13px] rounded-full shadow-[0_10px_24px_-8px_rgba(0,0,0,0.5)]"
         >
           {{ toast }}
         </div>

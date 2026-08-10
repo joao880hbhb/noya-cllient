@@ -23,7 +23,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Computed
   const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
-  const userDisplayName = computed(() => user.value?.name || user.value?.email || t('common.user'))
+  const needsOnboarding = computed(() => isAuthenticated.value && user.value?.onboardingCompleted === false)
+  const userDisplayName = computed(() => user.value?.name || user.value?.displayName || user.value?.email || t('common.user'))
 
   // Actions
   const setToken = (token) => {
@@ -219,6 +220,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // Selesaikan onboarding (pilih avatar preset + edit display name)
+  const completeOnboarding = async (data) => {
+    try {
+      isLoading.value = true
+      clearError()
+
+      const response = await profileAPI.completeOnboarding(data)
+      const returnedUser = response.data?.user ?? response.data?.data
+      if (returnedUser) setUser(returnedUser)
+
+      return { success: true, data: response.data }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || t('auth.onboardingFailed')
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     // State
     user,
@@ -228,6 +249,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // Computed
     isAuthenticated,
+    needsOnboarding,
     userDisplayName,
 
     // Actions
@@ -239,6 +261,7 @@ export const useAuthStore = defineStore('auth', () => {
     refreshToken,
     initializeAuth,
     updateProfile,
+    completeOnboarding,
     clearError,
   }
 })

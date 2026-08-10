@@ -27,18 +27,10 @@
 
     <!-- SECTION 1: HERO & LOGIN CARD -->
     <main class="w-full max-w-7xl mx-auto px-6 py-12 md:py-24">
-      <div class="grid lg:grid-cols-12 gap-12 items-center min-h-[70vh]">
+      <div class="grid lg:grid-cols-12 gap-12 items-center min-h-[60vh]">
         <!-- Hero Text -->
         <div class="lg:col-span-7 space-y-6 text-left">
-          <div 
-            :class="[
-              'inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-300',
-              isDark ? 'bg-white/[0.04] border-white/[0.08] text-purple-200' : 'bg-purple-50 border-purple-100 text-purple-700'
-            ]"
-          >
-            <span class="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
-            {{ t('login.badge') }}
-          </div>
+        
           <h1 
             :class="[
               'font-display italic text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight transition-colors duration-300',
@@ -181,129 +173,45 @@
       </div>
     </main>
 
-    <!-- SECTION 2: FEATURES SECTION -->
-    <section 
-      id="features-section" 
+    <!-- SECTION 3.5: LATEST WRITERS (marquee 2 baris) -->
+    <section
+      v-if="latestUsers.length"
       :class="[
-        'w-full border-t transition-colors duration-300 py-20',
+        'w-full border-t transition-colors duration-300 py-20 overflow-hidden',
         isDark ? 'border-white/[0.05] bg-white/[0.01]' : 'border-stone-200 bg-stone-50/30'
       ]"
     >
       <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center max-w-xl mx-auto mb-16">
-          <h2 
+        <div class="text-center max-w-xl mx-auto mb-12">
+          <h2
             :class="[
               'font-display italic text-3xl sm:text-4xl transition-colors duration-300',
               isDark ? 'text-white' : 'text-stone-900'
             ]"
           >
-            {{ t('login.featuresTitle') }}
+            {{ t('login.latestWriters') }}
           </h2>
           <p :class="['text-sm mt-2', isDark ? 'text-gray-400' : 'text-stone-500']">
-            {{ t('login.featuresSubtitle') }}
+            {{ t('login.latestWritersSubtitle') }}
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-          <!-- Feature 1 -->
-          <div 
-            :class="[
-              'border rounded-2xl p-8 transition-all duration-300',
-              isDark 
-                ? 'bg-white/[0.02] border-white/[0.05] hover:border-purple-500/20 hover:bg-white/[0.03]' 
-                : 'bg-white border-stone-200 shadow-sm hover:shadow-md hover:border-purple-500/10'
-            ]"
-          >
-            <div 
-              :class="[
-                'h-10 w-10 rounded-lg flex items-center justify-center mb-6 border transition-colors duration-300',
-                isDark 
-                  ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' 
-                  : 'bg-purple-50 border-purple-200/60 text-purple-600'
-              ]"
-            >
-              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </div>
-            <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
-              {{ t('login.feature1Title') }}
-            </h3>
-            <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
-              {{ t('login.feature1Desc') }}
-            </p>
-          </div>
-
-          <!-- Feature 2 -->
-          <div 
-            :class="[
-              'border rounded-2xl p-8 transition-all duration-300',
-              isDark 
-                ? 'bg-white/[0.02] border-white/[0.05] hover:border-purple-500/20 hover:bg-white/[0.03]' 
-                : 'bg-white border-stone-200 shadow-sm hover:shadow-md hover:border-purple-500/10'
-            ]"
-          >
-            <div 
-              :class="[
-                'h-10 w-10 rounded-lg flex items-center justify-center mb-6 border transition-colors duration-300',
-                isDark 
-                  ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' 
-                  : 'bg-purple-50 border-purple-200/60 text-purple-600'
-              ]"
-            >
-              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-              </svg>
-            </div>
-            <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
-              {{ t('login.feature2Title') }}
-            </h3>
-            <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
-              {{ t('login.feature2Desc') }}
-            </p>
-          </div>
-
-          <!-- Feature 3 -->
-          <div 
-            :class="[
-              'border rounded-2xl p-8 transition-all duration-300',
-              isDark 
-                ? 'bg-white/[0.02] border-white/[0.05] hover:border-purple-500/20 hover:bg-white/[0.03]' 
-                : 'bg-white border-stone-200 shadow-sm hover:shadow-md hover:border-purple-500/10'
-            ]"
-          >
-            <div 
-              :class="[
-                'h-10 w-10 rounded-lg flex items-center justify-center mb-6 border transition-colors duration-300',
-                isDark 
-                  ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' 
-                  : 'bg-purple-50 border-purple-200/60 text-purple-600'
-              ]"
-            >
-              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-              </svg>
-            </div>
-            <h3 :class="['font-display italic text-xl font-bold mb-3', isDark ? 'text-white' : 'text-stone-850']">
-              {{ t('login.feature3Title') }}
-            </h3>
-            <p :class="['text-sm leading-relaxed', isDark ? 'text-gray-400' : 'text-stone-600']">
-              {{ t('login.feature3Desc') }}
-            </p>
-          </div>
+        <div class="space-y-5">
+          <!-- Baris 1: geser ke kanan -->
+          <UserMarquee :users="latestRowA" direction="right" :is-dark="isDark" />
+          <!-- Baris 2: geser ke kiri -->
+          <UserMarquee :users="latestRowB" direction="left" :is-dark="isDark" />
         </div>
       </div>
-    </section>
+     </section>
 
-    <!-- SECTION 3: TRENDING SHOWCASE -->
-    <section 
-      :class="[
-        'w-full border-t transition-colors duration-300 py-20',
-        isDark ? 'border-white/[0.05]' : 'border-stone-200'
-      ]"
-    >
-      <div class="max-w-4xl mx-auto px-6">
-        <div class="text-center max-w-xl mx-auto mb-16">
+     
+<!-- DOME -->
+      <div style="width: 100vw; height: 100vh;"
+      
+      >
+        
+            <div class="text-center max-w-xl mx-auto mb-12 mt-20">
           <h2 
             :class="[
               'font-display italic text-3xl sm:text-4xl transition-colors duration-300',
@@ -316,86 +224,20 @@
             {{ t('login.trendingSubtitle') }}
           </p>
         </div>
-
-        <!-- Blog Cards Grid -->
-        <div class="space-y-4">
-          <div
-            v-if="trendingLoading"
-            class="space-y-4"
-          >
-            <div 
-              v-for="i in 3" 
-              :key="i" 
-              :class="[
-                'border rounded-2xl p-6 animate-pulse flex items-center justify-between transition-colors duration-300',
-                isDark ? 'bg-white/[0.01] border-white/[0.05]' : 'bg-white border-stone-200 shadow-sm'
-              ]"
-            >
-              <div class="flex-1 space-y-3">
-                <div class="h-4 bg-white/10 rounded w-1/3"></div>
-                <div class="h-3 bg-white/5 rounded w-3/4"></div>
-              </div>
-              <div class="h-16 w-16 bg-white/5 rounded-xl ml-4"></div>
-            </div>
-          </div>
-
-          <div
-            v-else-if="trendingBlogs.length"
-            class="space-y-4"
-          >
-            <div
-              v-for="blog in trendingBlogs"
-              :key="blog._id"
-              :class="[
-                'group block border rounded-2xl p-6 transition-all duration-300',
-                isDark 
-                  ? 'bg-white/[0.01] border-white/[0.05] hover:border-purple-500/10 hover:bg-white/[0.02]' 
-                  : 'bg-white border-stone-200 hover:border-purple-500/20 shadow-sm hover:shadow-md'
-              ]"
-            >
-              <div class="flex items-center justify-between gap-6">
-                <div class="flex-1 min-w-0">
-                  <div :class="['flex items-center gap-2 mb-2 text-xs transition-colors', isDark ? 'text-gray-450' : 'text-stone-500']">
-                    <span class="font-medium">{{ blog.author?.displayName || t('login.authorNoya') }}</span>
-                    <span>&middot;</span>
-                    <span>{{ formatRelativeTime(blog.publishedAt || blog.createdAt) }}</span>
-                  </div>
-                  <h3 
-                    :class="[
-                      'font-display italic text-lg sm:text-xl font-bold group-hover:text-purple-500 transition-colors line-clamp-1',
-                      isDark ? 'text-white' : 'text-stone-900'
-                    ]"
-                  >
-                    {{ blog.title }}
-                  </h3>
-                  <p :class="['text-xs sm:text-sm mt-1.5 line-clamp-2 leading-relaxed transition-colors', isDark ? 'text-gray-400' : 'text-stone-600']">
-                    {{ blog.excerpt || t('login.excerptFallback') }}
-                  </p>
-                </div>
-                <div 
-                  v-if="blog.coverImage" 
-                  :class="[
-                    'h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-xl overflow-hidden border transition-colors',
-                    isDark ? 'bg-gray-900 border-white/5' : 'bg-stone-100 border-stone-200'
-                  ]"
-                >
-                  <img :src="blog.coverImage" :alt="blog.title" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-else class="text-center py-10 text-gray-500 text-sm">
-            {{ t('login.noPublicStories') }}
-          </div>
-        </div>
-      </div>
-    </section>
+  <DomeGallery
+    :images="domeImages"
+    :read-more-label="t('login.readMore')"
+    :min-radius="isMobile ? 320 : 600"
+    :segments="isMobile ? 22 : 35"
+    :drag-sensitivity="isMobile ? 12 : 20"
+    @select="handleSelectBlog"
+  />
+  </div>
 
     <!-- SECTION 4: CALL TO ACTION -->
     <section 
       :class="[
-        'w-full border-t transition-colors duration-300 py-24 text-center',
+        'w-full border-t transition-colors duration-300 py-24 text-center mt-52',
         isDark 
           ? 'border-white/[0.05] bg-gradient-to-b from-transparent to-purple-950/10' 
           : 'border-stone-200 bg-gradient-to-b from-transparent to-purple-500/[0.02]'
@@ -443,12 +285,25 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, watch } from "vue";
+import { onMounted, onBeforeUnmount, ref, watch, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import DomeGallery from "@/components/landingpage/DomeGallery.vue"
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/auth";
-import { blogAPI } from "@/services/api";
+import { blogAPI, profileAPI } from "@/services/api";
 import { formatRelativeTime } from "@/utils/helpers";
+import UserMarquee from "@/components/UserMarquee.vue";
+const isMobile = ref(false);
+
+function checkMobile() {
+  isMobile.value = window.innerWidth < 768;
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+onUnmounted(() => window.removeEventListener('resize', checkMobile));
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -498,6 +353,40 @@ watch(isDark, () => {
 const trendingBlogs = ref([]);
 const trendingLoading = ref(true);
 
+// ---- User terbaru (marquee 2 baris, fetch bertahap 20 → 40 → 60) ----
+const LATEST_BATCH = 20;
+const LATEST_WANTED = 60;
+const latestUsers = ref([]);
+const latestLoading = ref(false);
+
+const latestRowA = computed(() => latestUsers.value.slice(0, 30));
+const latestRowB = computed(() => latestUsers.value.slice(30, 60));
+
+const fetchLatestUsers = async () => {
+  if (latestLoading.value) return;
+  latestLoading.value = true;
+  let before = null;
+  let collected = [];
+  let hasMore = true;
+  try {
+    // Progressive: tarik 20 dulu, lalu lanjut 20 berikutnya dst.
+    while (collected.length < LATEST_WANTED && hasMore) {
+      const res = await profileAPI.getLatestUsers({ limit: LATEST_BATCH, before });
+      const batch = res.data?.users || [];
+      if (!batch.length) break;
+      collected = [...collected, ...batch];
+      before = res.data?.nextBefore || null;
+      hasMore = !!res.data?.hasMore;
+    }
+    latestUsers.value = collected;
+  } catch (err) {
+    // Non-blocking — landing tetap tampil walau gagal
+    console.warn("Failed to load latest users:", err);
+  } finally {
+    latestLoading.value = false;
+  }
+};
+
 const toggleRememberMe = () => {
   authStore.setRememberMe(!authStore.rememberMe);
 };
@@ -533,6 +422,11 @@ onMounted(async () => {
     const credential = response.credential;
     const result = await authStore.loginWithGoogle(credential);
     if (result.success) {
+      // User baru (baru daftar) → arahkan lengkapi profil (avatar + display name)
+      if (authStore.needsOnboarding) {
+        router.push({ name: 'profile-setup' })
+        return
+      }
       const redirectTo = router.currentRoute.value.query.redirect || "/";
       router.push(redirectTo);
     }
@@ -566,14 +460,34 @@ onMounted(async () => {
 
   // Fetch trending stories for showcase
   try {
-    const response = await blogAPI.getAllBlogs({ sort: "trending", limit: 3 });
+    const response = await blogAPI.getAllBlogs({ sort: "trending", limit: 8 });
     trendingBlogs.value = response.data.blogs || [];
   } catch (err) {
     console.error("Failed to load trending blogs for preview", err);
   } finally {
     trendingLoading.value = false;
   }
+
+  // Fetch latest writers untuk marquee (berjalan paralel, tidak memblok halaman)
+  fetchLatestUsers();
 });
+
+
+
+
+const domeImages = computed(() =>
+  trendingBlogs.value.map((blog) => ({
+    src: blog.coverImage || '/images/default-cover.jpg',
+    alt: blog.title,
+    title: blog.title,
+    author: blog.author?.displayName || t('login.authorNoya'),
+    link: `/blogs/${blog.slug || blog._id}`,
+  }))
+);
+
+function handleSelectBlog(item) {
+  if (item.link) router.push(item.link);
+}
 </script>
 
 <style scoped>

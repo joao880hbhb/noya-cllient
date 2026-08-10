@@ -2,6 +2,7 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { useTheme } from '@/composables/useTheme'
 import { blogAPI } from '@/services/api'
 import BlogCard from '@/components/BlogCard.vue'
 import UserSearch from '@/components/UserSearch.vue'
@@ -9,6 +10,7 @@ import { getInitials, formatRelativeTime } from '@/utils/helpers'
 
 const authStore = useAuthStore()
 const { t } = useI18n()
+const { isDark } = useTheme()
 
 const trendingBlogs = ref([])
 const latestBlogs = ref([])
@@ -87,41 +89,42 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white">
+  <div :class="['min-h-screen transition-colors duration-300', isDark ? 'bg-[#060608] text-white' : 'bg-white text-gray-900']">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Beranda header -->
-
       <!-- User search -->
       <div class="mb-8 max-w-xl">
         <UserSearch />
       </div>
+
+      <!-- Beranda header -->
       <div class="mb-6 flex items-end justify-between">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">
+          <h1 :class="['text-2xl font-bold', isDark ? 'text-white' : 'text-gray-900']">
             {{ t('home.greeting', { name: authStore.user?.displayName || t('common.user') }) }}
           </h1>
-          <p class="mt-1 text-sm text-gray-500">{{ t('home.subtitle') }}</p>
+          <p :class="['mt-1 text-sm', isDark ? 'text-gray-400' : 'text-gray-500']">{{ t('home.subtitle') }}</p>
         </div>
         <router-link
           to="/blogs"
-          class="inline-flex items-center text-sm font-medium text-black whitespace-nowrap shrink-0"
+          :class="['inline-flex items-center text-sm font-medium whitespace-nowrap shrink-0', isDark ? 'text-white hover:text-gray-300' : 'text-black hover:text-gray-700']"
         >
           {{ t('home.viewAll') }} &rarr;
         </router-link>
       </div>
+
       <!-- Loading state -->
       <div v-if="loading" class="space-y-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div
             v-for="i in 4"
             :key="i"
-            class="flex items-center gap-3 bg-gray-50 rounded-2xl p-3 animate-pulse"
+            :class="['flex items-center gap-3 rounded-2xl p-3 animate-pulse', isDark ? 'bg-white/[0.03]' : 'bg-gray-50']"
           >
-            <div class="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-xl bg-gray-100"></div>
+            <div :class="['h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-xl', isDark ? 'bg-white/[0.06]' : 'bg-gray-100']"></div>
             <div class="flex-1 min-w-0">
-              <div class="h-4 bg-gray-100 rounded mb-2 w-3/4"></div>
-              <div class="h-3 bg-gray-100 rounded mb-2 w-full"></div>
-              <div class="h-3 bg-gray-100 rounded w-1/2"></div>
+              <div :class="['h-4 rounded mb-2 w-3/4', isDark ? 'bg-white/[0.06]' : 'bg-gray-100']"></div>
+              <div :class="['h-3 rounded mb-2 w-full', isDark ? 'bg-white/[0.06]' : 'bg-gray-100']"></div>
+              <div :class="['h-3 rounded w-1/2', isDark ? 'bg-white/[0.06]' : 'bg-gray-100']"></div>
             </div>
           </div>
         </div>
@@ -129,7 +132,7 @@ onBeforeUnmount(() => {
 
       <!-- Error state -->
       <div v-else-if="error" class="text-center py-20">
-        <p class="text-gray-500">{{ error }}</p>
+        <p :class="isDark ? 'text-gray-400' : 'text-gray-500'">{{ error }}</p>
         <button
           @click="fetchFeed"
           class="mt-4 px-4 py-2 bg-[#5B4BFF] text-white rounded-full text-sm font-medium hover:bg-[#4a3dcc]"
@@ -142,12 +145,7 @@ onBeforeUnmount(() => {
         <!-- Trending on Noya -->
         <section v-if="trendingBlogs.length" class="mb-10">
           <div class="mb-4 flex items-center gap-2">
-            <h2 class="font-serif text-xl font-bold text-gray-900">{{ t('home.trendingOnNoya') }}</h2>
-            <!-- <span
-              class="rounded-full bg-[#5B4BFF]/10 px-2 py-0.5 text-xs font-semibold text-[#e49d2c]"
-            >
-              LIVE
-            </span> -->
+            <h2 :class="['font-serif text-xl font-bold', isDark ? 'text-white' : 'text-gray-900']">{{ t('home.trendingOnNoya') }}</h2>
           </div>
 
           <!-- Horizontal compact cards, 2 per row -->
@@ -159,12 +157,15 @@ onBeforeUnmount(() => {
               class="block"
             >
               <div
-                class="group flex items-center gap-3 bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] p-3 hover:shadow-[0_4px_20px_rgba(0,0,0,0.1)] transition-shadow h-full"
+                :class="[
+                  'group flex items-center gap-3 rounded-2xl p-3 transition-all h-full',
+                  isDark
+                    ? 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04]'
+                    : 'bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.1)]',
+                ]"
               >
                 <!-- Thumbnail -->
-                <div
-                  class="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-xl bg-gray-100"
-                >
+                <div :class="['relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-xl', isDark ? 'bg-white/[0.05]' : 'bg-gray-100']">
                   <img
                     v-if="blog.coverImage"
                     :src="blog.coverImage"
@@ -173,13 +174,16 @@ onBeforeUnmount(() => {
                     loading="lazy"
                   />
                   <div v-else class="h-full w-full flex items-center justify-center">
-                    <span class="text-xl font-bold text-gray-300">{{
+                    <span :class="['text-xl font-bold', isDark ? 'text-gray-600' : 'text-gray-300']">{{
                       getInitials(blog.title)
                     }}</span>
                   </div>
                   <!-- Rank -->
                   <span
-                    class="absolute top-1 left-1 h-6 w-6 rounded-md bg-white/90 backdrop-blur flex items-center justify-center font-serif text-xs font-bold text-gray-900 shadow-sm"
+                    :class="[
+                      'absolute top-1 left-1 h-6 w-6 rounded-md backdrop-blur flex items-center justify-center font-serif text-xs font-bold shadow-sm',
+                      isDark ? 'bg-black/70 text-white' : 'bg-white/90 text-gray-900',
+                    ]"
                   >
                     {{ String(index + 1).padStart(2, '0') }}
                   </span>
@@ -188,16 +192,16 @@ onBeforeUnmount(() => {
                 <!-- Content -->
                 <div class="flex-1 min-w-0">
                   <h3
-                    class="font-serif text-sm sm:text-base font-bold leading-snug text-gray-900 line-clamp-2"
+                    :class="['font-serif text-sm sm:text-base font-bold leading-snug line-clamp-2', isDark ? 'text-white' : 'text-gray-900']"
                   >
                     {{ blog.title }}
                   </h3>
-                  <p v-if="blog.excerpt" class="mt-1 text-xs text-gray-500 line-clamp-2">
+                  <p v-if="blog.excerpt" :class="['mt-1 text-xs line-clamp-2', isDark ? 'text-gray-400' : 'text-gray-500']">
                     {{ blog.excerpt }}
                   </p>
 
                   <!-- Like & view info -->
-                  <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
+                  <div :class="['mt-2 flex items-center gap-3 text-xs', isDark ? 'text-gray-500' : 'text-gray-400']">
                     <span class="inline-flex items-center gap-1">
                       <svg
                         class="h-3.5 w-3.5"
@@ -249,11 +253,11 @@ onBeforeUnmount(() => {
         <!-- Latest stories -->
         <section>
           <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-serif text-xl font-bold text-gray-900">{{ t('home.latestStories') }}</h2>
-            <span class="h-px flex-1 bg-gray-100"></span>
+            <h2 :class="['font-serif text-xl font-bold', isDark ? 'text-white' : 'text-gray-900']">{{ t('home.latestStories') }}</h2>
+            <span :class="['h-px flex-1', isDark ? 'bg-white/10' : 'bg-gray-100']"></span>
           </div>
 
-          <div v-if="latestBlogs.length" class="flex flex-col divide-y divide-gray-100">
+          <div v-if="latestBlogs.length" :class="['flex flex-col divide-y', isDark ? 'divide-white/10' : 'divide-gray-100']">
             <router-link
               v-for="blog in latestBlogs"
               :key="blog._id"
@@ -262,9 +266,7 @@ onBeforeUnmount(() => {
             >
               <div class="group flex items-center gap-4">
                 <!-- Thumbnail (kiri) -->
-                <div
-                  class="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-xl bg-gray-100"
-                >
+                <div :class="['relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-xl', isDark ? 'bg-white/[0.05]' : 'bg-gray-100']">
                   <img
                     v-if="blog.coverImage"
                     :src="blog.coverImage"
@@ -273,7 +275,7 @@ onBeforeUnmount(() => {
                     loading="lazy"
                   />
                   <div v-else class="h-full w-full flex items-center justify-center">
-                    <span class="text-xl font-bold text-gray-300">{{
+                    <span :class="['text-xl font-bold', isDark ? 'text-gray-600' : 'text-gray-300']">{{
                       getInitials(blog.title)
                     }}</span>
                   </div>
@@ -282,18 +284,21 @@ onBeforeUnmount(() => {
                 <!-- Content (kanan) -->
                 <div class="flex-1 min-w-0">
                   <h3
-                    class="font-serif text-sm sm:text-base font-bold leading-snug text-gray-900 line-clamp-2"
+                    :class="['font-serif text-sm sm:text-base font-bold leading-snug line-clamp-2', isDark ? 'text-white' : 'text-gray-900']"
                   >
                     {{ blog.title }}
                   </h3>
-                  <p v-if="blog.excerpt" class="mt-1 text-xs text-gray-500 line-clamp-2">
+                  <p v-if="blog.excerpt" :class="['mt-1 text-xs line-clamp-2', isDark ? 'text-gray-400' : 'text-gray-500']">
                     {{ blog.excerpt }}
                   </p>
 
                   <!-- Tag lagu -->
                   <span
                     v-if="blog.song || blog.music"
-                    class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#E7E7E7] px-2.5 py-0.5 text-[11px] font-medium text-[#4B4B4B]"
+                    :class="[
+                      'mt-2 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium',
+                      isDark ? 'border-white/15 text-gray-300' : 'border-[#E7E7E7] text-[#4B4B4B]',
+                    ]"
                   >
                     <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                       <path
@@ -305,7 +310,7 @@ onBeforeUnmount(() => {
                     }}{{ blog.song?.title ?? blog.music?.title ?? blog.song ?? blog.music }}
                   </span>
 
-                  <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
+                  <div :class="['mt-2 flex items-center gap-3 text-xs', isDark ? 'text-gray-500' : 'text-gray-400']">
                     <span class="inline-flex items-center gap-1.5 min-w-0">
                       <img
                         v-if="blog.author?.picture"
@@ -315,7 +320,7 @@ onBeforeUnmount(() => {
                       />
                       <div
                         v-else
-                        class="h-5 w-5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] font-bold text-gray-500 shrink-0"
+                        :class="['h-5 w-5 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0', isDark ? 'bg-white/10 text-gray-300' : 'bg-gray-100 text-gray-500']"
                       >
                         {{ getInitials(blog.author?.displayName || blog.author?.publicId) }}
                       </div>
@@ -371,18 +376,18 @@ onBeforeUnmount(() => {
           </div>
 
           <!-- Empty state -->
-          <div v-else class="rounded-[20px] bg-gray-50 py-16 px-6 text-center">
+          <div v-else :class="['rounded-[20px] py-16 px-6 text-center', isDark ? 'bg-white/[0.02]' : 'bg-gray-50']">
             <div
-              class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm"
+              :class="['mx-auto flex h-14 w-14 items-center justify-center rounded-full shadow-sm', isDark ? 'bg-white/5' : 'bg-white']"
             >
-              <svg class="h-7 w-7 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+              <svg :class="['h-7 w-7', isDark ? 'text-gray-600' : 'text-gray-300']" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   d="M4 3a1 1 0 011-1h8.586a1 1 0 01.707.293l2.414 2.414A1 1 0 0117 5.414V17a1 1 0 01-1 1H5a1 1 0 01-1-1V3zm9 1v3h3l-3-3z"
                 />
               </svg>
             </div>
-            <h3 class="mt-4 font-serif text-lg font-bold text-gray-800">{{ t('home.noStories') }}</h3>
-            <p class="mt-1 text-sm text-gray-500">{{ t('home.firstWriter') }}</p>
+            <h3 :class="['mt-4 font-serif text-lg font-bold', isDark ? 'text-white' : 'text-gray-800']">{{ t('home.noStories') }}</h3>
+            <p :class="['mt-1 text-sm', isDark ? 'text-gray-400' : 'text-gray-500']">{{ t('home.firstWriter') }}</p>
             <router-link
               v-if="authStore.isAuthenticated"
               to="/blogs/create"
@@ -397,14 +402,14 @@ onBeforeUnmount(() => {
             <!-- Loading spinner for more items -->
             <div v-if="loadingMore" class="flex flex-col items-center gap-2">
               <div
-                class="h-6 w-6 animate-spin rounded-full border-2 border-gray-200 border-t-[#5B4BFF]"
+                :class="['h-6 w-6 animate-spin rounded-full border-2 border-t-[#5B4BFF]', isDark ? 'border-white/10' : 'border-gray-200']"
               ></div>
-              <span class="text-xs text-gray-500 font-medium">{{ t('home.loadingMore') }}</span>
+              <span :class="['text-xs font-medium', isDark ? 'text-gray-400' : 'text-gray-500']">{{ t('home.loadingMore') }}</span>
             </div>
             <!-- No more items text -->
             <span
               v-else-if="!hasMore && latestBlogs.length > 0"
-              class="text-xs text-gray-400 font-medium"
+              :class="['text-xs font-medium', isDark ? 'text-gray-500' : 'text-gray-400']"
             >
               {{ t('home.allLoaded') }}
             </span>

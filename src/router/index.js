@@ -34,6 +34,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/profile/setup',
+      name: 'profile-setup',
+      component: () => import('../views/SetupProfileView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/profile/:publicId',
       name: 'public-profile',
       component: () => import('../views/PublicProfileView.vue'),
@@ -79,6 +85,10 @@ router.beforeEach((to, from, next) => {
       name: 'login',
       query: { redirect: to.fullPath },
     })
+  }
+  // User baru wajib selesaikan setup profil sebelum masuk aplikasi
+  else if (to.meta.requiresAuth && authStore.isAuthenticated && authStore.needsOnboarding && to.name !== 'profile-setup') {
+    next({ name: 'profile-setup' })
   }
   // Check if route requires guest (not authenticated)
   else if (to.meta.requiresGuest && authStore.isAuthenticated) {

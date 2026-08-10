@@ -206,6 +206,21 @@ export const profileAPI = {
   searchUsers: (query) => {
     return apiClient.get('/profile/search', { params: { q: query } })
   },
+
+  // Latest public users (cursor-based pagination, e.g. { limit: 20, before })
+  getLatestUsers: (params = {}) => {
+    return apiClient.get('/profile/latest', { params })
+  },
+
+  // Get preset avatars (onboarding "pilih avatar")
+  getPresetAvatars: () => {
+    return apiClient.get('/profile/avatars')
+  },
+
+  // Complete onboarding (pilih avatar preset + displayName)
+  completeOnboarding: (data) => {
+    return apiClient.post('/profile/onboard', data)
+  },
 }
 
 // ============================================

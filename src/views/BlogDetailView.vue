@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen bg-white">
+  <div :class="['min-h-screen transition-colors duration-300', isDark ? 'bg-[#060608] text-white reading-dark' : 'bg-white text-[#111111]']">
     <!-- Reading progress -->
-    <div class="fixed top-0 left-0 right-0 h-[2px] bg-[#F0F0F0] z-40">
+    <div :class="['fixed top-0 left-0 right-0 h-[2px] z-40', isDark ? 'bg-white/10' : 'bg-[#F0F0F0]']">
       <div
-        class="h-full bg-[#111111] transition-[width] duration-150 ease-out"
+        :class="['h-full transition-[width] duration-150 ease-out', isDark ? 'bg-white' : 'bg-[#111111]']"
         :style="{ width: progress + '%' }"
       ></div>
     </div>
@@ -11,7 +11,7 @@
     <div class="max-w-3xl mx-auto px-6 sm:px-10 py-12 sm:py-16">
       <button
         @click="router.back()"
-        class="mb-10 inline-flex items-center gap-2 text-[13px] font-medium text-[#6B6B6B] hover:text-[#111111] transition-colors"
+        :class="['mb-10 inline-flex items-center gap-2 text-[13px] font-medium transition-colors', isDark ? 'text-gray-400 hover:text-white' : 'text-[#6B6B6B] hover:text-[#111111]']"
       >
         <svg
           class="h-3.5 w-3.5"
@@ -27,7 +27,7 @@
 
       <!-- Loading state -->
       <div v-if="loading" class="flex flex-col items-center justify-center h-72 gap-3">
-        <svg class="animate-spin h-6 w-6 text-[#111111]" fill="none" viewBox="0 0 24 24">
+        <svg :class="['animate-spin h-6 w-6', isDark ? 'text-white' : 'text-[#111111]']" fill="none" viewBox="0 0 24 24">
           <circle
             class="opacity-20"
             cx="12"
@@ -42,15 +42,15 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
           ></path>
         </svg>
-        <p class="text-[11px] tracking-[0.15em] text-[#B0B0B0] uppercase">{{ t('blogDetail.loadingStory') }}</p>
+        <p :class="['text-[11px] tracking-[0.15em] uppercase', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">{{ t('blogDetail.loadingStory') }}</p>
       </div>
 
       <!-- Error state -->
-      <div v-else-if="error" class="border border-[#E7E7E7] rounded-[3px] p-10 text-center">
-        <p class="text-[11px] tracking-[0.15em] text-[#B3261E] uppercase mb-2">
+      <div v-else-if="error" :class="['border rounded-[3px] p-10 text-center', isDark ? 'border-white/10' : 'border-[#E7E7E7]']">
+        <p :class="['text-[11px] tracking-[0.15em] uppercase mb-2', isDark ? 'text-red-400' : 'text-[#B3261E]']">
           {{ t('blogDetail.loadError') }}
         </p>
-        <p class="text-[15px] text-[#4B4B4B]">{{ error }}</p>
+        <p :class="['text-[15px]', isDark ? 'text-gray-300' : 'text-[#4B4B4B]']">{{ error }}</p>
       </div>
 
       <!-- Blog content -->
@@ -106,13 +106,13 @@
         <!-- Cover image -->
 
         <!-- Title -->
-        <h1 class="font-display italic text-[32px] sm:text-[44px] leading-[1.1] text-[#111111]">
+        <h1 :class="['font-display italic text-[32px] sm:text-[44px] leading-[1.1]', isDark ? 'text-white' : 'text-[#111111]']">
           {{ blog.title }}
         </h1>
 
         <!-- Meta -->
         <div
-          class="mt-6 flex flex-wrap items-center justify-between gap-4 border-b border-[#F0F0F0] pb-6"
+          :class="['mt-6 flex flex-wrap items-center justify-between gap-4 border-b pb-6', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
         >
           <component
             :is="blog.author?.publicId ? 'router-link' : 'div'"
@@ -123,22 +123,22 @@
               v-if="blog.author?.picture"
               :src="blog.author.picture"
               :alt="authorName"
-              class="h-10 w-10 rounded-full object-cover border border-[#E7E7E7]"
+              :class="['h-10 w-10 rounded-full object-cover border', isDark ? 'border-white/10' : 'border-[#E7E7E7]']"
             />
             <div
               v-else
-              class="h-10 w-10 rounded-full bg-[#111111] flex items-center justify-center text-white text-[12px] font-medium"
+              :class="['h-10 w-10 rounded-full flex items-center justify-center text-[12px] font-medium', isDark ? 'bg-white text-black' : 'bg-[#111111] text-white']"
             >
               {{ getInitials(authorName) }}
             </div>
             <div>
-              <p class="text-[11px] tracking-wide text-[#B0B0B0]">{{ t('blogDetail.writtenBy') }}</p>
+              <p :class="['text-[11px] tracking-wide', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">{{ t('blogDetail.writtenBy') }}</p>
               <p
-                class="text-[13px] font-medium text-[#111111] group-hover:underline underline-offset-2"
+                :class="['text-[13px] font-medium group-hover:underline underline-offset-2', isDark ? 'text-white' : 'text-[#111111]']"
               >
                 {{ authorName }}
               </p>
-              <p class="text-[12px] text-[#B0B0B0]">
+              <p :class="['text-[12px]', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">
                 {{ formatDate(blog.publishedAt || blog.createdAt) }} &middot;
                 {{ t('blogDetail.minRead', { min: readingTime }) }}
               </p>
@@ -153,8 +153,8 @@
               class="inline-flex items-center gap-1.5 text-[13px] font-medium rounded-full px-3.5 py-1.5 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               :class="
                 liked
-                  ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100'
-                  : 'text-[#6B6B6B] border-[#E7E7E7] hover:border-[#111111] hover:text-[#111111]'
+                  ? (isDark ? 'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20' : 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100')
+                  : (isDark ? 'text-gray-400 border-white/10 hover:border-white hover:text-white' : 'text-[#6B6B6B] border-[#E7E7E7] hover:border-[#111111] hover:text-[#111111]')
               "
             >
               <svg
@@ -181,8 +181,8 @@
               class="inline-flex items-center gap-1.5 text-[13px] font-medium rounded-full px-3.5 py-1.5 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               :class="
                 reposted
-                  ? 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100'
-                  : 'text-[#6B6B6B] border-[#E7E7E7] hover:border-[#111111] hover:text-[#111111]'
+                  ? (isDark ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20' : 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100')
+                  : (isDark ? 'text-gray-400 border-white/10 hover:border-white hover:text-white' : 'text-[#6B6B6B] border-[#E7E7E7] hover:border-[#111111] hover:text-[#111111]')
               "
             >
               <svg
@@ -204,7 +204,10 @@
             <!-- Comment count -->
             <button
               @click="scrollToComments"
-              class="inline-flex items-center gap-1.5 text-[13px] font-medium rounded-full px-3.5 py-1.5 border border-[#E7E7E7] text-[#6B6B6B] hover:border-[#111111] hover:text-[#111111] transition-colors"
+              :class="[
+                'inline-flex items-center gap-1.5 text-[13px] font-medium rounded-full px-3.5 py-1.5 border transition-colors',
+                isDark ? 'border-white/10 text-gray-400 hover:border-white hover:text-white' : 'border-[#E7E7E7] text-[#6B6B6B] hover:border-[#111111] hover:text-[#111111]',
+              ]"
             >
               <svg
                 class="h-4 w-4"
@@ -223,7 +226,7 @@
             </button>
 
             <!-- Views -->
-            <span class="inline-flex items-center gap-1.5 text-[13px] text-[#B0B0B0]">
+            <span :class="['inline-flex items-center gap-1.5 text-[13px]', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">
               <svg
                 class="h-4 w-4"
                 fill="none"
@@ -245,32 +248,32 @@
 
         <div
           v-if="blog.coverImage"
-          class="mb-10 border border-[#E7E7E7] rounded-[3px] overflow-hidden"
+          :class="['mb-10 border rounded-[3px] overflow-hidden', isDark ? 'border-white/10' : 'border-[#E7E7E7]']"
         >
           <img :src="blog.coverImage" :alt="blog.title" class="w-full h-64 sm:h-96 object-cover" />
         </div>
         <!-- Excerpt -->
         <p
           v-if="blog.excerpt"
-          class="mt-8 pl-5 border-l-2 border-[#111111] font-display italic text-[19px] leading-relaxed text-[#4B4B4B]"
+          :class="['mt-8 pl-5 border-l-2 font-display italic text-[19px] leading-relaxed', isDark ? 'border-white text-gray-300' : 'border-[#111111] text-[#4B4B4B]']"
         >
           {{ blog.excerpt }}
         </p>
 
         <!-- Content -->
-        <div class="reading-content mt-8 text-[#1F1F1F]">
+        <div :class="['reading-content mt-8', isDark ? 'text-gray-200' : 'text-[#1F1F1F]']">
           <BlogContent :content="blog.content" />
         </div>
 
         <!-- Tags -->
         <div
           v-if="blog.tags && blog.tags.length"
-          class="mt-12 pt-6 border-t border-[#F0F0F0] flex flex-wrap gap-2"
+          :class="['mt-12 pt-6 border-t flex flex-wrap gap-2', isDark ? 'border-white/10' : 'border-[#F0F0F0]']"
         >
           <span
             v-for="tag in blog.tags"
             :key="tag"
-            class="px-3 py-1 border border-[#E7E7E7] text-[#4B4B4B] text-[12px] rounded-full"
+            :class="['px-3 py-1 border text-[12px] rounded-full', isDark ? 'border-white/10 text-gray-300' : 'border-[#E7E7E7] text-[#4B4B4B]']"
           >
             #{{ tag }}
           </span>
@@ -278,8 +281,8 @@
       </article>
 
       <!-- Comments section -->
-      <div ref="commentsSection" class="mt-14 border-t border-[#F0F0F0] pt-10">
-        <h2 class="font-display italic text-[24px] sm:text-[28px] text-[#111111]">{{ t('blogDetail.comments') }}</h2>
+      <div ref="commentsSection" :class="['mt-14 border-t pt-10', isDark ? 'border-white/10' : 'border-[#F0F0F0]']">
+        <h2 :class="['font-display italic text-[24px] sm:text-[28px]', isDark ? 'text-white' : 'text-[#111111]']">{{ t('blogDetail.comments') }}</h2>
 
         <!-- Comment form -->
         <div class="mt-6">
@@ -288,11 +291,11 @@
               v-if="authStore.user?.picture"
               :src="authStore.user.picture"
               :alt="authStore.user?.displayName"
-              class="h-9 w-9 rounded-full object-cover border border-[#E7E7E7] shrink-0"
+              :class="['h-9 w-9 rounded-full object-cover border shrink-0', isDark ? 'border-white/10' : 'border-[#E7E7E7]']"
             />
             <div
               v-else
-              class="h-9 w-9 rounded-full bg-[#111111] flex items-center justify-center text-white text-[12px] font-medium shrink-0"
+              :class="['h-9 w-9 rounded-full flex items-center justify-center text-[12px] font-medium shrink-0', isDark ? 'bg-white text-black' : 'bg-[#111111] text-white']"
             >
               {{ getInitials(authStore.user?.displayName || 'U') }}
             </div>
@@ -301,19 +304,27 @@
                 v-model="commentText"
                 rows="2"
                 maxlength="1000"
-                class="w-full text-[14px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[3px] focus:border-[#111111] focus:ring-0 px-3 py-2.5 resize-none transition-colors"
+                :class="[
+                  'w-full text-[14px] border rounded-[3px] focus:ring-0 px-3 py-2.5 resize-none transition-colors',
+                  isDark
+                    ? 'bg-white/[0.03] text-white placeholder-gray-600 border-white/15 focus:border-white'
+                    : 'text-[#111111] placeholder-[#C9C9C9] border-[#E7E7E7] focus:border-[#111111]',
+                ]"
                 :placeholder="t('blogDetail.commentPlaceholder')"
                 @keydown.ctrl.enter="submitComment"
                 @keydown.meta.enter="submitComment"
               ></textarea>
               <div class="flex items-center justify-between mt-2">
-                <span class="text-[11px] text-[#B0B0B0] tabular-nums"
+                <span :class="['text-[11px] tabular-nums', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']"
                   >{{ commentText.length }} / 1000</span
                 >
                 <button
                   type="submit"
                   :disabled="commentSubmitting"
-                  class="inline-flex items-center px-4 py-1.5 bg-[#111111] text-white rounded-full text-[12px] font-medium hover:bg-black disabled:opacity-50 transition-colors"
+                  :class="[
+                    'inline-flex items-center px-4 py-1.5 rounded-full text-[12px] font-medium disabled:opacity-50 transition-colors',
+                    isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-[#111111] text-white hover:bg-black',
+                  ]"
                 >
                   {{ commentSubmitting ? t('blogDetail.sending') : t('blogDetail.send') }}
                 </button>
@@ -323,7 +334,10 @@
           <button
             v-else
             @click="openLoginPrompt('login-comment')"
-            class="w-full text-left border border-dashed border-[#D8D8D8] rounded-[3px] px-4 py-3.5 text-[13px] text-[#B0B0B0] hover:border-[#111111] hover:text-[#111111] transition-colors"
+            :class="[
+              'w-full text-left border border-dashed rounded-[3px] px-4 py-3.5 text-[13px] transition-colors',
+              isDark ? 'border-white/20 text-gray-500 hover:border-white hover:text-white' : 'border-[#D8D8D8] text-[#B0B0B0] hover:border-[#111111] hover:text-[#111111]',
+            ]"
           >
             {{ t('blogDetail.loginToComment') }}
           </button>
@@ -332,50 +346,50 @@
         <!-- Comment list -->
         <div v-if="commentsLoading" class="mt-6 space-y-4">
           <div v-for="i in 3" :key="i" class="flex gap-3 animate-pulse">
-            <div class="h-9 w-9 rounded-full bg-[#F0F0F0] shrink-0"></div>
+            <div :class="['h-9 w-9 rounded-full shrink-0', isDark ? 'bg-white/10' : 'bg-[#F0F0F0]']"></div>
             <div class="flex-1 space-y-2">
-              <div class="h-3 w-32 bg-[#F0F0F0] rounded"></div>
-              <div class="h-3 w-full bg-[#F0F0F0] rounded"></div>
+              <div :class="['h-3 w-32 rounded', isDark ? 'bg-white/10' : 'bg-[#F0F0F0]']"></div>
+              <div :class="['h-3 w-full rounded', isDark ? 'bg-white/10' : 'bg-[#F0F0F0]']"></div>
             </div>
           </div>
         </div>
 
-        <div v-else-if="commentsError" class="mt-6 border border-[#FDF7F6] bg-[#FDF7F6] px-4 py-3">
-          <p class="text-[13px] text-[#8C1D14]">{{ commentsError }}</p>
+        <div v-else-if="commentsError" :class="['mt-6 border px-4 py-3', isDark ? 'border-red-500/20 bg-red-500/10' : 'border-[#FDF7F6] bg-[#FDF7F6]']">
+          <p :class="['text-[13px]', isDark ? 'text-red-400' : 'text-[#8C1D14]']">{{ commentsError }}</p>
         </div>
 
-        <div v-else-if="comments.length" class="mt-6 flex flex-col divide-y divide-[#F0F0F0]">
+        <div v-else-if="comments.length" :class="['mt-6 flex flex-col divide-y', isDark ? 'divide-white/10' : 'divide-[#F0F0F0]']">
           <div v-for="comment in comments" :key="comment._id" class="py-5">
             <div class="flex items-start gap-3">
               <img
                 v-if="comment.author?.picture"
                 :src="comment.author.picture"
                 :alt="comment.author?.displayName"
-                class="h-9 w-9 rounded-full object-cover border border-[#E7E7E7] shrink-0"
+                :class="['h-9 w-9 rounded-full object-cover border shrink-0', isDark ? 'border-white/10' : 'border-[#E7E7E7]']"
               />
               <div
                 v-else
-                class="h-9 w-9 rounded-full bg-[#111111] flex items-center justify-center text-white text-[12px] font-medium shrink-0"
+                :class="['h-9 w-9 rounded-full flex items-center justify-center text-[12px] font-medium shrink-0', isDark ? 'bg-white text-black' : 'bg-[#111111] text-white']"
               >
                 {{ getInitials(commentAuthorName(comment)) }}
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-baseline gap-2">
-                  <p class="text-[13px] font-medium text-[#111111]">
+                  <p :class="['text-[13px] font-medium', isDark ? 'text-white' : 'text-[#111111]']">
                     {{ commentAuthorName(comment) }}
                   </p>
-                  <span class="text-[11px] text-[#B0B0B0]">{{
+                  <span :class="['text-[11px]', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">{{
                     formatRelativeTime(comment.createdAt)
                   }}</span>
                   <button
                     v-if="authStore.isAuthenticated && comment.author?._id === authStore.user?.id"
                     @click="deleteComment(comment._id)"
-                    class="ml-auto text-[11px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
+                    :class="['ml-auto text-[11px] transition-colors', isDark ? 'text-gray-500 hover:text-red-400' : 'text-[#B0B0B0] hover:text-[#B3261E]']"
                   >
                     {{ t('blogDetail.delete') }}
                   </button>
                 </div>
-                <p class="mt-1 text-[14px] leading-relaxed text-[#333333] whitespace-pre-wrap">
+                <p :class="['mt-1 text-[14px] leading-relaxed whitespace-pre-wrap', isDark ? 'text-gray-300' : 'text-[#333333]']">
                   {{ comment.content }}
                 </p>
               </div>
@@ -384,7 +398,7 @@
             <!-- Replies -->
             <div
               v-if="comment.replies && comment.replies.length"
-              class="mt-3 ml-12 flex flex-col divide-y divide-[#F5F5F5]"
+              :class="['mt-3 ml-12 flex flex-col divide-y', isDark ? 'divide-white/5' : 'divide-[#F5F5F5]']"
             >
               <div v-for="reply in comment.replies" :key="reply._id" class="py-3">
                 <div class="flex items-start gap-3">
@@ -392,32 +406,32 @@
                     v-if="reply.author?.picture"
                     :src="reply.author.picture"
                     :alt="reply.author?.displayName"
-                    class="h-7 w-7 rounded-full object-cover border border-[#E7E7E7] shrink-0"
+                    :class="['h-7 w-7 rounded-full object-cover border shrink-0', isDark ? 'border-white/10' : 'border-[#E7E7E7]']"
                   />
                   <div
                     v-else
-                    class="h-7 w-7 rounded-full bg-[#111111] flex items-center justify-center text-white text-[10px] font-medium shrink-0"
+                    :class="['h-7 w-7 rounded-full flex items-center justify-center text-[10px] font-medium shrink-0', isDark ? 'bg-white text-black' : 'bg-[#111111] text-white']"
                   >
                     {{ getInitials(replyAuthorName(reply)) }}
                   </div>
                   <div class="flex-1 min-w-0">
                     <div class="flex items-baseline gap-2">
-                      <p class="text-[12.5px] font-medium text-[#111111]">
+                      <p :class="['text-[12.5px] font-medium', isDark ? 'text-white' : 'text-[#111111]']">
                         {{ replyAuthorName(reply) }}
                       </p>
-                      <span class="text-[11px] text-[#B0B0B0]">{{
+                      <span :class="['text-[11px]', isDark ? 'text-gray-500' : 'text-[#B0B0B0]']">{{
                         formatRelativeTime(reply.createdAt)
                       }}</span>
                       <button
                         v-if="authStore.isAuthenticated && reply.author?._id === authStore.user?.id"
                         @click="deleteComment(reply._id)"
-                        class="ml-auto text-[11px] text-[#B0B0B0] hover:text-[#B3261E] transition-colors"
+                        :class="['ml-auto text-[11px] transition-colors', isDark ? 'text-gray-500 hover:text-red-400' : 'text-[#B0B0B0] hover:text-[#B3261E]']"
                       >
                         Hapus
                       </button>
                     </div>
                     <p
-                      class="mt-1 text-[13.5px] leading-relaxed text-[#333333] whitespace-pre-wrap"
+                      :class="['mt-1 text-[13.5px] leading-relaxed whitespace-pre-wrap', isDark ? 'text-gray-300' : 'text-[#333333]']"
                     >
                       {{ reply.content }}
                     </p>
@@ -436,12 +450,17 @@
                 v-model="replyTexts[comment._id]"
                 type="text"
                 maxlength="1000"
-                class="flex-1 text-[13px] text-[#111111] placeholder-[#C9C9C9] border border-[#E7E7E7] rounded-[3px] focus:border-[#111111] focus:ring-0 px-3 py-1.5 transition-colors"
+                :class="[
+                  'flex-1 text-[13px] border rounded-[3px] focus:ring-0 px-3 py-1.5 transition-colors',
+                  isDark
+                    ? 'bg-white/[0.03] text-white placeholder-gray-600 border-white/15 focus:border-white'
+                    : 'text-[#111111] placeholder-[#C9C9C9] border-[#E7E7E7] focus:border-[#111111]',
+                ]"
                 :placeholder="t('blogDetail.replyPlaceholder')"
               />
               <button
                 type="submit"
-                class="text-[12px] font-medium text-[#5B4BFF] hover:text-[#4a3dcc] shrink-0 transition-colors"
+                :class="['text-[12px] font-medium shrink-0 transition-colors', isDark ? 'text-[#8f84ff] hover:text-[#a79dff]' : 'text-[#5B4BFF] hover:text-[#4a3dcc]']"
               >
                 {{ t('blogDetail.reply') }}
               </button>
@@ -452,9 +471,9 @@
         <!-- Empty comments -->
         <div
           v-else
-          class="mt-6 border border-dashed border-[#D8D8D8] rounded-[3px] py-10 px-6 text-center"
+          :class="['mt-6 border border-dashed rounded-[3px] py-10 px-6 text-center', isDark ? 'border-white/15' : 'border-[#D8D8D8]']"
         >
-          <p class="text-[13px] text-[#8A8A8A]">{{ t('blogDetail.noComments') }}</p>
+          <p :class="['text-[13px]', isDark ? 'text-gray-500' : 'text-[#8A8A8A]']">{{ t('blogDetail.noComments') }}</p>
         </div>
       </div>
     </div>
@@ -463,13 +482,16 @@
     <div v-if="showLoginPrompt" class="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]" @click="closeLoginPrompt"></div>
       <div
-        class="relative w-full max-w-sm bg-white rounded-[6px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)] p-8 text-center"
+        :class="[
+          'relative w-full max-w-sm rounded-[6px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)] p-8 text-center',
+          isDark ? 'bg-[#0c0c10] border border-white/10' : 'bg-white',
+        ]"
       >
         <div
-          class="mx-auto h-12 w-12 rounded-full bg-[#F7F5FF] flex items-center justify-center mb-5"
+          :class="['mx-auto h-12 w-12 rounded-full flex items-center justify-center mb-5', isDark ? 'bg-white/5' : 'bg-[#F7F5FF]']"
         >
           <svg
-            class="h-6 w-6 text-[#5B4BFF]"
+            :class="['h-6 w-6', isDark ? 'text-[#8f84ff]' : 'text-[#5B4BFF]']"
             fill="none"
             stroke="currentColor"
             stroke-width="1.8"
@@ -482,10 +504,10 @@
             />
           </svg>
         </div>
-        <h3 class="text-[17px] font-display font-semibold text-[#111111]">
+        <h3 :class="['text-[17px] font-display font-semibold', isDark ? 'text-white' : 'text-[#111111]']">
           {{ loginPromptTitle }}
         </h3>
-        <p class="mt-2 text-[13px] leading-relaxed text-[#6B6B6B]">
+        <p :class="['mt-2 text-[13px] leading-relaxed', isDark ? 'text-gray-400' : 'text-[#6B6B6B]']">
           {{ loginPromptMessage }}
         </p>
         <div class="mt-7 flex flex-col gap-2.5">
@@ -497,7 +519,10 @@
           </button>
           <button
             @click="closeLoginPrompt"
-            class="w-full inline-flex items-center justify-center px-5 py-2.5 border border-[#E7E7E7] text-[#4B4B4B] rounded-full text-[13px] font-medium hover:bg-[#FAFAFA] transition-colors"
+            :class="[
+              'w-full inline-flex items-center justify-center px-5 py-2.5 border rounded-full text-[13px] font-medium transition-colors',
+              isDark ? 'border-white/15 text-gray-300 hover:bg-white/5' : 'border-[#E7E7E7] text-[#4B4B4B] hover:bg-[#FAFAFA]',
+            ]"
           >
             {{ t('blogDetail.cancel') }}
           </button>
@@ -511,6 +536,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useTheme } from '@/composables/useTheme'
 import { blogAPI, likeAPI, repostAPI, commentAPI, BASE_URL } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 import BlogContent from '@/components/BlogContent.vue'
@@ -520,6 +546,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const { t } = useI18n()
+const { isDark } = useTheme()
 
 const blog = ref(null)
 const loading = ref(false)
@@ -903,5 +930,41 @@ onUnmounted(() => {
   border: none;
   padding: 0;
   color: inherit;
+}
+
+/* Dark mode overrides untuk konten artikel (h2/h3/blockquote/code/dst
+   ditulis lewat CSS karena elemen-elemen ini datang dari HTML mentah
+   BlogContent, bukan class Tailwind yang bisa di-bind isDark). */
+.reading-dark .reading-content :deep(h2),
+.reading-dark .reading-content :deep(h3) {
+  color: #ffffff;
+}
+
+.reading-dark .reading-content :deep(a) {
+  color: #ffffff;
+}
+
+.reading-dark .reading-content :deep(strong) {
+  color: #ffffff;
+}
+
+.reading-dark .reading-content :deep(blockquote) {
+  border-left-color: #ffffff;
+  color: #b5b5b5;
+}
+
+.reading-dark .reading-content :deep(img) {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.reading-dark .reading-content :deep(code) {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e5e5e5;
+}
+
+.reading-dark .reading-content :deep(pre) {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 </style>
