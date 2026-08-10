@@ -220,8 +220,8 @@
 
      
 <!-- DOME -->
-      <div style="width: 100vw; height: 100vh;"
-      
+      <div
+        :style="{ width: '100vw', height: isMobile ? '62vh' : '100vh' }"
       >
         
             <div class="text-center max-w-xl mx-auto mb-12 mt-20">
